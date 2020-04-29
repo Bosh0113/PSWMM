@@ -6,8 +6,10 @@ import router from './router'
 import ViewUI from 'view-design'
 import "view-design/dist/styles/iview.css"
 import VueRouter from 'vue-router'
+import vuescroll from 'vuescroll'
 
 Vue.use(ViewUI);
+Vue.use(vuescroll)
 
 Vue.config.productionTip = false
 
