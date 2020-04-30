@@ -160,14 +160,15 @@
                                     type="date" placeholder="Select date" 
                                     style="width:120px"
                                     format="MM/dd/yyyy"
-                                    :value="simulationOptions.START_DATE"></DatePicker>
+                                    :clearable="false"
+                                    v-model="simulationOptions.START_DATE"></DatePicker>
                                 </Col>
                                 <Col span="6" offset="1">
                                     <TimePicker format="HH:mm" 
                                     placeholder="Time" 
                                     style="width: 80px"
                                     size="small"
-                                    :value="simulationOptions.START_TIME"></TimePicker>
+                                    v-model="simulationOptions.START_TIME"></TimePicker>
                                 </Col>
                             </Row>
                             <Row class="datesItem">
@@ -179,14 +180,15 @@
                                     type="date" placeholder="Select date" 
                                     style="width:120px"
                                     format="MM/dd/yyyy"
-                                    :value="simulationOptions.REPORT_START_DATE"></DatePicker>
+                                    :clearable="false"
+                                    v-model="simulationOptions.REPORT_START_DATE"></DatePicker>
                                 </Col>
                                 <Col span="6" offset="1">
                                     <TimePicker format="HH:mm" 
                                     placeholder="Time" 
                                     style="width: 80px"
                                     size="small"
-                                    :value="simulationOptions.REPORT_START_TIME"></TimePicker>
+                                    v-model="simulationOptions.REPORT_START_TIME"></TimePicker>
                                 </Col>
                             </Row>
                             <Row class="datesItem">
@@ -198,14 +200,15 @@
                                     type="date" placeholder="Select date" 
                                     style="width:120px"
                                     format="MM/dd/yyyy"
-                                    :value="simulationOptions.END_DATE"></DatePicker>
+                                    :clearable="false"
+                                    v-model="simulationOptions.END_DATE"></DatePicker>
                                 </Col>
                                 <Col span="6" offset="1">
                                     <TimePicker format="HH:mm" 
                                     placeholder="Time" 
                                     style="width: 80px"
                                     size="small"
-                                    :value="simulationOptions.END_TIME"></TimePicker>
+                                    v-model="simulationOptions.END_TIME"></TimePicker>
                                 </Col>
                             </Row>
                             <Row class="datesItem">
@@ -217,7 +220,8 @@
                                     type="date" placeholder="Date" 
                                     style="width:80px"
                                     format="MM/dd"
-                                    :value="simulationOptions.SWEEP_START"></DatePicker>
+                                    :clearable="false"
+                                    v-model="simulationOptions.SWEEP_START"></DatePicker>
                                 </Col>
                             </Row>
                             <Row class="datesItem">
@@ -229,7 +233,8 @@
                                     type="date" placeholder="Date" 
                                     style="width:80px"
                                     format="MM/dd"
-                                    :value="simulationOptions.SWEEP_END"></DatePicker>
+                                    :clearable="false"
+                                    v-model="simulationOptions.SWEEP_END"></DatePicker>
                                 </Col>
                             </Row>
                             <Row class="datesItem">
@@ -271,7 +276,7 @@
                                     placeholder="Time" 
                                     style="width: 100px"
                                     size="small"
-                                    :value="simulationOptions.REPORT_STEP_h"></TimePicker>
+                                    v-model="simulationOptions.REPORT_STEP_h"></TimePicker>
                                 </Col>
                             </Row>
                             <Row class="datesItem">
@@ -287,7 +292,7 @@
                                     placeholder="Time" 
                                     style="width: 100px"
                                     size="small"
-                                    :value="simulationOptions.DRY_STEP_h"></TimePicker>
+                                    v-model="simulationOptions.DRY_STEP_h"></TimePicker>
                                 </Col>
                             </Row>
                             <Row class="datesItem">
@@ -303,7 +308,7 @@
                                     placeholder="Time" 
                                     style="width: 100px"
                                     size="small"
-                                    :value="simulationOptions.WET_STEP_h"></TimePicker>
+                                    v-model="simulationOptions.WET_STEP_h"></TimePicker>
                                 </Col>
                             </Row>
                             <Row class="datesItem">
@@ -519,14 +524,14 @@ export default {
             INFILTRATION:"HORTON",
             FLOW_ROUTING:"KINWAVE",
             //Dates
-            START_DATE:"",
+            START_DATE:new Date(),
             START_TIME:"",
-            REPORT_START_DATE:"",
+            REPORT_START_DATE:new Date(),
             REPORT_START_TIME:"",
-            END_DATE:"",
+            END_DATE:new Date(),
             END_TIME:"",
-            SWEEP_START:"01/01",
-            SWEEP_END:"12/31",
+            SWEEP_START:new Date("2020/01/01"),
+            SWEEP_END: new Date("2020/12/31"),
             DRY_DAYS:"0",
             //Time Steps
             REPORT_STEP_d:0,
@@ -600,12 +605,18 @@ export default {
       this.sendMessage("connect",{});
     },
     onMessage(e) {
-        console.log(e.data);
         var messageObject = JSON.parse(e.data);
+        console.log(messageObject);
         switch(messageObject.type){
             case "operation":{
                 this.optionTab = messageObject.operation.tab;
-                this.simulationOptions = messageObject.operation.options;
+                var optionsMessage = messageObject.operation.options;
+                optionsMessage.START_DATE = new Date(optionsMessage.START_DATE);
+                optionsMessage.REPORT_START_DATE = new Date(optionsMessage.REPORT_START_DATE);
+                optionsMessage.END_DATE = new Date(optionsMessage.END_DATE);
+                optionsMessage.SWEEP_START = new Date(optionsMessage.SWEEP_START);
+                optionsMessage.SWEEP_END = new Date(optionsMessage.SWEEP_END);
+                this.simulationOptions = optionsMessage;
                 break;
             }
             case "members":{
@@ -656,6 +667,11 @@ export default {
     submitOp(){
         var optionTab = this.optionTab;
         var options = this.simulationOptions;
+        options.START_DATE = new Date(options.START_DATE);
+        options.REPORT_START_DATE = new Date(options.REPORT_START_DATE);
+        options.END_DATE = new Date(options.END_DATE);
+        options.SWEEP_START = new Date(options.SWEEP_START);
+        options.SWEEP_END = new Date(options.SWEEP_END);
         var operation = {
             tab: optionTab,
             options: options
