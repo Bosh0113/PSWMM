@@ -525,9 +525,10 @@ export default {
         UVTS:true,
         AB:75,
         TSFCL:0,
-        MNSA:12.557,
+        MNSA:12.566,
         MTPTS:8,
-        HCT:0.005
+        HCT:0.005,
+        //Files
     }
   },
   methods:{
@@ -535,13 +536,13 @@ export default {
         this.runParametersModal = true;
     },
     applyDefaults(){
-        confirm("apply defaults.");
+        confirm("Apply defaults.");
     },
     closeRunParametersModal(){
         this.runParametersModal = false;
     },
     saveRunParameters(){
-        confirm('save run parameters.');
+        confirm('Save run parameters.');
     },
     submitOp(){
         confirm('Submit operation.');
