@@ -13,8 +13,20 @@
     position: absolute;
     line-height: 1.2;
 }
+.btnHoverBlue:hover {
+  background-color: #2db7f5;
+  color: white;
+}
 .btnHoverGreen:hover {
   background-color: #19be6b;
+  color: white;
+}
+.btnHoverOrange:hover {
+  background-color: #ff9900;
+  color: white;
+}
+.btnHoverRed:hover {
+  background-color: #ed4014;
   color: white;
 }
 .cardDiv{
@@ -125,6 +137,7 @@
                 </TabPane>
                 <TabPane label="Dates" name="Dates">
                     <div style="height:380px;width:100%">
+                        <vue-scroll :ops="ops">
                         <div style="padding:10px 30px">
                             <Row class="datesItem">
                                 <Col span="7" offset="1">
@@ -228,6 +241,7 @@
                                 </Col>
                             </Row>
                         </div>
+                        </vue-scroll>
                     </div>
                 </TabPane>
                 <TabPane label="Time Steps" name="Time Steps">
@@ -302,7 +316,7 @@
                                     <p>Seconds</p>
                                 </Col>
                             </Row>
-                            <div style="padding:15px">
+                            <div style="padding:10px 15px">
                                 <div class="cardDiv">
                                     <div class="cardTitle">Steady Flow Periods</div>
                                     <div style="margin:10px 0;padding:10px">
@@ -387,12 +401,23 @@
                                 <div style="width:293px;display:inline-block">Head Convergence Tolerance (feet)</div>
                                 <Input v-model="HCT" size="small" style="width:80px;"/>
                             </div>
+                            <div class="datesItem">
+                                <Button class="btnHoverOrange" @click="applyDefaults">Apply Defaults</Button>
+                            </div>
                         </div>
                     </div>
                 </TabPane>
                 <TabPane label="Files" name="Files">
                     <div style="height:380px;width:100%">
-                        
+                        <div style="padding:15px">
+                            <p>Specify interface files to use or save:</p>
+                            <div style="margin-top:10px;width:100%;height:180px;border:1px solid #808695"></div>
+                            <div style="margin-top:15px;text-align: center;">
+                                <Button class="btnHoverGreen" size="small" style="width:80px">Add</Button>
+                                <Button class="btnHoverBlue" size="small" style="width:80px">Edit</Button>
+                                <Button class="btnHoverRed" size="small" style="width:80px">Delete</Button>
+                            </div>
+                        </div>
                     </div>
                 </TabPane>
             </Tabs>
@@ -417,7 +442,7 @@
                     operation
                 </p>
                 <h5 style="display: inline-block;margin:8px 0 0 60px;position:absolute">:</h5>
-                <Button icon="md-cloud-upload" 
+                <Button icon="ios-paper-plane" 
                 shape="circle" class="btnHoverGreen" 
                 style="margin:-18px 0 0 70px" @click="submitOp"></Button>
             </div>
@@ -470,8 +495,8 @@ export default {
         processCheck:[],
         miscellaneousCheck:[],
         mininSlope:"0",
-        infiltrationRadio:"",
-        routingRadio:"",
+        infiltrationRadio:"Horton",
+        routingRadio:"Kinematic Wave",
         //Dates
         SAOD:"",
         SAOT:"",
@@ -479,8 +504,8 @@ export default {
         SROT:"",
         EAOD:"",
         EAOT:"",
-        SSOD:"",
-        ESOD:"",
+        SSOD:"01/01",
+        ESOD:"12/31",
         ADD:"0",
         //Time Steps
         RD:0,
@@ -509,11 +534,14 @@ export default {
     showRunParametersModal(){
         this.runParametersModal = true;
     },
+    applyDefaults(){
+        confirm("apply defaults.");
+    },
     closeRunParametersModal(){
         this.runParametersModal = false;
     },
     saveRunParameters(){
-        confirm('save run parameters');
+        confirm('save run parameters.');
     },
     submitOp(){
         confirm('Submit operation.');
