@@ -66,44 +66,44 @@
                             <Col span="12" style="height:100%">
                                 <div class="cardDiv">
                                     <div class="cardTitle">Process Models</div>
-                                     <CheckboxGroup v-model="processCheck" style="margin-top:15px">
-                                         <Checkbox label="Rainfall/Runoff" class="processCB">
+                                     <div style="margin-top:15px">
+                                         <Checkbox v-model="simulationOptions.IGNORE_RAINFALL" class="processCB">
                                             <span>Rainfall/Runoff</span>
                                         </Checkbox><br/>
-                                         <Checkbox label="Rainfall Dependent |/|" class="processCB">
+                                         <Checkbox v-model="simulationOptions.IGNORE_DEPENDENT" class="processCB">
                                             <span>Rainfall Dependent |/|</span>
                                         </Checkbox><br/>
-                                         <Checkbox label="Snow Melt" class="processCB">
+                                         <Checkbox v-model="simulationOptions.IGNORE_SNOW_MELT" class="processCB">
                                             <span>Snow Melt</span>
                                         </Checkbox><br/>
-                                         <Checkbox label="Groundwater" class="processCB">
+                                         <Checkbox v-model="simulationOptions.IGNORE_GROUNDWATER" class="processCB">
                                             <span>Groundwater</span>
                                         </Checkbox><br/>
-                                         <Checkbox label="Flow Routing" class="processCB">
+                                         <Checkbox v-model="simulationOptions.IGNORE_ROUTING" class="processCB">
                                             <span>Flow Routing</span>
                                         </Checkbox><br/>
-                                         <Checkbox label="Water Quality" class="processCB">
+                                         <Checkbox v-model="simulationOptions.IGNORE_WATER_QUALITY" class="processCB">
                                             <span>Water Quality</span>
                                         </Checkbox>
-                                     </CheckboxGroup>
+                                     </div>
                                 </div>
                             </Col>
                             <Col span="12" style="height:100%">
                                 <div class="cardDiv">
                                     <div class="cardTitle">Miscellaneous</div>
-                                     <CheckboxGroup v-model="miscellaneousCheck" style="margin-top:15px">
-                                         <Checkbox label="Allow Ponding" class="processCB">
+                                     <div style="margin-top:15px">
+                                         <Checkbox v-model="simulationOptions.ALLOW_PONDING" class="processCB">
                                             <span>Allow Ponding</span>
                                         </Checkbox><br/>
-                                         <Checkbox label="Report Control Actions" class="processCB">
+                                         <Checkbox v-model="simulationOptions.CONTROLS" class="processCB">
                                             <span>Report Control Actions</span>
                                         </Checkbox><br/>
-                                         <Checkbox label="Report Input Summary" class="processCB">
+                                         <Checkbox v-model="simulationOptions.INPUT" class="processCB">
                                             <span>Report Input Summary</span>
                                         </Checkbox>
-                                     </CheckboxGroup>
+                                     </div>
                                      <p style="margin: 5px 5px 0">Minimum Conduit Slope</p>
-                                     <Input v-model="mininSlope" size="small" style="width:80px;margin-left:5px"/>
+                                     <Input v-model="simulationOptions.MIN_SLOPE" size="small" style="width:80px;margin-left:5px"/>
                                      <span style="margin-left:5px">%</span>
                                 </div>
                             </Col>
@@ -114,21 +114,21 @@
                             <Col span="12" style="height:100%">
                                 <div class="cardDiv">
                                     <div class="cardTitle">Infiltration Model</div>
-                                    <RadioGroup v-model="infiltrationRadio" style="margin-top:15px">
-                                        <Radio label="Horton" class="processCB"></Radio><br/>
-                                        <Radio label="Modeified Horton" class="processCB"></Radio><br/>
-                                        <Radio label="Green Ampt" class="processCB"></Radio><br/>
-                                        <Radio label="Curve Number" class="processCB"></Radio>
+                                    <RadioGroup v-model="simulationOptions.INFILTRATION" style="margin-top:15px">
+                                        <Radio label="HORTON" class="processCB">Horton</Radio><br/>
+                                        <Radio label="MODIFIED_HORTON" class="processCB">Modeified Horton</Radio><br/>
+                                        <Radio label="GREEN_AMPT" class="processCB">Green Ampt</Radio><br/>
+                                        <Radio label="CURVE_NUMBER" class="processCB">Curve Number</Radio>
                                     </RadioGroup>
                                 </div>
                             </Col>
                             <Col span="12" style="height:100%">
                                 <div class="cardDiv">
                                     <div class="cardTitle">Routing Model</div>
-                                    <RadioGroup v-model="routingRadio" style="margin-top:15px">
-                                        <Radio label="Steady Flow" class="processCB"></Radio><br/>
-                                        <Radio label="Kinematic Wave" style="margin:18px 5px"></Radio><br/>
-                                        <Radio label="Dynamic Wave" class="processCB"></Radio>
+                                    <RadioGroup v-model="simulationOptions.FLOW_ROUTING" style="margin-top:15px">
+                                        <Radio label="STEADY" class="processCB">Steady Flow</Radio><br/>
+                                        <Radio label="KINWAVE" style="margin:18px 5px">Kinematic Wave</Radio><br/>
+                                        <Radio label="DYNWAVE" class="processCB">Dynamic Wave</Radio>
                                     </RadioGroup>
                                 </div>
                             </Col>
@@ -159,14 +159,14 @@
                                     type="date" placeholder="Select date" 
                                     style="width:120px"
                                     format="MM/dd/yyyy"
-                                    :value="SAOD"></DatePicker>
+                                    :value="simulationOptions.START_DATE"></DatePicker>
                                 </Col>
                                 <Col span="6" offset="1">
                                     <TimePicker format="HH:mm" 
                                     placeholder="Time" 
                                     style="width: 80px"
                                     size="small"
-                                    :value="SAOT"></TimePicker>
+                                    :value="simulationOptions.START_TIME"></TimePicker>
                                 </Col>
                             </Row>
                             <Row class="datesItem">
@@ -178,14 +178,14 @@
                                     type="date" placeholder="Select date" 
                                     style="width:120px"
                                     format="MM/dd/yyyy"
-                                    :value="SROD"></DatePicker>
+                                    :value="simulationOptions.REPORT_START_DATE"></DatePicker>
                                 </Col>
                                 <Col span="6" offset="1">
                                     <TimePicker format="HH:mm" 
                                     placeholder="Time" 
                                     style="width: 80px"
                                     size="small"
-                                    :value="SROT"></TimePicker>
+                                    :value="simulationOptions.REPORT_START_TIME"></TimePicker>
                                 </Col>
                             </Row>
                             <Row class="datesItem">
@@ -197,14 +197,14 @@
                                     type="date" placeholder="Select date" 
                                     style="width:120px"
                                     format="MM/dd/yyyy"
-                                    :value="EAOD"></DatePicker>
+                                    :value="simulationOptions.END_DATE"></DatePicker>
                                 </Col>
                                 <Col span="6" offset="1">
                                     <TimePicker format="HH:mm" 
                                     placeholder="Time" 
                                     style="width: 80px"
                                     size="small"
-                                    :value="EAOT"></TimePicker>
+                                    :value="simulationOptions.END_TIME"></TimePicker>
                                 </Col>
                             </Row>
                             <Row class="datesItem">
@@ -216,7 +216,7 @@
                                     type="date" placeholder="Date" 
                                     style="width:80px"
                                     format="MM/dd"
-                                    :value="SSOD"></DatePicker>
+                                    :value="simulationOptions.SWEEP_START"></DatePicker>
                                 </Col>
                             </Row>
                             <Row class="datesItem">
@@ -228,7 +228,7 @@
                                     type="date" placeholder="Date" 
                                     style="width:80px"
                                     format="MM/dd"
-                                    :value="ESOD"></DatePicker>
+                                    :value="simulationOptions.SWEEP_END"></DatePicker>
                                 </Col>
                             </Row>
                             <Row class="datesItem">
@@ -237,7 +237,7 @@
                                     Dry Days</p>
                                 </Col>
                                 <Col span="8" offset="1">
-                                    <Input v-model="ADD" size="small" style="width:80px;"/>
+                                    <Input v-model="simulationOptions.DRY_DAYS" size="small" style="width:80px;"/>
                                 </Col>
                             </Row>
                         </div>
@@ -263,14 +263,14 @@
                                     <p>Reporting</p>
                                 </Col>
                                 <Col span="6" offset="1">
-                                    <InputNumber v-model="RD" size="small" min="0" max="59"></InputNumber>
+                                    <InputNumber v-model="simulationOptions.REPORT_STEP_d" size="small" :min="0" :max="59"></InputNumber>
                                 </Col>
                                 <Col span="8" offset="1">
                                     <TimePicker format="HH:mm:ss" 
                                     placeholder="Time" 
                                     style="width: 100px"
                                     size="small"
-                                    :value="RH"></TimePicker>
+                                    :value="simulationOptions.REPORT_STEP_h"></TimePicker>
                                 </Col>
                             </Row>
                             <Row class="datesItem">
@@ -279,14 +279,14 @@
                                     Dry Weather</p>
                                 </Col>
                                 <Col span="6" offset="1">
-                                    <InputNumber v-model="RDWD" size="small" min="0" max="59"></InputNumber>
+                                    <InputNumber v-model="simulationOptions.DRY_STEP_d" size="small" :min="0" :max="59"></InputNumber>
                                 </Col>
                                 <Col span="8" offset="1">
                                     <TimePicker format="HH:mm:ss" 
                                     placeholder="Time" 
                                     style="width: 100px"
                                     size="small"
-                                    :value="RDWH"></TimePicker>
+                                    :value="simulationOptions.DRY_STEP_h"></TimePicker>
                                 </Col>
                             </Row>
                             <Row class="datesItem">
@@ -295,14 +295,14 @@
                                     Wet Weather</p>
                                 </Col>
                                 <Col span="6" offset="1">
-                                    <InputNumber v-model="RWWD" size="small" min="0" max="59"></InputNumber>
+                                    <InputNumber v-model="simulationOptions.WET_STEP_d" size="small" :min="0" :max="59"></InputNumber>
                                 </Col>
                                 <Col span="8" offset="1">
                                     <TimePicker format="HH:mm:ss" 
                                     placeholder="Time" 
                                     style="width: 100px"
                                     size="small"
-                                    :value="RWWH"></TimePicker>
+                                    :value="simulationOptions.WET_STEP_h"></TimePicker>
                                 </Col>
                             </Row>
                             <Row class="datesItem">
@@ -310,7 +310,7 @@
                                     <p>Routing</p>
                                 </Col>
                                 <Col span="6" offset="1">
-                                    <InputNumber v-model="RDI" size="small" min="0" max="59"></InputNumber>
+                                    <InputNumber v-model="simulationOptions.ROUTING_STEP" size="small" :min="0" :max="59"></InputNumber>
                                 </Col>
                                 <Col span="8" offset="1">
                                     <p>Seconds</p>
@@ -320,13 +320,13 @@
                                 <div class="cardDiv">
                                     <div class="cardTitle">Steady Flow Periods</div>
                                     <div style="margin:10px 0;padding:10px">
-                                        <Checkbox v-model="KSFP">Skip Steady Flow Periods</Checkbox>
+                                        <Checkbox v-model="simulationOptions.SKIP_STEADY_STATE">Skip Steady Flow Periods</Checkbox>
                                         <Row style="margin-top:5px">
                                             <Col span="16">
                                                 <p style="display:inline-block">System Flow Tolerance(%)</p>
                                             </Col>
                                             <Col span="6" offset="1">
-                                                <InputNumber v-model="SFT" size="small" min="0" max="100"></InputNumber>
+                                                <InputNumber v-model="simulationOptions.SYS_FLOW_TOL" size="small" :min="0" :max="100"></InputNumber>
                                             </Col>
                                         </Row>
                                         <Row style="margin-top:5px">
@@ -334,7 +334,7 @@
                                                 <p style="display:inline-block">Lateral Flow Tolerance(%)</p>
                                             </Col>
                                             <Col span="6" offset="1">
-                                                <InputNumber v-model="LFT" size="small" min="0" max="100"></InputNumber>
+                                                <InputNumber v-model="simulationOptions.LAT_FLOW_TOL" size="small" :min="0" :max="100"></InputNumber>
                                             </Col>
                                         </Row>
                                     </div>
@@ -350,29 +350,29 @@
                                 <Col span="6">
                                     <div class="cardDiv">
                                         <div class="cardTitle">Inertial Terms</div>
-                                        <RadioGroup v-model="inertialTerms" style="margin-top:15px">
-                                            <Radio label="Keep" class="processCB"></Radio><br/>
-                                            <Radio label="Dampen" class="processCB"></Radio><br/>
-                                            <Radio label="Ignore" class="processCB"></Radio>
+                                        <RadioGroup v-model="simulationOptions.INERTIAL_DAMPING" style="margin-top:15px">
+                                            <Radio label="NONE" class="processCB">Keep</Radio><br/>
+                                            <Radio label="PARTIAL" class="processCB">Dampen</Radio><br/>
+                                            <Radio label="FULL" class="processCB">Ignore</Radio>
                                         </RadioGroup>
                                     </div>
                                 </Col>
                                 <Col span="9">
                                     <div class="cardDiv">
                                         <div class="cardTitle">Normal Flow Criterion</div>
-                                        <RadioGroup v-model="normalFC" style="margin-top:15px">
-                                            <Radio label="Slope" class="processCB"></Radio><br/>
-                                            <Radio label="Froude No." class="processCB"></Radio><br/>
-                                            <Radio label="Both" class="processCB"></Radio>
+                                        <RadioGroup v-model="simulationOptions.NORMAL_FLOW_LIMITED" style="margin-top:15px">
+                                            <Radio label="SLOPE" class="processCB">Slope</Radio><br/>
+                                            <Radio label="FROUDE" class="processCB">Froude No.</Radio><br/>
+                                            <Radio label="BOTH" class="processCB">Both</Radio>
                                         </RadioGroup>
                                     </div>
                                 </Col>
                                 <Col span="9" style="height:100%">
                                     <div class="cardDiv">
                                         <div class="cardTitle">Force Main Equation</div>
-                                        <RadioGroup v-model="forceME" style="margin-top:15px">
-                                            <Radio label="Hazen-Willarms" style="margin:10px 5px;"></Radio><br/>
-                                            <Radio label="Darcy-Weisbach" style="margin:10px 5px;"></Radio>
+                                        <RadioGroup v-model="simulationOptions.FORCE_MAIN_EQUATION" style="margin-top:15px">
+                                            <Radio label="H-W" style="margin:10px 5px;">Hazen-Willarms</Radio><br/>
+                                            <Radio label="D-W" style="margin:10px 5px;">Darcy-Weisbach</Radio>
                                         </RadioGroup>
                                     </div>
                                 </Col>
@@ -380,26 +380,25 @@
                         </div>
                         <div style="padding:30px 50px">
                             <div>
-                                <Checkbox v-model="UVTS">Use Variable Time Steps</Checkbox>
+                                <Checkbox v-model="simulationOptions.VARIABLE_STEP_c">Use Variable Time Steps</Checkbox>
                                 <span style="margin-left:30px">Adjusted By</span>
-                                <InputNumber v-model="AB" size="small" min="0" max="100" style="width:50px"></InputNumber>
-                                <span style="margin-left:5px">%</span>
+                                <InputNumber v-model="simulationOptions.VARIABLE_STEP" size="small" :min="0" :max="1" :step="0.01" style="width:80px"></InputNumber>
                             </div>
                             <div class="datesItem">
                                 <div style="width:293px;display:inline-block">Time Step For Condit Lengthening (sec)</div>
-                                <Input v-model="TSFCL" size="small" style="width:80px;"/>
+                                <Input v-model="simulationOptions.LENGTHENING_STEP" size="small" style="width:80px;"/>
                             </div>
                             <div class="datesItem">
                                 <div style="width:293px;display:inline-block">Minimum Nodal Surface Area (sq.feet)</div>
-                                <Input v-model="MNSA" size="small" style="width:80px;"/>
+                                <Input v-model="simulationOptions.MIN_SURFAREA" size="small" style="width:80px;"/>
                             </div>
                             <div class="datesItem">
                                 <div style="width:293px;display:inline-block">Maximum Trial per Time Step</div>
-                                <InputNumber v-model="MTPTS" size="small" min="3" max="20"></InputNumber>
+                                <InputNumber v-model="simulationOptions.MAX_TRIALS" size="small" :min="3" :max="20"></InputNumber>
                             </div>
                             <div class="datesItem">
                                 <div style="width:293px;display:inline-block">Head Convergence Tolerance (feet)</div>
-                                <Input v-model="HCT" size="small" style="width:80px;"/>
+                                <Input v-model="simulationOptions.HEAD_TOLERANCE" size="small" style="width:80px;"/>
                             </div>
                             <div class="datesItem">
                                 <Button class="btnHoverOrange" @click="applyDefaults">Apply Defaults</Button>
@@ -491,44 +490,64 @@ export default {
             }
         ],
         optionTab:"General",
-        //General
-        processCheck:[],
-        miscellaneousCheck:[],
-        mininSlope:"0",
-        infiltrationRadio:"Horton",
-        routingRadio:"Kinematic Wave",
-        //Dates
-        SAOD:"",
-        SAOT:"",
-        SROD:"",
-        SROT:"",
-        EAOD:"",
-        EAOT:"",
-        SSOD:"01/01",
-        ESOD:"12/31",
-        ADD:"0",
-        //Time Steps
-        RD:0,
-        RH:"00:15:00",
-        RDWD: 0,
-        RDWH:"01:00:00",
-        RWWD: 0,
-        RWWH:"00:05:00",
-        RDI:"30",
-        KSFP:false,
-        SFT:5,
-        LFT:5,
-        //Dynamic Wave
-        inertialTerms:"Dampen",
-        normalFC:"Both",
-        forceME:"Hazen-Willarms",
-        UVTS:true,
-        AB:75,
-        TSFCL:0,
-        MNSA:12.566,
-        MTPTS:8,
-        HCT:0.005,
-        //Files
+        /*
+        前端JSON内容与INP文件属性对应说明：
+        1.变量命名与属性命名对应注意：
+            a:变量n_XX表示属性XX的相反值;
+            b:Checkbox的变量值对应ture为YES,false为NO;
+        2.变量值与属性值对应注意：
+            a:XX_d与XX_h对应的属性XX其值为XX_d+XX_h;
+            b:ROUTING_STEP变量值**的属性值为00:00:**格式;
+            c:VARIABLE_STEP_c变量对应复选框选中，则VARIABLE_STEP属性值为0.00，否则，VARIABLE_STEP的属性值为VARIABLE_STEP变量的值。
+        3.其余变量名即为属性名。
+        */
+       simulationOptions:{
+            //General
+            IGNORE_RAINFALL:false,
+            IGNORE_DEPENDENT:false,
+            IGNORE_SNOW_MELT:false,
+            IGNORE_GROUNDWATER:false,
+            IGNORE_ROUTING:false,
+            IGNORE_WATER_QUALITY:false,
+            ALLOW_PONDING:false,
+            CONTROLS:false,
+            INPUT:false,
+            MIN_SLOPE:"0",
+            INFILTRATION:"HORTON",
+            FLOW_ROUTING:"KINWAVE",
+            //Dates
+            START_DATE:"",
+            START_TIME:"",
+            REPORT_START_DATE:"",
+            REPORT_START_TIME:"",
+            END_DATE:"",
+            END_TIME:"",
+            SWEEP_START:"01/01",
+            SWEEP_END:"12/31",
+            DRY_DAYS:"0",
+            //Time Steps
+            REPORT_STEP_d:0,
+            REPORT_STEP_h:"00:15:00",
+            DRY_STEP_d: 0,
+            DRY_STEP_h:"01:00:00",
+            WET_STEP_d: 0,
+            WET_STEP_h:"00:05:00",
+            ROUTING_STEP:30,
+            SKIP_STEADY_STATE:false,
+            SYS_FLOW_TOL:5,
+            LAT_FLOW_TOL:5,
+            //Dynamic Wave
+            INERTIAL_DAMPING:"PARTIAL",
+            NORMAL_FLOW_LIMITED:"BOTH",
+            FORCE_MAIN_EQUATION:"H-W",
+            VARIABLE_STEP_c: true,
+            VARIABLE_STEP:0.80,
+            LENGTHENING_STEP:0,
+            MIN_SURFAREA:12.566,
+            MAX_TRIALS:8,
+            HEAD_TOLERANCE:0.005,
+            //Files
+       }
     }
   },
   methods:{
@@ -536,13 +555,22 @@ export default {
         this.runParametersModal = true;
     },
     applyDefaults(){
-        confirm("Apply defaults.");
+            this.simulationOptions.INERTIAL_DAMPING="PARTIAL";
+            this.simulationOptions.NORMAL_FLOW_LIMITED="BOTH";
+            this.simulationOptions.FORCE_MAIN_EQUATION="H-W";
+            this.simulationOptions.VARIABLE_STEP_c= true;
+            this.simulationOptions.VARIABLE_STEP=0.80;
+            this.simulationOptions.LENGTHENING_STEP=0;
+            this.simulationOptions.MIN_SURFAREA=12.566;
+            this.simulationOptions.MAX_TRIALS=8;
+            this.simulationOptions.HEAD_TOLERANCE=0.005;
     },
     closeRunParametersModal(){
         this.runParametersModal = false;
     },
     saveRunParameters(){
         confirm('Save run parameters.');
+        console.log(this.simulationOptions);
     },
     submitOp(){
         confirm('Submit operation.');
