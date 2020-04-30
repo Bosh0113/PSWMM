@@ -56,10 +56,11 @@
     v-model="runParametersModal"
     :mask-closable="false"
     :styles="{top: '20px'}"
+    :closable="false"
     width="500">
         <h4 slot="header">Simulation Options</h4>
         <div style="height:480px">
-            <Tabs type="line" :animated="false" size="small" :value="optionTab">
+            <Tabs type="line" :animated="false" size="small" v-model="optionTab">
                 <TabPane label="General" name="General">
                     <div style="height:210px;width:100%">
                         <Row style="height:100%">
@@ -463,7 +464,9 @@ export default {
   },
   data () {
     return {
+        pageParams:{},
         runParametersModal:false,
+        soSocket:null,
         ops: {
             bar: {
                 background: "#808695"
@@ -550,9 +553,86 @@ export default {
        }
     }
   },
+  created(){
+      this.getPageInfo();
+  },
   methods:{
+    getPageInfo(){
+        var href = window.location.href;
+        var url = href.split("&");
+
+        for (var i = 0; i < url.length; i++) {
+            if (/groupID/.test(url[i])) {
+                this.pageParams.pageId = url[i].match(/groupID=(\S*)/)[1];
+                continue;
+            }
+
+            if (/userID/.test(url[i])) {
+                this.pageParams.userId = url[i].match(/userID=(\S*)/)[1];
+                continue;
+            }
+
+            if (/userName/.test(url[i])) {
+                this.pageParams.userName = url[i].match(/userName=(\S*)/)[1];
+                continue;
+            }
+        }
+    },
     showRunParametersModal(){
         this.runParametersModal = true;
+        this.connectSocket();
+    },
+    connectSocket(){
+        this.soSocket=null;
+        var ip_port = window.location.host;
+        if(ip_port = "localhost:8084"){
+            ip_port = "localhost:8086";
+        }
+        var soSocketUrl = "ws://" + ip_port + "/PSWMM/SimulationOptionsSocket/" + this.pageParams.pageId;
+        this.soSocket = new WebSocket(soSocketUrl);
+        this.soSocket.onopen = this.onOpen;
+        this.soSocket.onmessage = this.onMessage;
+        this.soSocket.onclose = this.onClose;
+        this.soSocket.onerror = this.onError;
+    },
+    onOpen() {
+      console.log("Socket连接成功！");
+      this.sendMessage("connect",{});
+    },
+    onMessage(e) {
+        console.log(e.data);
+        var messageObject = JSON.parse(e.data);
+        switch(messageObject.type){
+            case "operation":{
+                this.optionTab = messageObject.operation.tab;
+                this.simulationOptions = messageObject.operation.options;
+                break;
+            }
+            case "members":{
+                this.participants = messageObject.memberList;
+            }
+        }
+    },
+    onClose(e) {
+      this.runParametersModal = false;
+      console.log("Socket连接断开！");
+    },
+    onError(e) {
+      this.runParametersModal = false;
+      console.log("Socket连接错误！");
+    },
+    sendMessage(type, operation){
+      var userId = this.pageParams.userId;
+      var userName = this.pageParams.userName;
+      var message ={
+          type: type,
+          userInfo:{
+              userId: userId,
+              userName: userName
+          },
+          operation: operation
+      }
+      this.soSocket.send(JSON.stringify(message));
     },
     applyDefaults(){
             this.simulationOptions.INERTIAL_DAMPING="PARTIAL";
@@ -567,13 +647,20 @@ export default {
     },
     closeRunParametersModal(){
         this.runParametersModal = false;
+        this.soSocket.close();
     },
     saveRunParameters(){
         confirm('Save run parameters.');
         console.log(this.simulationOptions);
     },
     submitOp(){
-        confirm('Submit operation.');
+        var optionTab = this.optionTab;
+        var options = this.simulationOptions;
+        var operation = {
+            tab: optionTab,
+            options: options
+        }
+        this.sendMessage("operation", operation);
     }
   }
 }
