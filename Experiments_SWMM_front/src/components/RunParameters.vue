@@ -498,7 +498,7 @@ export default {
         2.变量值与属性值对应注意：
             a:XX_d与XX_h对应的属性XX其值为XX_d+XX_h;
             b:ROUTING_STEP变量值**的属性值为00:00:**格式;
-            c:VARIABLE_STEP_c变量对应复选框选中，则VARIABLE_STEP属性值为0.00，否则，VARIABLE_STEP的属性值为VARIABLE_STEP变量的值。
+            c:VARIABLE_STEP_c变量对应复选框选中，则VARIABLE_STEP属性值为0.00，否则，VARIABLE_STEP的属性值为VARIABLE_STEP变量的值;
         3.其余变量名即为属性名。
         */
        simulationOptions:{
