@@ -58,7 +58,18 @@
     :styles="{top: '20px'}"
     :closable="false"
     width="500">
-        <h4 slot="header">Simulation Options</h4>
+        <div slot="header">
+            <h4 style="display:inline-block">Simulation Options</h4>
+            <div style="display:inline-block;float:right;margin-top: -5px;">
+                <h5 style="display:inline-block">You:</h5>
+                <avatar
+                    :username="pageParams.userName"
+                    :size="25"
+                    :title="pageParams.userName"
+                    style="display:inline-block;margin:0 2px"
+                ></avatar>
+            </div>
+        </div>
         <div style="height:480px">
             <Tabs type="line" :animated="false" size="small" v-model="optionTab">
                 <TabPane label="General" name="General">
