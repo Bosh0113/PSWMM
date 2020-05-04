@@ -40,6 +40,8 @@ public class RptDataDao implements IRptDataDao {
                     cursor = readNodeInflowSummary(cursor);break;
                 case "Node Flooding Summary":
                     cursor = readNodeFloodingSummary(cursor);break;
+                case "Node Surcharge Summary":
+                    cursor = readNodeSurchargeSummary(cursor);break;
                 case "Storage Volume Summary":
                     cursor = readStorageVolumeSummary(cursor);break;
                 case "Outfall Loading Summary":
@@ -189,6 +191,33 @@ public class RptDataDao implements IRptDataDao {
             index++;
         }
         rptLocal.get().setNodeFloodingSummaries(nodeFloodingSummaries);
+        return index;
+    }
+
+    private int readNodeSurchargeSummary(int index){
+        List<String> lines = linesLocal.get();
+        List<RptData.NodeSurchargeSummary>  nodeSurchargeSummaries = new ArrayList<>();
+        index++;
+        index = skipTitle(index,lines);
+        while (index < lines.size() && !nextSection(lines.get(index).trim()))
+        {
+            String line = lines.get(index).trim();
+            if ("".equals(line))
+            {
+                index++;
+                continue;
+            }
+            RptData.NodeSurchargeSummary nodeSurchargeSummary = new RptData.NodeSurchargeSummary();
+            String[] tempStr=line.split("[ ]+");
+            nodeSurchargeSummary.setNode(tempStr[0]);
+            nodeSurchargeSummary.setType(tempStr[1]);
+            nodeSurchargeSummary.setHoursSurcharged(tempStr[2]);
+            nodeSurchargeSummary.setMaxHeightAboveCrown(tempStr[3]);
+            nodeSurchargeSummary.setMinDepthBelowRim(tempStr[4]);
+            nodeSurchargeSummaries.add(nodeSurchargeSummary);
+            index++;
+        }
+        rptLocal.get().setNodeSurchargeSummaries(nodeSurchargeSummaries);
         return index;
     }
 
