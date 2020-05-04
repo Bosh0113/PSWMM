@@ -1,0 +1,3031 @@
+[TITLE]
+;;Project Title/Notes
+INP file created on 2017/6/10 18:21:57 by nnuxd with inpPINS version 0.0.3.0
+Title/Notes:
+
+[OPTIONS]
+;;Option             Value
+FLOW_UNITS           LPS
+INFILTRATION         HORTON
+FLOW_ROUTING         KINWAVE
+LINK_OFFSETS         DEPTH
+MIN_SLOPE            0
+ALLOW_PONDING        NO
+SKIP_STEADY_STATE    NO
+
+START_DATE           06/10/2017
+START_TIME           00:00:00
+REPORT_START_DATE    06/10/2017
+REPORT_START_TIME    00:00:00
+END_DATE             06/10/2017
+END_TIME             03:00:00
+SWEEP_START          01/01
+SWEEP_END            12/31
+DRY_DAYS             0
+REPORT_STEP          00:01:00
+WET_STEP             00:01:00
+DRY_STEP             01:00:00
+ROUTING_STEP         0:00:15 
+
+INERTIAL_DAMPING     PARTIAL
+NORMAL_FLOW_LIMITED  BOTH
+FORCE_MAIN_EQUATION  D-W
+VARIABLE_STEP        0.75
+LENGTHENING_STEP     0
+MIN_SURFAREA         1.14
+MAX_TRIALS           8
+HEAD_TOLERANCE       0.0015
+SYS_FLOW_TOL         5
+LAT_FLOW_TOL         5
+
+[EVAPORATION]
+;;Evap Data      Parameters
+;;-------------- ----------------
+CONSTANT         0
+DRY_ONLY         NO
+
+[RAINGAGES]
+;;Gage           Format    Interval SCF      Source    
+;;-------------- --------- ------ ------ ----------
+rain             INTENSITY 0:01     1.0      TIMESERIES 2-yr            
+
+[SUBCATCHMENTS]
+;;Subcatchment   Rain Gage        Outlet           Area     %Imperv  Width    %Slope   CurbLen  Snow Pack       
+;;-------------- ---------------- ---------------- -------- -------- -------- -------- -------- ----------------
+Sub0             rain             WeLL28           0.0787578 44.03715 21.37544 1.46978  0                        
+Sub1             rain             WeLL30           0.0717357 26.13653 21.43476 2.2731   0                        
+Sub2             rain             WeLL74           0.0359556 70.52045 10.77095 1.95362  0                        
+Sub3             rain             WeLL51           0.0239649 99.99794 10.85269 1.87064  0                        
+Sub4             rain             WeLL52           0.00886972 100.0023 3.190317 1        0                        
+Sub5             rain             WeLL52           0.019697 58.38982 8.866133 2.41089  0                        
+Sub6             rain             WeLL51           0.00697514 99.97901 2.876584 1.10563  0                        
+Sub7             rain             WeLL1            0.00736073 99.93636 2.952322 1.97842  0                        
+Sub8             rain             WeLL76           0.00779382 99.96114 2.90489  1        0                        
+Sub9             rain             WeLL83           0.0713659 76.59316 21.13794 2.11657  0                        
+Sub10            rain             WeLL70           0.120312 20.92349 12.47933 2.18018  0                        
+Sub11            rain             WeLL67           0.0271264 89.91203 8.398267 1.69636  0                        
+Sub12            rain             WeLL16           0.0419228 82.8207  13.36867 2.19552  0                        
+Sub13            rain             WeLL24           0.109128 12.30227 11.38113 3.4629   0                        
+Sub14            rain             WeLL24           0.0389186 16.52844 14.62006 2.78109  0                        
+Sub15            rain             WeLL45           0.00892982 99.88937 4.126725 1.325    0                        
+Sub16            rain             WeLL48           0.00977748 100.0068 3.911774 1.22727  0                        
+Sub17            rain             WeLL51           0.0708075 89.64775 14.07676 1.7462   0                        
+Sub18            rain             WeLL1            0.0301637 69.01852 11.99352 2.76786  0                        
+Sub19            rain             WeLL76           0.0374038 55.31231 12.42404 3.31143  0                        
+Sub20            rain             WeLL80           0.024258 74.18855 10.45919 2.0568   0                        
+Sub21            rain             WeLL92           0.0417865 33.17253 16.61755 3.3818   0                        
+Sub22            rain             WeLL106          0.00971163 99.99825 3.884497 1.31343  0                        
+Sub23            rain             Node3            0.0584302 69.77764 9.7631   2.85017  0                        
+Sub24            rain             WeLL44           0.0213461 36.95484 8.867605 3.38928  0                        
+Sub25            rain             WeLL57           0.0717196 88.59454 14.25809 1.78854  0                        
+Sub26            rain             WeLL87           0.0272092 40.65317 13.93272 3.16486  0                        
+Sub27            rain             WeLL89           0.0546592 72.18317 16.20252 2.03648  0                        
+Sub28            rain             WeLL73           0.045965 37.71383 11.94672 1.49725  0                        
+Sub29            rain             WeLL74           0.0266782 76.80168 11.06704 1.68199  0                        
+Sub30            rain             WeLL86           0.0533123 78.74937 14.96864 1.92811  0                        
+Sub31            rain             Node0            0.0252577 8.409782 4.889691 4.4902   0                        
+Sub32            rain             Node4            0.0753948 21.98676 17.24059 3.37703  0                        
+Sub33            rain             Node2            0.0801706 56.97923 14.02957 2.58752  0                        
+Sub34            rain             Node4            0.0686233 32.7347  12.45771 3.39743  0                        
+Sub35            rain             Node5            0.0494293 63.43633 9.588799 2.98812  0                        
+Sub36            rain             WeLL39           0.11775  17.30091 16.34191 3.66694  0                        
+Sub37            rain             WeLL72           0.053796 31.68497 10.26994 3.80146  0                        
+Sub38            rain             WeLL28           0.0328589 41.69802 8.915724 2.85329  0                        
+Sub39            rain             WeLL68           0.0891774 25.07331 25.39364 2.37149  0                        
+Sub40            rain             WeLL64           0.0179223 54.82421 9.811836 2.80435  0                        
+Sub41            rain             WeLL68           0.0257412 55.19693 9.325846 2.65067  0                        
+Sub42            rain             WeLL70           0.0272504 54.68618 12.78941 2.43194  0                        
+Sub43            rain             WeLL32           0.0126747 68.71407 5.870906 3.06667  0                        
+Sub44            rain             WeLL35           0.068539 91.194   13.62577 1.56734  0                        
+Sub45            rain             WeLL30           0.0283716 71.05913 9.282078 1.9308   0                        
+Sub46            rain             WeLL28           0.017744 54.49591 9.860517 3        0                        
+Sub47            rain             WeLL38           0.0894938 30.28009 16.19856 3.63616  0                        
+Sub48            rain             WeLL53           0.0347925 21.01056 14.26858 3.99434  0                        
+Sub49            rain             WeLL9            0.0113248 70.80909 4.59741  1.95595  0                        
+Sub50            rain             WeLL33           0.0481181 24.3457  13.57658 3.52187  0                        
+Sub51            rain             WeLL64           0.0265321 26.67054 9.269828 3.95733  0                        
+Sub52            rain             WeLL66           0.0304138 73.17263 8.866997 2.12219  0                        
+Sub53            rain             WeLL67           0.021126 63.19854 8.126635 2.56713  0                        
+Sub54            rain             WeLL55           0.069718 89.60992 13.86016 1.61084  0                        
+Sub55            rain             WeLL11           0.0750072 22.76767 22.03178 4.09915  0                        
+Sub56            rain             WeLL13           0.0407357 30.30124 14.86976 3.60896  0                        
+Sub57            rain             WeLL56           0.0719634 88.47102 14.37399 1.76808  0                        
+Sub58            rain             WeLL58           0.0720007 88.51261 14.31397 1.66871  0                        
+Sub59            rain             WeLL11           0.0317287 65.17254 12.03303 2.09422  0                        
+Sub60            rain             WeLL13           0.0759042 40.20366 15.22957 2.65362  0                        
+Sub61            rain             WeLL80           0.0178622 71.65362 5.392362 1.20354  0                        
+Sub62            rain             WeLL8            0.132163 15.50942 14.1233  2.96122  0                        
+Sub63            rain             WeLL8            0.131158 17.60887 17.19406 2.59834  0                        
+Sub64            rain             WeLL53           0.0169146 29.04293 9.354385 2.45797  0                        
+Sub65            rain             WeLL95           0.0108876 99.89841 4.666981 1.31915  0                        
+Sub66            rain             WeLL96           0.019813 24.74487 11.64512 3.14005  0                        
+Sub67            rain             WeLL105          0.0260501 63.75    11.16162 2.41541  0                        
+Sub68            rain             WeLL105          0.0166661 99.99837 5.15372  1.3      0                        
+Sub69            rain             WeLL25           0.0449763 29.87431 9.36382  2.69464  0                        
+Sub70            rain             WeLL37           0.0123942 99.98322 6.142128 1.4186   0                        
+Sub71            rain             WeLL25           0.0417388 41.85954 13.93895 3.58657  0                        
+Sub72            rain             WeLL4            0.0281542 72.89636 11.34198 1.65679  0                        
+Sub73            rain             WeLL2            0.0285771 70.36931 11.87694 1.80961  0                        
+Sub74            rain             WeLL2            0.038764 35.45908 11.50165 3.20532  0                        
+Sub75            rain             WeLL9            0.0271149 35.1343  13.43785 2.82459  0                        
+Sub76            rain             WeLL9            0.0297853 42.57503 15.78447 2.95207  0                        
+Sub77            rain             WeLL16           0.0357521 29.39289 11.08902 3.99181  0                        
+Sub78            rain             WeLL70           0.0202107 59.97549 7.467191 1        0                        
+Sub79            rain             WeLL87           0.0667086 49.89164 19.55003 2.76798  0                        
+Sub80            rain             WeLL83           0.0116671 48.97402 6.511385 3.82353  0                        
+Sub81            rain             WeLL78           0.0394913 91.4314  15.48618 1.74093  0                        
+Sub82            rain             Node1            0.0592016 21.01076 12.11509 4.20248  0                        
+
+[SUBAREAS]
+;;Subcatchment   N-Imperv   N-Perv     S-Imperv   S-Perv     PctZero    RouteTo    PctRouted 
+;;-------------- ---------- ---------- ---------- ---------- ---------- ---------- ----------
+Sub0             0.012      0.24       1.524      5.08       5          OUTLET    
+Sub1             0.012      0.24       1.524      5.08       5          OUTLET    
+Sub2             0.012      0.24       1.524      5.08       5          OUTLET    
+Sub3             0.012      0.24       1.524      5.08       5          OUTLET    
+Sub4             0.012      0.24       1.524      5.08       5          OUTLET    
+Sub5             0.012      0.24       1.524      5.08       5          OUTLET    
+Sub6             0.012      0.24       1.524      5.08       5          OUTLET    
+Sub7             0.012      0.24       1.524      5.08       5          OUTLET    
+Sub8             0.012      0.24       1.524      5.08       5          OUTLET    
+Sub9             0.012      0.24       1.524      5.08       5          OUTLET    
+Sub10            0.012      0.24       1.524      5.08       5          OUTLET    
+Sub11            0.012      0.24       1.524      5.08       5          OUTLET    
+Sub12            0.012      0.24       1.524      5.08       5          OUTLET    
+Sub13            0.012      0.24       1.524      5.08       5          OUTLET    
+Sub14            0.012      0.24       1.524      5.08       5          OUTLET    
+Sub15            0.012      0.24       1.524      5.08       5          OUTLET    
+Sub16            0.012      0.24       1.524      5.08       5          OUTLET    
+Sub17            0.012      0.24       1.524      5.08       5          OUTLET    
+Sub18            0.012      0.24       1.524      5.08       5          OUTLET    
+Sub19            0.012      0.24       1.524      5.08       5          OUTLET    
+Sub20            0.012      0.24       1.524      5.08       5          OUTLET    
+Sub21            0.012      0.24       1.524      5.08       5          OUTLET    
+Sub22            0.012      0.24       1.524      5.08       5          OUTLET    
+Sub23            0.012      0.24       1.524      5.08       5          OUTLET    
+Sub24            0.012      0.24       1.524      5.08       5          OUTLET    
+Sub25            0.012      0.24       1.524      5.08       5          OUTLET    
+Sub26            0.012      0.24       1.524      5.08       5          OUTLET    
+Sub27            0.012      0.24       1.524      5.08       5          OUTLET    
+Sub28            0.012      0.24       1.524      5.08       5          OUTLET    
+Sub29            0.012      0.24       1.524      5.08       5          OUTLET    
+Sub30            0.012      0.24       1.524      5.08       5          OUTLET    
+Sub31            0.012      0.24       1.524      5.08       5          OUTLET    
+Sub32            0.012      0.24       1.524      5.08       5          OUTLET    
+Sub33            0.012      0.24       1.524      5.08       5          OUTLET    
+Sub34            0.012      0.24       1.524      5.08       5          OUTLET    
+Sub35            0.012      0.24       1.524      5.08       5          OUTLET    
+Sub36            0.012      0.24       1.524      5.08       5          OUTLET    
+Sub37            0.012      0.24       1.524      5.08       5          OUTLET    
+Sub38            0.012      0.24       1.524      5.08       5          OUTLET    
+Sub39            0.012      0.24       1.524      5.08       5          OUTLET    
+Sub40            0.012      0.24       1.524      5.08       5          OUTLET    
+Sub41            0.012      0.24       1.524      5.08       5          OUTLET    
+Sub42            0.012      0.24       1.524      5.08       5          OUTLET    
+Sub43            0.012      0.24       1.524      5.08       5          OUTLET    
+Sub44            0.012      0.24       1.524      5.08       5          OUTLET    
+Sub45            0.012      0.24       1.524      5.08       5          OUTLET    
+Sub46            0.012      0.24       1.524      5.08       5          OUTLET    
+Sub47            0.012      0.24       1.524      5.08       5          OUTLET    
+Sub48            0.012      0.24       1.524      5.08       5          OUTLET    
+Sub49            0.012      0.24       1.524      5.08       5          OUTLET    
+Sub50            0.012      0.24       1.524      5.08       5          OUTLET    
+Sub51            0.012      0.24       1.524      5.08       5          OUTLET    
+Sub52            0.012      0.24       1.524      5.08       5          OUTLET    
+Sub53            0.012      0.24       1.524      5.08       5          OUTLET    
+Sub54            0.012      0.24       1.524      5.08       5          OUTLET    
+Sub55            0.012      0.24       1.524      5.08       5          OUTLET    
+Sub56            0.012      0.24       1.524      5.08       5          OUTLET    
+Sub57            0.012      0.24       1.524      5.08       5          OUTLET    
+Sub58            0.012      0.24       1.524      5.08       5          OUTLET    
+Sub59            0.012      0.24       1.524      5.08       5          OUTLET    
+Sub60            0.012      0.24       1.524      5.08       5          OUTLET    
+Sub61            0.012      0.24       1.524      5.08       5          OUTLET    
+Sub62            0.012      0.24       1.524      5.08       5          OUTLET    
+Sub63            0.012      0.24       1.524      5.08       5          OUTLET    
+Sub64            0.012      0.24       1.524      5.08       5          OUTLET    
+Sub65            0.012      0.24       1.524      5.08       5          OUTLET    
+Sub66            0.012      0.24       1.524      5.08       5          OUTLET    
+Sub67            0.012      0.24       1.524      5.08       5          OUTLET    
+Sub68            0.012      0.24       1.524      5.08       5          OUTLET    
+Sub69            0.012      0.24       1.524      5.08       5          OUTLET    
+Sub70            0.012      0.24       1.524      5.08       5          OUTLET    
+Sub71            0.012      0.24       1.524      5.08       5          OUTLET    
+Sub72            0.012      0.24       1.524      5.08       5          OUTLET    
+Sub73            0.012      0.24       1.524      5.08       5          OUTLET    
+Sub74            0.012      0.24       1.524      5.08       5          OUTLET    
+Sub75            0.012      0.24       1.524      5.08       5          OUTLET    
+Sub76            0.012      0.24       1.524      5.08       5          OUTLET    
+Sub77            0.012      0.24       1.524      5.08       5          OUTLET    
+Sub78            0.012      0.24       1.524      5.08       5          OUTLET    
+Sub79            0.012      0.24       1.524      5.08       5          OUTLET    
+Sub80            0.012      0.24       1.524      5.08       5          OUTLET    
+Sub81            0.012      0.24       1.524      5.08       5          OUTLET    
+Sub82            0.012      0.24       1.524      5.08       5          OUTLET    
+
+[INFILTRATION]
+;;Subcatchment   MaxRate    MinRate    Decay      DryTime    MaxInfil  
+;;-------------- ---------- ---------- ---------- ---------- ----------
+Sub0             75.25      3.5        4          7          0         
+Sub1             75.25      3.5        4          7          0         
+Sub2             75.25      3.5        4          7          0         
+Sub3             3.0        0.5        4          7          0         
+Sub4             75.25      3.5        4          7          0         
+Sub5             75.25      3.5        4          7          0         
+Sub6             75.25      3.5        4          7          0         
+Sub7             75.25      3.5        4          7          0         
+Sub8             75.25      3.5        4          7          0         
+Sub9             75.25      3.5        4          7          0         
+Sub10            75.25      3.5        4          7          0         
+Sub11            75.25      3.5        4          7          0         
+Sub12            75.25      3.5        4          7          0         
+Sub13            75.25      3.5        4          7          0         
+Sub14            75.25      3.5        4          7          0         
+Sub15            75.25      3.5        4          7          0         
+Sub16            75.25      3.5        4          7          0         
+Sub17            75.25      3.5        4          7          0         
+Sub18            75.25      3.5        4          7          0         
+Sub19            75.25      3.5        4          7          0         
+Sub20            75.25      3.5        4          7          0         
+Sub21            75.25      3.5        4          7          0         
+Sub22            75.25      3.5        4          7          0         
+Sub23            75.25      3.5        4          7          0         
+Sub24            75.25      3.5        4          7          0         
+Sub25            75.25      3.5        4          7          0         
+Sub26            75.25      3.5        4          7          0         
+Sub27            75.25      3.5        4          7          0         
+Sub28            75.25      3.5        4          7          0         
+Sub29            75.25      3.5        4          7          0         
+Sub30            75.25      3.5        4          7          0         
+Sub31            75.25      3.5        4          7          0         
+Sub32            75.25      3.5        4          7          0         
+Sub33            75.25      3.5        4          7          0         
+Sub34            75.25      3.5        4          7          0         
+Sub35            75.25      3.5        4          7          0         
+Sub36            75.25      3.5        4          7          0         
+Sub37            75.25      3.5        4          7          0         
+Sub38            75.25      3.5        4          7          0         
+Sub39            75.25      3.5        4          7          0         
+Sub40            75.25      3.5        4          7          0         
+Sub41            75.25      3.5        4          7          0         
+Sub42            75.25      3.5        4          7          0         
+Sub43            75.25      3.5        4          7          0         
+Sub44            75.25      3.5        4          7          0         
+Sub45            75.25      3.5        4          7          0         
+Sub46            75.25      3.5        4          7          0         
+Sub47            75.25      3.5        4          7          0         
+Sub48            75.25      3.5        4          7          0         
+Sub49            75.25      3.5        4          7          0         
+Sub50            75.25      3.5        4          7          0         
+Sub51            75.25      3.5        4          7          0         
+Sub52            75.25      3.5        4          7          0         
+Sub53            75.25      3.5        4          7          0         
+Sub54            75.25      3.5        4          7          0         
+Sub55            75.25      3.5        4          7          0         
+Sub56            75.25      3.5        4          7          0         
+Sub57            75.25      3.5        4          7          0         
+Sub58            75.25      3.5        4          7          0         
+Sub59            75.25      3.5        4          7          0         
+Sub60            75.25      3.5        4          7          0         
+Sub61            75.25      3.5        4          7          0         
+Sub62            75.25      3.5        4          7          0         
+Sub63            75.25      3.5        4          7          0         
+Sub64            75.25      3.5        4          7          0         
+Sub65            75.25      3.5        4          7          0         
+Sub66            75.25      3.5        4          7          0         
+Sub67            75.25      3.5        4          7          0         
+Sub68            75.25      3.5        4          7          0         
+Sub69            75.25      3.5        4          7          0         
+Sub70            75.25      3.5        4          7          0         
+Sub71            75.25      3.5        4          7          0         
+Sub72            75.25      3.5        4          7          0         
+Sub73            75.25      3.5        4          7          0         
+Sub74            75.25      3.5        4          7          0         
+Sub75            75.25      3.5        4          7          0         
+Sub76            75.25      3.5        4          7          0         
+Sub77            75.25      3.5        4          7          0         
+Sub78            75.25      3.5        4          7          0         
+Sub79            75.25      3.5        4          7          0         
+Sub80            75.25      3.5        4          7          0         
+Sub81            75.25      3.5        4          7          0         
+Sub82            75.25      3.5        4          7          0         
+
+[JUNCTIONS]
+;;Junction       Invert     MaxDepth   InitDepth  SurDepth   Aponded   
+;;-------------- ---------- ---------- ---------- ---------- ----------
+;AdminWeLL0
+AdminWeLL0       0.46       1          0          0.015      0         
+AdminWeLL1       1          1          0          0.015      0         
+AdminWeLL2       0.34       1          0          0.015      0         
+AdminWeLL3       0.42       1          0          0.015      0         
+AdminWeLL4       0.42       1          0          0.015      0         
+Node0            3.9        0.3        0          0.015      0         
+Node1            3.9        0.3        0          0.015      0         
+Node2            3.57       0.3        0          0.015      0         
+Node3            3.57       0.3        0          0.015      0         
+Node4            3.57       0.3        0          0.015      0         
+Node5            3.57       0.3        0          0.015      0         
+WeLL0            1.201      1          0          0.015      0         
+WeLL1            1.5        1          0          0.015      0         
+WeLL2            1.7        1          0          0.015      0         
+WeLL3            1.664      1          0          0.015      0         
+WeLL4            1.624      1          0          0.015      0         
+WeLL5            1.588      1          0          0.015      0         
+WeLL6            1.467      1          0          0.015      0         
+WeLL7            1.413      1          0          0.015      0         
+WeLL8            1.028      1          0          0.015      0         
+WeLL9            1.5        1          0          0.015      0         
+WeLL10           1.259      1          0          0.015      0         
+WeLL11           1.7        1          0          0.015      0         
+WeLL12           1.664      1          0          0.015      0         
+WeLL13           1.624      1          0          0.015      0         
+WeLL14           1.588      1          0          0.015      0         
+WeLL15           1.376      1          0          0.015      0         
+WeLL16           1.5        1          0          0.015      0         
+WeLL17           1.5        1          0          0.015      0         
+WeLL18           1.44       1          0          0.015      0         
+WeLL19           1.399      1          0          0.015      0         
+WeLL20           1.221      1          0          0.015      0         
+WeLL21           1.184      1          0          0.015      0         
+WeLL22           1.094      1          0          0.015      0         
+WeLL23           1.067      1          0          0.015      0         
+WeLL24           0.974      1          0          0.015      0         
+WeLL25           1.5        1          0          0.015      0         
+WeLL26           1.286      1          0          0.015      0         
+WeLL27           1.376      1          0          0.015      0         
+WeLL28           1.7        1          0          0.015      0         
+WeLL29           1.457      1          0          0.015      0         
+WeLL30           1.424      1          0          0.015      0         
+WeLL31           1.384      1          0          0.015      0         
+WeLL32           1.245      1          0          0.015      0         
+WeLL33           1.7        1          0          0.015      0         
+WeLL34           1.67       1          0          0.015      0         
+WeLL35           1.625      1          0          0.015      0         
+WeLL36           1.58       1          0          0.015      0         
+WeLL37           1.534      1          0          0.015      0         
+WeLL38           1.553      1          0          0.015      0         
+WeLL39           1.5        1          0          0.015      0         
+WeLL40           1.473      1          0          0.015      0         
+WeLL41           1.44       1          0          0.015      0         
+WeLL42           1.414      1          0          0.015      0         
+WeLL43           0.948      1          0          0.015      0         
+WeLL44           0.976      1          0          0.015      0         
+WeLL45           0.998      1          0          0.015      0         
+WeLL46           1.065      1          0          0.015      0         
+WeLL47           1.095      1          0          0.015      0         
+WeLL48           1.177      1          0          0.015      0         
+WeLL49           1.466      1          0          0.015      0         
+WeLL50           1.437      1          0          0.015      0         
+WeLL51           1.412      1          0          0.015      0         
+WeLL52           1.345      1          0          0.015      0         
+WeLL53           1.7        1          0          0.015      0         
+WeLL54           1.673      1          0          0.015      0         
+WeLL55           1.627      1          0          0.015      0         
+WeLL56           1.331      1          0          0.015      0         
+WeLL57           1.427      1          0          0.015      0         
+WeLL58           1.139      1          0          0.015      0         
+WeLL59           1.64       1          0          0.015      0         
+WeLL60           1.614      1          0          0.015      0         
+WeLL61           1.581      1          0          0.015      0         
+WeLL62           1.543      1          0          0.015      0         
+WeLL63           1.564      1          0          0.015      0         
+WeLL64           1.7        1          0          0.015      0         
+WeLL65           1.657      1          0          0.015      0         
+WeLL66           1.617      1          0          0.015      0         
+WeLL67           1.49       1          0          0.015      0         
+WeLL68           1.7        1          0          0.015      0         
+WeLL69           1.682      1          0          0.015      0         
+WeLL70           1.285      1          0          0.015      0         
+WeLL71           1.7        1          0          0.015      0         
+WeLL72           1.621      1          0          0.015      0         
+WeLL73           1.5        1          0          0.015      0         
+WeLL74           1.458      1          0          0.015      0         
+WeLL75           1.232      1          0          0.015      0         
+WeLL76           1.5        1          0          0.015      0         
+WeLL77           1.455      1          0          0.015      0         
+WeLL78           1.436      1          0          0.015      0         
+WeLL79           1.41       1          0          0.015      0         
+WeLL80           1          1          0          0.015      0         
+WeLL81           1.454      1          0          0.015      0         
+WeLL82           1.5        1          0          0.015      0         
+WeLL83           0.966      1          0          0.015      0         
+WeLL84           0.851      1          0          0.015      0         
+WeLL85           0.803      1          0          0.015      0         
+WeLL86           0.971      1          0          0.015      0         
+WeLL87           1          1          0          0.015      0         
+WeLL88           0.77       1          0          0.015      0         
+WeLL89           0.911      1          0          0.015      0         
+WeLL90           0.885      1          0          0.015      0         
+WeLL91           0.734      1          0          0.015      0         
+WeLL92           1.5        1          0          0.015      0         
+WeLL93           1.345      1          0          0.015      0         
+WeLL94           1.196      1          0          0.015      0         
+WeLL95           0.935      1          0          0.015      0         
+WeLL96           0.909      1          0          0.015      0         
+WeLL97           0.864      1          0          0.015      0         
+WeLL100          0.909      1          0          0.015      0         
+WeLL102          0.883      1          0          0.015      0         
+WeLL103          0.874      1          0          0.015      0         
+WeLL104          0.816      1          0          0.015      0         
+WeLL105          0.774      1          0          0.015      0         
+WeLL106          0.726      1          0          0.015      0         
+WeLL107          1.582      1          0          0.015      0         
+WeLL108          1.673      1          0          0.015      0         
+
+[OUTFALLS]
+;;Outfall        Invert     Type       Stage Data       Gated   
+;;-------------- ---------- ---------- ---------------- --------
+Outfall1         0          NORMAL                      NO
+Outfall2         0          FIXED      21               YES
+Outfall3         0          FREE                        NO
+Outfall4         0          FREE                        NO
+Outfall5         0.3        FREE                        NO
+
+[STORAGE]
+;;Storage Node   Invert   MaxDepth   InitDepth  Shape      Curve Name/Params                     Fevap    Seepage
+;;-------------- -------- ---------- ----------- ---------- ---------------------------- -------- -------- --------------------------------
+Storage0         1        2.5        0          TABULAR    StorageCurve                 0        2        1        2        3       
+Storage1         2        1          0          TABULAR    StorageCurve                 0        0       
+Storage2         2        1          0          TABULAR    StorageCurve                 0        0       
+Storage3         0        1          0          TABULAR    StorageCurve                 0        0       
+Storage4         2        1          0          TABULAR    StorageCurve                 0        0       
+Storage5         0        1          0          TABULAR    StorageCurve                 0        0       
+Storage6         0        1          0          TABULAR    StorageCurve                 0        0       
+
+[CONDUITS]
+;;Conduit        From Node        To Node          Length     Roughness  InOffset   OutOffset  InitFlow   MaxFlow   
+;;-------------- ---------------- ---------------- ---------- ---------- ---------- ---------- ---------- ----------
+Culvert0         Node0            WeLL92           45.9548    0.02       0          0          0          0         
+Culvert1         Node1            WeLL84           23.5492    0.02       0          0          0          0         
+Culvert2         Node3            WeLL46           46.0245    0.02       0          0          0          0         
+Culvert3         Node5            WeLL86           48.003     0.02       0          0          0          0         
+Culvert4         Node2            WeLL47           46.0243    0.02       0          0          0          0         
+Culvert5         Node4            WeLL87           42.566     0.02       0          0          0          0         
+Conduit0         WeLL76           WeLL77           14.983     0.015      0          0          0          0         
+Conduit1         WeLL77           WeLL78           6.34991    0.015      0          0          0          0         
+Conduit2         WeLL78           WeLL79           8.45022    0.015      0          0          0          0         
+Conduit3         WeLL79           WeLL80           7.52957    0.015      0          0          0          0         
+Conduit4         WeLL82           WeLL81           15.1613    0.015      0          0          0          0         
+Conduit5         WeLL81           WeLL80           16.1524    0.015      0          0          0          0         
+Conduit6         WeLL80           WeLL83           11.258     0.015      0          0          0          0         
+Conduit7         WeLL83           WeLL84           4.98333    0.015      0          0          0          0         
+Conduit8         WeLL84           WeLL85           15.8006    0.015      0          0          0          0         
+Conduit9         WeLL85           WeLL88           10.7704    0.015      0          0          0          0         
+Conduit10        WeLL88           WeLL91           11.9351    0.015      0          0          0          0         
+Conduit11        WeLL87           WeLL86           9.60712    0.015      0          0          0          0         
+Conduit12        WeLL86           WeLL89           19.949     0.015      0          0          0          0         
+Conduit13        WeLL89           WeLL90           8.57308    0.015      0          0          0          0         
+Conduit14        WeLL90           AdminWeLL2       23.9847    0.015      0          0          0          0         
+Conduit15        WeLL73           WeLL74           13.5523    0.015      0          0          0          0         
+Conduit16        WeLL71           WeLL108          8.91686    0.015      0          0          0          0         
+Conduit17        WeLL108          WeLL72           17.3304    0.015      0          0          0          0         
+Conduit18        WeLL72           WeLL74           14.3745    0.015      0          0          0          0         
+Conduit19        WeLL74           WeLL70           24.1219    0.015      0          0          0          0         
+Conduit20        WeLL68           WeLL69           5.87295    0.015      0          0          0          0         
+Conduit21        WeLL69           WeLL70           13.6697    0.015      0          0          0          0         
+Conduit22        WeLL70           WeLL75           17.4826    0.015      0          0          0          0         
+Conduit23        WeLL75           AdminWeLL1       20.8304    0.015      0          0          0          0         
+Conduit24        WeLL64           WeLL65           14.1638    0.015      0          0          0          0         
+Conduit25        WeLL65           WeLL66           13.2363    0.015      0          0          0          0         
+Conduit26        WeLL66           WeLL107          11.6051    0.015      0          0          0          0         
+Conduit27        WeLL107          WeLL67           8.99895    0.015      0          0          0          0         
+Conduit28        WeLL28           WeLL39           14.2206    0.015      0          0          0          0         
+Conduit29        WeLL29           WeLL30           10.6628    0.015      0          0          0          0         
+Conduit30        WeLL30           WeLL31           13.0774    0.015      0          0          0          0         
+Conduit31        WeLL31           WeLL32           12.8094    0.015      0          0          0          0         
+Conduit32        WeLL53           WeLL54           8.89979    0.015      0          0          0          0         
+Conduit33        WeLL54           WeLL59           10.6999    0.015      0          0          0          0         
+Conduit34        WeLL59           WeLL55           4.3022     0.015      0          0          0          0         
+Conduit35        WeLL55           WeLL60           4.29788    0.015      0          0          0          0         
+Conduit36        WeLL60           WeLL61           10.7       0.015      0          0          0          0         
+Conduit37        WeLL61           WeLL63           5.49996    0.015      0          0          0          0         
+Conduit38        WeLL63           WeLL62           6.81309    0.015      0          0          0          0         
+Conduit39        WeLL62           WeLL67           17.55      0.015      0          0          0          0         
+Conduit40        WeLL17           WeLL18           19.675     0.015      0          0          0          0         
+Conduit41        WeLL18           WeLL19           13.4224    0.015      0          0          0          0         
+Conduit42        WeLL16           WeLL19           20.6642    0.015      0          0          0          0         
+Conduit43        WeLL11           WeLL12           11.6894    0.015      0          0          0          0         
+Conduit44        WeLL12           WeLL13           13.0997    0.015      0          0          0          0         
+Conduit45        WeLL13           WeLL14           11.7002    0.015      0          0          0          0         
+Conduit46        WeLL14           WeLL15           6.40154    0.015      0          0          0          0         
+Conduit47        WeLL15           WeLL93           10.0972    0.015      0          0          0          0         
+Conduit48        WeLL93           WeLL20           7.89918    0.015      0          0          0          0         
+Conduit49        WeLL20           WeLL0            6.60857    0.015      0          0          0          0         
+Conduit50        WeLL0            WeLL21           5.50158    0.015      0          0          0          0         
+Conduit51        WeLL21           WeLL58           14.9914    0.015      0          0          0          0         
+Conduit52        WeLL58           WeLL22           15.0199    0.015      0          0          0          0         
+Conduit53        WeLL22           WeLL23           8.97963    0.015      0          0          0          0         
+Conduit54        WeLL23           WeLL8            12.6921    0.015      0          0          0          0         
+Conduit55        WeLL7            WeLL27           12.3249    0.015      0          0          0          0         
+Conduit56        WeLL27           WeLL56           15.0062    0.015      0          0          0          0         
+Conduit57        WeLL56           WeLL26           14.9938    0.015      0          0          0          0         
+Conduit58        WeLL26           WeLL10           8.99546    0.015      0          0          0          0         
+Conduit59        WeLL10           WeLL94           20.6786    0.015      0          0          0          0         
+Conduit60        WeLL94           WeLL8            3.24839    0.015      0          0          0          0         
+Conduit61        WeLL9            WeLL94           13.8039    0.015      0          0          0          0         
+Conduit62        WeLL8            WeLL24           17.8107    0.015      0          0          0          0         
+Conduit63        WeLL24           AdminWeLL0       1.87897    0.015      0          0          0          0         
+Conduit64        WeLL2            WeLL3            11.7002    0.015      0          0          0          0         
+Conduit65        WeLL3            WeLL4            13.0999    0.015      0          0          0          0         
+Conduit66        WeLL4            WeLL5            11.7002    0.015      0          0          0          0         
+Conduit67        WeLL5            WeLL6            6.60071    0.015      0          0          0          0         
+Conduit68        WeLL6            WeLL7            18.0089    0.015      0          0          0          0         
+Conduit69        WeLL25           WeLL6            10.7909    0.015      0          0          0          0         
+Conduit70        WeLL33           WeLL34           9.96648    0.015      0          0          0          0         
+Conduit71        WeLL34           WeLL35           14.9899    0.015      0          0          0          0         
+Conduit72        WeLL35           WeLL36           15.0104    0.015      0          0          0          0         
+Conduit73        WeLL36           WeLL38           9.00579    0.015      0          0          0          0         
+Conduit74        WeLL38           WeLL37           6.17684    0.015      0          0          0          0         
+Conduit75        WeLL39           WeLL40           8.95137    0.015      0          0          0          0         
+Conduit76        WeLL40           WeLL41           10.7001    0.015      0          0          0          0         
+Conduit77        WeLL41           WeLL57           4.29003    0.015      0          0          0          0         
+Conduit78        WeLL57           WeLL42           4.20129    0.015      0          0          0          0         
+Conduit79        WeLL42           WeLL43           10.6603    0.015      0          0          0          0         
+Conduit80        WeLL102          WeLL103          8.41176    0.015      0          0          0          0         
+Conduit81        WeLL45           WeLL44           7.27419    0.015      0          0          0          0         
+Conduit82        WeLL104          WeLL106          29.6002    0.015      0          0          0          0         
+Conduit83        WeLL46           WeLL45           22.0552    0.015      0          0          0          0         
+Conduit84        WeLL47           WeLL46           9.80753    0.015      0          0          0          0         
+Conduit85        WeLL48           WeLL47           27.3268    0.015      0          0          0          0         
+Conduit86        WeLL52           WeLL48           22.5449    0.015      0          0          0          0         
+Conduit87        WeLL92           WeLL48           7.57076    0.015      0          0          0          0         
+Conduit88        WeLL1            WeLL49           11.1023    0.015      0          0          0          0         
+Conduit89        WeLL49           WeLL50           9.64796    0.015      0          0          0          0         
+Conduit90        WeLL50           WeLL51           8.25241    0.015      0          0          0          0         
+Conduit91        WeLL51           WeLL52           22.2668    0.015      0          0          0          0         
+Conduit92        WeLL106          AdminWeLL3       36.4       0.015      0          0          0          0         
+Conduit93        WeLL43           WeLL100          12.8       0.015      0          0          0          0         
+Conduit95        WeLL97           WeLL105          30         0.015      0          0          0          0         
+Conduit96        WeLL32           WeLL95           34.4       0.015      0          0          0          0         
+Conduit97        WeLL95           WeLL96           8.5        0.015      0          0          0          0         
+Conduit98        WeLL105          AdminWeLL4       26.6       0.015      0          0          0          0         
+Conduit99        WeLL37           WeLL32           18.6       0.015      0          0          0          0         
+Conduit100       WeLL67           WeLL75           7.3        0.015      0          0          0          0         
+Conduit101       WeLL91           AdminWeLL2       2          0.015      0          0          0          0         
+Conduit102       WeLL103          WeLL104          19.1       0.015      0          0          0          0         
+Conduit105       WeLL100          WeLL102          2.8        0.015      0          0          0          0         
+Conduit106       WeLL44           WeLL43           10         0.015      0          0          0          0         
+Conduit107       WeLL19           WeLL15           7.4        0.015      0          0          0          0         
+AdminToOut1      AdminWeLL3       Outfall3         10         0.01       0          0          0          0         
+AdminToOut2      AdminWeLL4       Outfall2         10         0.01       0          0          0          0         
+AdminToOut3      AdminWeLL2       Outfall4         10         0.01       0          0          0          0         
+AdminToOut4      AdminWeLL1       Outfall5         10         0.01       0          0          0          0         
+AdminToOut5      AdminWeLL0       Outfall1         10         0.01       0          0          0          0         
+
+[XSECTIONS]
+;;Link           Shape        Geom1            Geom2      Geom3      Geom4      Barrels   
+;;-------------- ------------ ---------------- ---------- ---------- ---------- ----------
+Culvert0         RECT_OPEN    0.3              0.2        0          0          1                    
+Culvert1         TRAPEZOIDAL  0.3              0.2        0.5        0.5        1          567       
+Culvert2         TRAPEZOIDAL  0.3              0.2        0.5        0.5        1                    
+Culvert3         TRAPEZOIDAL  0.3              0.2        0.5        0.5        1                    
+Culvert4         TRAPEZOIDAL  0.3              0.2        0.5        0.5        1                    
+Culvert5         TRAPEZOIDAL  0.3              0.2        0.5        0.5        1                    
+Conduit0         CIRCULAR     0.325            0          0          0          1                    
+Conduit1         CIRCULAR     0.325            0          0          0          1                    
+Conduit2         CIRCULAR     0.325            0          0          0          1                    
+Conduit3         CIRCULAR     0.325            0          0          0          1                    
+Conduit4         CIRCULAR     0.325            0          0          0          1                    
+Conduit5         CIRCULAR     0.325            0          0          0          1                    
+Conduit6         CIRCULAR     0.325            0          0          0          1                    
+Conduit7         CIRCULAR     0.325            0          0          0          1                    
+Conduit8         CIRCULAR     0.325            0          0          0          1                    
+Conduit9         CIRCULAR     0.325            0          0          0          1                    
+Conduit10        CIRCULAR     0.325            0          0          0          1                    
+Conduit11        CIRCULAR     0.325            0          0          0          1                    
+Conduit12        CIRCULAR     0.325            0          0          0          1                    
+Conduit13        CIRCULAR     0.325            0          0          0          1                    
+Conduit14        CIRCULAR     0.325            0          0          0          1                    
+Conduit15        CIRCULAR     0.325            0          0          0          1                    
+Conduit16        CIRCULAR     0.325            0          0          0          1                    
+Conduit17        CIRCULAR     0.325            0          0          0          1                    
+Conduit18        CIRCULAR     0.325            0          0          0          1                    
+Conduit19        CIRCULAR     0.325            0          0          0          1                    
+Conduit20        CIRCULAR     0.325            0          0          0          1                    
+Conduit21        CIRCULAR     0.325            0          0          0          1                    
+Conduit22        CIRCULAR     0.325            0          0          0          1                    
+Conduit23        CIRCULAR     0.325            0          0          0          1                    
+Conduit24        CIRCULAR     0.325            0          0          0          1                    
+Conduit25        CIRCULAR     0.325            0          0          0          1                    
+Conduit26        CIRCULAR     0.325            0          0          0          1                    
+Conduit27        CIRCULAR     0.325            0          0          0          1                    
+Conduit28        CIRCULAR     0.325            0          0          0          1                    
+Conduit29        CIRCULAR     0.325            0          0          0          1                    
+Conduit30        CIRCULAR     0.325            0          0          0          1                    
+Conduit31        CIRCULAR     0.325            0          0          0          1                    
+Conduit32        CIRCULAR     0.325            0          0          0          1                    
+Conduit33        CIRCULAR     0.325            0          0          0          1                    
+Conduit34        CIRCULAR     0.325            0          0          0          1                    
+Conduit35        CIRCULAR     0.325            0          0          0          1                    
+Conduit36        CIRCULAR     0.325            0          0          0          1                    
+Conduit37        CIRCULAR     0.325            0          0          0          1                    
+Conduit38        CIRCULAR     0.325            0          0          0          1                    
+Conduit39        CIRCULAR     0.325            0          0          0          1                    
+Conduit40        CIRCULAR     0.325            0          0          0          1                    
+Conduit41        CIRCULAR     0.325            0          0          0          1                    
+Conduit42        CIRCULAR     0.325            0          0          0          1                    
+Conduit43        CIRCULAR     0.325            0          0          0          1                    
+Conduit44        CIRCULAR     0.325            0          0          0          1                    
+Conduit45        CIRCULAR     0.325            0          0          0          1                    
+Conduit46        CIRCULAR     0.325            0          0          0          1                    
+Conduit47        CIRCULAR     0.325            0          0          0          1                    
+Conduit48        CIRCULAR     0.325            0          0          0          1                    
+Conduit49        CIRCULAR     0.325            0          0          0          1                    
+Conduit50        CIRCULAR     0.325            0          0          0          1                    
+Conduit51        CIRCULAR     0.325            0          0          0          1                    
+Conduit52        CIRCULAR     0.325            0          0          0          1                    
+Conduit53        CIRCULAR     0.325            0          0          0          1                    
+Conduit54        CIRCULAR     0.325            0          0          0          1                    
+Conduit55        CIRCULAR     0.325            0          0          0          1                    
+Conduit56        CIRCULAR     0.325            0          0          0          1                    
+Conduit57        CIRCULAR     0.325            0          0          0          1                    
+Conduit58        CIRCULAR     0.325            0          0          0          1                    
+Conduit59        CIRCULAR     0.325            0          0          0          1                    
+Conduit60        CIRCULAR     0.325            0          0          0          1                    
+Conduit61        CIRCULAR     0.325            0          0          0          1                    
+Conduit62        CIRCULAR     0.325            0          0          0          1                    
+Conduit63        CIRCULAR     0.325            0          0          0          1                    
+Conduit64        CIRCULAR     0.325            0          0          0          1                    
+Conduit65        CIRCULAR     0.325            0          0          0          1                    
+Conduit66        CIRCULAR     0.325            0          0          0          1                    
+Conduit67        CIRCULAR     0.325            0          0          0          1                    
+Conduit68        CIRCULAR     0.325            0          0          0          1                    
+Conduit69        CIRCULAR     0.325            0          0          0          1                    
+Conduit70        CIRCULAR     0.325            0          0          0          1                    
+Conduit71        CIRCULAR     0.325            0          0          0          1                    
+Conduit72        CIRCULAR     0.325            0          0          0          1                    
+Conduit73        CIRCULAR     0.325            0          0          0          1                    
+Conduit74        CIRCULAR     0.325            0          0          0          1                    
+Conduit75        CIRCULAR     0.325            0          0          0          1                    
+Conduit76        CIRCULAR     0.325            0          0          0          1                    
+Conduit77        CIRCULAR     0.325            0          0          0          1                    
+Conduit78        CIRCULAR     0.325            0          0          0          1                    
+Conduit79        CIRCULAR     0.325            0          0          0          1                    
+Conduit80        CIRCULAR     0.325            0          0          0          1                    
+Conduit81        CIRCULAR     0.325            0          0          0          1                    
+Conduit82        CIRCULAR     0.325            0          0          0          1                    
+Conduit83        CIRCULAR     0.325            0          0          0          1                    
+Conduit84        CIRCULAR     0.325            0          0          0          1                    
+Conduit85        CIRCULAR     0.325            0          0          0          1                    
+Conduit86        CIRCULAR     0.325            0          0          0          1                    
+Conduit87        CIRCULAR     0.325            0          0          0          1                    
+Conduit88        CIRCULAR     0.325            0          0          0          1                    
+Conduit89        CIRCULAR     0.325            0          0          0          1                    
+Conduit90        CIRCULAR     0.325            0          0          0          1                    
+Conduit91        CIRCULAR     0.325            0          0          0          1                    
+Conduit92        CIRCULAR     0.325            0          0          0          1                    
+Conduit93        CIRCULAR     0.325            0          0          0          1                    
+Conduit95        CIRCULAR     0.325            0          0          0          1                    
+Conduit96        CIRCULAR     0.325            0          0          0          1                    
+Conduit97        CIRCULAR     0.325            0          0          0          1                    
+Conduit98        CIRCULAR     0.325            0          0          0          1                    
+Conduit99        CIRCULAR     0.325            0          0          0          1                    
+Conduit100       CIRCULAR     0.325            0          0          0          1                    
+Conduit101       CIRCULAR     0.325            0          0          0          1                    
+Conduit102       CIRCULAR     0.325            0          0          0          1                    
+Conduit105       CIRCULAR     0.325            0          0          0          1                    
+Conduit106       CIRCULAR     0.325            0          0          0          1                    
+Conduit107       CIRCULAR     0.325            0          0          0          1                    
+AdminToOut1      CIRCULAR     0.3              0          0          0          1                    
+AdminToOut2      CIRCULAR     0.3              0          0          0          1                    
+AdminToOut3      CIRCULAR     0.3              0          0          0          1                    
+AdminToOut4      CIRCULAR     0.3              0          0          0          1                    
+AdminToOut5      CIRCULAR     0.3              0          0          0          1                    
+
+[LOSSES]
+;;Link           Kinlet     Koutlet    Kavg       Flap Gate  SeepRate  
+;;-------------- ---------- ---------- ---------- ---------- ----------
+Culvert1         1          2          3          NO         4         
+
+[CURVES]
+;;Curve          Type       X-Value    Y-Value   
+;;-------------- ---------- ---------- ----------
+;124567890
+storageCurve1    Shape      0          15        
+storageCurve1               1          20        
+storageCurve1               2          30        
+;
+StorageCurve     Storage    0          30        
+StorageCurve                0.5        45        
+StorageCurve                1          60        
+
+[TIMESERIES]
+;;Time Series    Date       Time       Value     
+;;-------------- ---------- ---------- ----------
+1-yr                        0:00       2.42062   
+1-yr                        0:01       2.4638    
+1-yr                        0:02       2.50698   
+1-yr                        0:03       2.55016   
+1-yr                        0:04       2.59588   
+1-yr                        0:05       2.64414   
+1-yr                        0:06       2.69494   
+1-yr                        0:07       2.74828   
+1-yr                        0:08       2.80162   
+1-yr                        0:09       2.8575    
+1-yr                        0:10       2.91592   
+1-yr                        0:11       2.97688   
+1-yr                        0:12       3.04038   
+1-yr                        0:13       3.10642   
+1-yr                        0:14       3.175     
+1-yr                        0:15       3.24612   
+1-yr                        0:16       3.32232   
+1-yr                        0:17       3.40106   
+1-yr                        0:18       3.48234   
+1-yr                        0:19       3.57124   
+1-yr                        0:20       3.66014   
+1-yr                        0:21       3.75666   
+1-yr                        0:22       3.85826   
+1-yr                        0:23       3.9624    
+1-yr                        0:24       4.07416   
+1-yr                        0:25       4.19354   
+1-yr                        0:26       4.318     
+1-yr                        0:27       4.45008   
+1-yr                        0:28       4.58978   
+1-yr                        0:29       4.73964   
+1-yr                        0:30       4.89712   
+1-yr                        0:31       5.06476   
+1-yr                        0:32       5.2451    
+1-yr                        0:33       5.43814   
+1-yr                        0:34       5.64388   
+1-yr                        0:35       5.8674    
+1-yr                        0:36       6.10616   
+1-yr                        0:37       6.3627    
+1-yr                        0:38       6.6421    
+1-yr                        0:39       6.94436   
+1-yr                        0:40       7.27202   
+1-yr                        0:41       7.63016   
+1-yr                        0:42       8.02386   
+1-yr                        0:43       8.45566   
+1-yr                        0:44       8.93064   
+1-yr                        0:45       9.45642   
+1-yr                        0:46       10.04316  
+1-yr                        0:47       10.69848  
+1-yr                        0:48       11.43254  
+1-yr                        0:49       12.26566  
+1-yr                        0:50       13.21054  
+1-yr                        0:51       14.29512  
+1-yr                        0:52       15.54734  
+1-yr                        0:53       17.00276  
+1-yr                        0:54       18.71726  
+1-yr                        0:55       20.75434  
+1-yr                        0:56       23.20798  
+1-yr                        0:57       26.20518  
+1-yr                        0:58       29.93136  
+1-yr                        0:59       34.65576  
+1-yr                        1:00       40.78986  
+1-yr                        1:01       34.65576  
+1-yr                        1:02       29.93136  
+1-yr                        1:03       26.20518  
+1-yr                        1:04       23.20798  
+1-yr                        1:05       20.75434  
+1-yr                        1:06       18.71726  
+1-yr                        1:07       17.00276  
+1-yr                        1:08       15.54734  
+1-yr                        1:09       14.29512  
+1-yr                        1:10       13.21054  
+1-yr                        1:11       12.26566  
+1-yr                        1:12       11.43254  
+1-yr                        1:13       10.69848  
+1-yr                        1:14       10.04316  
+1-yr                        1:15       9.45642   
+1-yr                        1:16       8.93064   
+1-yr                        1:17       8.45566   
+1-yr                        1:18       8.02386   
+1-yr                        1:19       7.63016   
+1-yr                        1:20       7.27202   
+1-yr                        1:21       6.94436   
+1-yr                        1:22       6.6421    
+1-yr                        1:23       6.3627    
+1-yr                        1:24       6.10616   
+1-yr                        1:25       5.8674    
+1-yr                        1:26       5.64388   
+1-yr                        1:27       5.43814   
+1-yr                        1:28       5.2451    
+1-yr                        1:29       5.06476   
+1-yr                        1:30       4.89712   
+1-yr                        1:31       4.73964   
+1-yr                        1:32       4.58978   
+1-yr                        1:33       4.45008   
+1-yr                        1:34       4.318     
+1-yr                        1:35       4.19354   
+1-yr                        1:36       4.07416   
+1-yr                        1:37       3.9624    
+1-yr                        1:38       3.85826   
+1-yr                        1:39       3.75666   
+1-yr                        1:40       3.66014   
+1-yr                        1:41       3.57124   
+1-yr                        1:42       3.48234   
+1-yr                        1:43       3.40106   
+1-yr                        1:44       3.32232   
+1-yr                        1:45       3.24612   
+1-yr                        1:46       3.175     
+1-yr                        1:47       3.10642   
+1-yr                        1:48       3.04038   
+1-yr                        1:49       2.97688   
+1-yr                        1:50       2.91592   
+1-yr                        1:51       2.8575    
+1-yr                        1:52       2.80162   
+1-yr                        1:53       2.74828   
+1-yr                        1:54       2.69494   
+1-yr                        1:55       2.64414   
+1-yr                        1:56       2.59588   
+1-yr                        1:57       2.55016   
+1-yr                        1:58       2.50698   
+1-yr                        1:59       2.4638    
+1-yr                        2:00       2.42062   
+;
+2-yr                        0:00       2.99974   
+2-yr                        0:01       3.05054   
+2-yr                        0:02       3.10388   
+2-yr                        0:03       3.15976   
+2-yr                        0:04       3.21818   
+2-yr                        0:05       3.2766    
+2-yr                        0:06       3.3401    
+2-yr                        0:07       3.4036    
+2-yr                        0:08       3.46964   
+2-yr                        0:09       3.54076   
+2-yr                        0:10       3.61188   
+2-yr                        0:11       3.68808   
+2-yr                        0:12       3.76682   
+2-yr                        0:13       3.8481    
+2-yr                        0:14       3.93446   
+2-yr                        0:15       4.02336   
+2-yr                        0:16       4.1148    
+2-yr                        0:17       4.21386   
+2-yr                        0:18       4.31546   
+2-yr                        0:19       4.42214   
+2-yr                        0:20       4.53644   
+2-yr                        0:21       4.65328   
+2-yr                        0:22       4.78028   
+2-yr                        0:23       4.90982   
+2-yr                        0:24       5.04952   
+2-yr                        0:25       5.1943    
+2-yr                        0:26       5.34924   
+2-yr                        0:27       5.51434   
+2-yr                        0:28       5.68706   
+2-yr                        0:29       5.87248   
+2-yr                        0:30       6.06806   
+2-yr                        0:31       6.27634   
+2-yr                        0:32       6.49986   
+2-yr                        0:33       6.73862   
+2-yr                        0:34       6.99516   
+2-yr                        0:35       7.26948   
+2-yr                        0:36       7.56412   
+2-yr                        0:37       7.88416   
+2-yr                        0:38       8.2296    
+2-yr                        0:39       8.60298   
+2-yr                        0:40       9.00938   
+2-yr                        0:41       9.45388   
+2-yr                        0:42       9.94156   
+2-yr                        0:43       10.47496  
+2-yr                        0:44       11.06424  
+2-yr                        0:45       11.71702  
+2-yr                        0:46       12.44346  
+2-yr                        0:47       13.25372  
+2-yr                        0:48       14.16558  
+2-yr                        0:49       15.19682  
+2-yr                        0:50       16.3703   
+2-yr                        0:51       17.71142  
+2-yr                        0:52       19.26082  
+2-yr                        0:53       21.06676  
+2-yr                        0:54       23.1902   
+2-yr                        0:55       25.71496  
+2-yr                        0:56       28.75534  
+2-yr                        0:57       32.46882  
+2-yr                        0:58       37.08654  
+2-yr                        0:59       42.9387   
+2-yr                        1:00       50.54092  
+2-yr                        1:01       42.9387   
+2-yr                        1:02       37.08654  
+2-yr                        1:03       32.46882  
+2-yr                        1:04       28.75534  
+2-yr                        1:05       25.71496  
+2-yr                        1:06       23.1902   
+2-yr                        1:07       21.06676  
+2-yr                        1:08       19.26082  
+2-yr                        1:09       17.71142  
+2-yr                        1:10       16.3703   
+2-yr                        1:11       15.19682  
+2-yr                        1:12       14.16558  
+2-yr                        1:13       13.25372  
+2-yr                        1:14       12.44346  
+2-yr                        1:15       11.71702  
+2-yr                        1:16       11.06424  
+2-yr                        1:17       10.47496  
+2-yr                        1:18       9.94156   
+2-yr                        1:19       9.45388   
+2-yr                        1:20       9.00938   
+2-yr                        1:21       8.60298   
+2-yr                        1:22       8.2296    
+2-yr                        1:23       7.88416   
+2-yr                        1:24       7.56412   
+2-yr                        1:25       7.26948   
+2-yr                        1:26       6.99516   
+2-yr                        1:27       6.73862   
+2-yr                        1:28       6.49986   
+2-yr                        1:29       6.27634   
+2-yr                        1:30       6.06806   
+2-yr                        1:31       5.87248   
+2-yr                        1:32       5.68706   
+2-yr                        1:33       5.51434   
+2-yr                        1:34       5.34924   
+2-yr                        1:35       5.1943    
+2-yr                        1:36       5.04952   
+2-yr                        1:37       4.90982   
+2-yr                        1:38       4.78028   
+2-yr                        1:39       4.65328   
+2-yr                        1:40       4.53644   
+2-yr                        1:41       4.42214   
+2-yr                        1:42       4.31546   
+2-yr                        1:43       4.21386   
+2-yr                        1:44       4.1148    
+2-yr                        1:45       4.02336   
+2-yr                        1:46       3.93446   
+2-yr                        1:47       3.8481    
+2-yr                        1:48       3.76682   
+2-yr                        1:49       3.68808   
+2-yr                        1:50       3.61188   
+2-yr                        1:51       3.54076   
+2-yr                        1:52       3.46964   
+2-yr                        1:53       3.4036    
+2-yr                        1:54       3.3401    
+2-yr                        1:55       3.2766    
+2-yr                        1:56       3.21818   
+2-yr                        1:57       3.15976   
+2-yr                        1:58       3.10388   
+2-yr                        1:59       3.05054   
+2-yr                        2:00       2.99974   
+;
+5-yr                        0:00       3.76428   
+5-yr                        0:01       3.83032   
+5-yr                        0:02       3.89636   
+5-yr                        0:03       3.96748   
+5-yr                        0:04       4.0386    
+5-yr                        0:05       4.11226   
+5-yr                        0:06       4.191     
+5-yr                        0:07       4.27228   
+5-yr                        0:08       4.3561    
+5-yr                        0:09       4.44246   
+5-yr                        0:10       4.5339    
+5-yr                        0:11       4.62788   
+5-yr                        0:12       4.72694   
+5-yr                        0:13       4.82854   
+5-yr                        0:14       4.93522   
+5-yr                        0:15       5.04952   
+5-yr                        0:16       5.16636   
+5-yr                        0:17       5.28828   
+5-yr                        0:18       5.41782   
+5-yr                        0:19       5.55244   
+5-yr                        0:20       5.69214   
+5-yr                        0:21       5.842     
+5-yr                        0:22       5.99694   
+5-yr                        0:23       6.16204   
+5-yr                        0:24       6.3373    
+5-yr                        0:25       6.52018   
+5-yr                        0:26       6.71322   
+5-yr                        0:27       6.91896   
+5-yr                        0:28       7.1374    
+5-yr                        0:29       7.36854   
+5-yr                        0:30       7.61492   
+5-yr                        0:31       7.87654   
+5-yr                        0:32       8.15594   
+5-yr                        0:33       8.45566   
+5-yr                        0:34       8.77824   
+5-yr                        0:35       9.12114   
+5-yr                        0:36       9.49452   
+5-yr                        0:37       9.8933    
+5-yr                        0:38       10.32764  
+5-yr                        0:39       10.79754  
+5-yr                        0:40       11.30808  
+5-yr                        0:41       11.86688  
+5-yr                        0:42       12.47648  
+5-yr                        0:43       13.14704  
+5-yr                        0:44       13.88618  
+5-yr                        0:45       14.7066   
+5-yr                        0:46       15.61592  
+5-yr                        0:47       16.63446  
+5-yr                        0:48       17.78     
+5-yr                        0:49       19.07286  
+5-yr                        0:50       20.54352  
+5-yr                        0:51       22.22754  
+5-yr                        0:52       24.17318  
+5-yr                        0:53       26.43886  
+5-yr                        0:54       29.10332  
+5-yr                        0:55       32.2707   
+5-yr                        0:56       36.08832  
+5-yr                        0:57       40.74922  
+5-yr                        0:58       46.54296  
+5-yr                        0:59       53.89118  
+5-yr                        1:00       63.42888  
+5-yr                        1:01       53.89118  
+5-yr                        1:02       46.54296  
+5-yr                        1:03       40.74922  
+5-yr                        1:04       36.08832  
+5-yr                        1:05       32.2707   
+5-yr                        1:06       29.10332  
+5-yr                        1:07       26.43886  
+5-yr                        1:08       24.17318  
+5-yr                        1:09       22.22754  
+5-yr                        1:10       20.54352  
+5-yr                        1:11       19.07286  
+5-yr                        1:12       17.78     
+5-yr                        1:13       16.63446  
+5-yr                        1:14       15.61592  
+5-yr                        1:15       14.7066   
+5-yr                        1:16       13.88618  
+5-yr                        1:17       13.14704  
+5-yr                        1:18       12.47648  
+5-yr                        1:19       11.86688  
+5-yr                        1:20       11.30808  
+5-yr                        1:21       10.79754  
+5-yr                        1:22       10.32764  
+5-yr                        1:23       9.8933    
+5-yr                        1:24       9.49452   
+5-yr                        1:25       9.12114   
+5-yr                        1:26       8.77824   
+5-yr                        1:27       8.45566   
+5-yr                        1:28       8.15594   
+5-yr                        1:29       7.87654   
+5-yr                        1:30       7.61492   
+5-yr                        1:31       7.36854   
+5-yr                        1:32       7.1374    
+5-yr                        1:33       6.91896   
+5-yr                        1:34       6.71322   
+5-yr                        1:35       6.52018   
+5-yr                        1:36       6.3373    
+5-yr                        1:37       6.16204   
+5-yr                        1:38       5.99694   
+5-yr                        1:39       5.842     
+5-yr                        1:40       5.69214   
+5-yr                        1:41       5.55244   
+5-yr                        1:42       5.41782   
+5-yr                        1:43       5.28828   
+5-yr                        1:44       5.16636   
+5-yr                        1:45       5.04952   
+5-yr                        1:46       4.93522   
+5-yr                        1:47       4.82854   
+5-yr                        1:48       4.72694   
+5-yr                        1:49       4.62788   
+5-yr                        1:50       4.5339    
+5-yr                        1:51       4.44246   
+5-yr                        1:52       4.3561    
+5-yr                        1:53       4.27228   
+5-yr                        1:54       4.191     
+5-yr                        1:55       4.11226   
+5-yr                        1:56       4.0386    
+5-yr                        1:57       3.96748   
+5-yr                        1:58       3.89636   
+5-yr                        1:59       3.83032   
+5-yr                        2:00       3.76428   
+;
+10-yr                       0:00       6.822     
+10-yr                       0:01       6.9       
+10-yr                       0:02       6.978     
+10-yr                       0:03       7.056     
+10-yr                       0:04       7.14      
+10-yr                       0:05       7.224     
+10-yr                       0:06       7.308     
+10-yr                       0:07       7.398     
+10-yr                       0:08       7.488     
+10-yr                       0:09       7.578     
+10-yr                       0:10       7.674     
+10-yr                       0:11       7.77      
+10-yr                       0:12       7.872     
+10-yr                       0:13       7.974     
+10-yr                       0:14       8.076     
+10-yr                       0:15       8.184     
+10-yr                       0:16       8.298     
+10-yr                       0:17       8.412     
+10-yr                       0:18       8.532     
+10-yr                       0:19       8.652     
+10-yr                       0:20       8.778     
+10-yr                       0:21       8.904     
+10-yr                       0:22       9.036     
+10-yr                       0:23       9.174     
+10-yr                       0:24       9.312     
+10-yr                       0:25       9.462     
+10-yr                       0:26       9.606     
+10-yr                       0:27       9.762     
+10-yr                       0:28       9.924     
+10-yr                       0:29       10.086    
+10-yr                       0:30       10.26     
+10-yr                       0:31       10.434    
+10-yr                       0:32       10.62     
+10-yr                       0:33       10.812    
+10-yr                       0:34       11.004    
+10-yr                       0:35       11.208    
+10-yr                       0:36       11.424    
+10-yr                       0:37       11.64     
+10-yr                       0:38       11.868    
+10-yr                       0:39       12.108    
+10-yr                       0:40       12.354    
+10-yr                       0:41       12.612    
+10-yr                       0:42       12.882    
+10-yr                       0:43       13.158    
+10-yr                       0:44       13.452    
+10-yr                       0:45       13.758    
+10-yr                       0:46       14.076    
+10-yr                       0:47       14.412    
+10-yr                       0:48       14.76     
+10-yr                       0:49       15.132    
+10-yr                       0:50       15.516    
+10-yr                       0:51       15.918    
+10-yr                       0:52       16.344    
+10-yr                       0:53       16.794    
+10-yr                       0:54       17.268    
+10-yr                       0:55       17.766    
+10-yr                       0:56       18.3      
+10-yr                       0:57       18.858    
+10-yr                       0:58       19.452    
+10-yr                       0:59       20.082    
+10-yr                       1:00       20.754    
+10-yr                       1:01       21.468    
+10-yr                       1:02       22.23     
+10-yr                       1:03       23.046    
+10-yr                       1:04       23.922    
+10-yr                       1:05       24.864    
+10-yr                       1:06       25.872    
+10-yr                       1:07       26.964    
+10-yr                       1:08       28.146    
+10-yr                       1:09       29.424    
+10-yr                       1:10       30.816    
+10-yr                       1:11       32.34     
+10-yr                       1:12       34.002    
+10-yr                       1:13       35.826    
+10-yr                       1:14       37.842    
+10-yr                       1:15       40.074    
+10-yr                       1:16       42.558    
+10-yr                       1:17       45.336    
+10-yr                       1:18       48.456    
+10-yr                       1:19       51.978    
+10-yr                       1:20       55.986    
+10-yr                       1:21       60.582    
+10-yr                       1:22       65.88     
+10-yr                       1:23       72.054    
+10-yr                       1:24       79.314    
+10-yr                       1:25       87.948    
+10-yr                       1:26       98.346    
+10-yr                       1:27       111.054   
+10-yr                       1:28       126.846   
+10-yr                       1:29       146.868   
+10-yr                       1:30       172.86    
+10-yr                       1:31       146.868   
+10-yr                       1:32       126.846   
+10-yr                       1:33       111.054   
+10-yr                       1:34       98.346    
+10-yr                       1:35       87.948    
+10-yr                       1:36       79.314    
+10-yr                       1:37       72.054    
+10-yr                       1:38       65.88     
+10-yr                       1:39       60.582    
+10-yr                       1:40       55.986    
+10-yr                       1:41       51.978    
+10-yr                       1:42       48.456    
+10-yr                       1:43       45.336    
+10-yr                       1:44       42.558    
+10-yr                       1:45       40.074    
+10-yr                       1:46       37.842    
+10-yr                       1:47       35.826    
+10-yr                       1:48       34.002    
+10-yr                       1:49       32.34     
+10-yr                       1:50       30.816    
+10-yr                       1:51       29.424    
+10-yr                       1:52       28.146    
+10-yr                       1:53       26.964    
+10-yr                       1:54       25.872    
+10-yr                       1:55       24.864    
+10-yr                       1:56       23.922    
+10-yr                       1:57       23.046    
+10-yr                       1:58       22.23     
+10-yr                       1:59       21.468    
+10-yr                       2:00       20.754    
+10-yr                       2:01       20.082    
+10-yr                       2:02       19.452    
+10-yr                       2:03       18.858    
+10-yr                       2:04       18.3      
+10-yr                       2:05       17.766    
+10-yr                       2:06       17.268    
+10-yr                       2:07       16.794    
+10-yr                       2:08       16.344    
+10-yr                       2:09       15.918    
+10-yr                       2:10       15.516    
+10-yr                       2:11       15.132    
+10-yr                       2:12       14.76     
+10-yr                       2:13       14.412    
+10-yr                       2:14       14.076    
+10-yr                       2:15       13.758    
+10-yr                       2:16       13.452    
+10-yr                       2:17       13.158    
+10-yr                       2:18       12.882    
+10-yr                       2:19       12.612    
+10-yr                       2:20       12.354    
+10-yr                       2:21       12.108    
+10-yr                       2:22       11.868    
+10-yr                       2:23       11.64     
+10-yr                       2:24       11.424    
+10-yr                       2:25       11.208    
+10-yr                       2:26       11.004    
+10-yr                       2:27       10.812    
+10-yr                       2:28       10.62     
+10-yr                       2:29       10.434    
+10-yr                       2:30       10.26     
+10-yr                       2:31       10.086    
+10-yr                       2:32       9.924     
+10-yr                       2:33       9.762     
+10-yr                       2:34       9.606     
+10-yr                       2:35       9.462     
+10-yr                       2:36       9.312     
+10-yr                       2:37       9.174     
+10-yr                       2:38       9.036     
+10-yr                       2:39       8.904     
+10-yr                       2:40       8.778     
+10-yr                       2:41       8.652     
+10-yr                       2:42       8.532     
+10-yr                       2:43       8.412     
+10-yr                       2:44       8.298     
+10-yr                       2:45       8.184     
+10-yr                       2:46       8.076     
+10-yr                       2:47       7.974     
+10-yr                       2:48       7.872     
+10-yr                       2:49       7.77      
+10-yr                       2:50       7.674     
+10-yr                       2:51       7.578     
+10-yr                       2:52       7.488     
+10-yr                       2:53       7.398     
+10-yr                       2:54       7.308     
+10-yr                       2:55       7.224     
+10-yr                       2:56       7.14      
+10-yr                       2:57       7.056     
+10-yr                       2:58       6.978     
+10-yr                       2:59       6.9       
+10-yr                       3:00       6.822     
+;
+100-yr                      0:00       9.84      
+100-yr                      0:01       9.954     
+100-yr                      0:02       10.062    
+100-yr                      0:03       10.176    
+100-yr                      0:04       10.296    
+100-yr                      0:05       10.416    
+100-yr                      0:06       10.542    
+100-yr                      0:07       10.668    
+100-yr                      0:08       10.8      
+100-yr                      0:09       10.932    
+100-yr                      0:10       11.07     
+100-yr                      0:11       11.208    
+100-yr                      0:12       11.352    
+100-yr                      0:13       11.502    
+100-yr                      0:14       11.652    
+100-yr                      0:15       11.808    
+100-yr                      0:16       11.97     
+100-yr                      0:17       12.138    
+100-yr                      0:18       12.306    
+100-yr                      0:19       12.48     
+100-yr                      0:20       12.66     
+100-yr                      0:21       12.846    
+100-yr                      0:22       13.038    
+100-yr                      0:23       13.236    
+100-yr                      0:24       13.434    
+100-yr                      0:25       13.644    
+100-yr                      0:26       13.86     
+100-yr                      0:27       14.082    
+100-yr                      0:28       14.316    
+100-yr                      0:29       14.556    
+100-yr                      0:30       14.802    
+100-yr                      0:31       15.054    
+100-yr                      0:32       15.318    
+100-yr                      0:33       15.594    
+100-yr                      0:34       15.876    
+100-yr                      0:35       16.17     
+100-yr                      0:36       16.476    
+100-yr                      0:37       16.794    
+100-yr                      0:38       17.124    
+100-yr                      0:39       17.466    
+100-yr                      0:40       17.826    
+100-yr                      0:41       18.192    
+100-yr                      0:42       18.582    
+100-yr                      0:43       18.984    
+100-yr                      0:44       19.41     
+100-yr                      0:45       19.848    
+100-yr                      0:46       20.31     
+100-yr                      0:47       20.79     
+100-yr                      0:48       21.294    
+100-yr                      0:49       21.822    
+100-yr                      0:50       22.38     
+100-yr                      0:51       22.968    
+100-yr                      0:52       23.58     
+100-yr                      0:53       24.228    
+100-yr                      0:54       24.912    
+100-yr                      0:55       25.632    
+100-yr                      0:56       26.394    
+100-yr                      0:57       27.204    
+100-yr                      0:58       28.062    
+100-yr                      0:59       28.968    
+100-yr                      1:00       29.934    
+100-yr                      1:01       30.966    
+100-yr                      1:02       32.07     
+100-yr                      1:03       33.246    
+100-yr                      1:04       34.506    
+100-yr                      1:05       35.862    
+100-yr                      1:06       37.326    
+100-yr                      1:07       38.898    
+100-yr                      1:08       40.602    
+100-yr                      1:09       42.45     
+100-yr                      1:10       44.46     
+100-yr                      1:11       46.65     
+100-yr                      1:12       49.05     
+100-yr                      1:13       51.684    
+100-yr                      1:14       54.594    
+100-yr                      1:15       57.816    
+100-yr                      1:16       61.398    
+100-yr                      1:17       65.4      
+100-yr                      1:18       69.9      
+100-yr                      1:19       74.982    
+100-yr                      1:20       80.766    
+100-yr                      1:21       87.39     
+100-yr                      1:22       95.04     
+100-yr                      1:23       103.944   
+100-yr                      1:24       114.42    
+100-yr                      1:25       126.876   
+100-yr                      1:26       141.876   
+100-yr                      1:27       160.206   
+100-yr                      1:28       182.988   
+100-yr                      1:29       211.866   
+100-yr                      1:30       249.372   
+100-yr                      1:31       211.866   
+100-yr                      1:32       182.988   
+100-yr                      1:33       160.206   
+100-yr                      1:34       141.876   
+100-yr                      1:35       126.876   
+100-yr                      1:36       114.42    
+100-yr                      1:37       103.944   
+100-yr                      1:38       95.04     
+100-yr                      1:39       87.39     
+100-yr                      1:40       80.766    
+100-yr                      1:41       74.982    
+100-yr                      1:42       69.9      
+100-yr                      1:43       65.4      
+100-yr                      1:44       61.398    
+100-yr                      1:45       57.816    
+100-yr                      1:46       54.594    
+100-yr                      1:47       51.684    
+100-yr                      1:48       49.05     
+100-yr                      1:49       46.65     
+100-yr                      1:50       44.46     
+100-yr                      1:51       42.45     
+100-yr                      1:52       40.602    
+100-yr                      1:53       38.898    
+100-yr                      1:54       37.326    
+100-yr                      1:55       35.862    
+100-yr                      1:56       34.506    
+100-yr                      1:57       33.246    
+100-yr                      1:58       32.07     
+100-yr                      1:59       30.966    
+100-yr                      2:00       29.934    
+100-yr                      2:01       28.968    
+100-yr                      2:02       28.062    
+100-yr                      2:03       27.204    
+100-yr                      2:04       26.394    
+100-yr                      2:05       25.632    
+100-yr                      2:06       24.912    
+100-yr                      2:07       24.228    
+100-yr                      2:08       23.58     
+100-yr                      2:09       22.968    
+100-yr                      2:10       22.38     
+100-yr                      2:11       21.822    
+100-yr                      2:12       21.294    
+100-yr                      2:13       20.79     
+100-yr                      2:14       20.31     
+100-yr                      2:15       19.848    
+100-yr                      2:16       19.41     
+100-yr                      2:17       18.984    
+100-yr                      2:18       18.582    
+100-yr                      2:19       18.192    
+100-yr                      2:20       17.826    
+100-yr                      2:21       17.466    
+100-yr                      2:22       17.124    
+100-yr                      2:23       16.794    
+100-yr                      2:24       16.476    
+100-yr                      2:25       16.17     
+100-yr                      2:26       15.876    
+100-yr                      2:27       15.594    
+100-yr                      2:28       15.318    
+100-yr                      2:29       15.054    
+100-yr                      2:30       14.802    
+100-yr                      2:31       14.556    
+100-yr                      2:32       14.316    
+100-yr                      2:33       14.082    
+100-yr                      2:34       13.86     
+100-yr                      2:35       13.644    
+100-yr                      2:36       13.434    
+100-yr                      2:37       13.236    
+100-yr                      2:38       13.038    
+100-yr                      2:39       12.846    
+100-yr                      2:40       12.66     
+100-yr                      2:41       12.48     
+100-yr                      2:42       12.306    
+100-yr                      2:43       12.138    
+100-yr                      2:44       11.97     
+100-yr                      2:45       11.808    
+100-yr                      2:46       11.652    
+100-yr                      2:47       11.502    
+100-yr                      2:48       11.352    
+100-yr                      2:49       11.208    
+100-yr                      2:50       11.07     
+100-yr                      2:51       10.932    
+100-yr                      2:52       10.8      
+100-yr                      2:53       10.668    
+100-yr                      2:54       10.542    
+100-yr                      2:55       10.416    
+100-yr                      2:56       10.296    
+100-yr                      2:57       10.176    
+100-yr                      2:58       10.062    
+100-yr                      2:59       9.954     
+100-yr                      3:00       9.84      
+
+[PATTERNS]
+;;Pattern        Type       Multipliers
+;;-------------- ---------- -----------
+;12345678
+001              MONTHLY    1.0   2     3     4     5     6    
+001                         7     8     9     0     1.0   1.0  
+
+[REPORT]
+;;Reporting Options
+INPUT      YES
+CONTROLS   YES
+SUBCATCHMENTS Sub2 Sub27 Sub79
+NODES ALL
+LINKS ALL
+
+[TAGS]
+Gage       rain             aaa             
+Subcatch  Sub0             bbb             
+Subcatch  Sub1             ccc             
+Node       AdminWeLL0       ddd             
+Link       Culvert0         fff             
+Link       Culvert1         ggg             
+
+[MAP]
+DIMENSIONS 13438520.551 3666011.564 13438620.551 3666311.564
+Units      None
+
+[COORDINATES]
+;;Node           X-Coord            Y-Coord           
+;;-------------- ------------------ ------------------
+AdminWeLL0       13438448.050       3665979.064       
+AdminWeLL1       13438550.540       3666084.185       
+AdminWeLL2       13438562.070       3666190.668       
+AdminWeLL3       13438397.180       3666238.862       
+AdminWeLL4       13438371.100       3666086.751       
+Node0            13438465.430       3666220.988       
+Node1            13438491.190       3666216.248       
+Node2            13438459.310       3666189.437       
+Node3            13438457.230       3666178.059       
+Node4            13438472.590       3666184.483       
+Node5            13438471.320       3666180.086       
+WeLL0            13438516.750       3665995.795       
+WeLL1            13438461.590       3666242.045       
+WeLL2            13438420.910       3666030.794       
+WeLL3            13438407.460       3666033.271       
+WeLL4            13438392.390       3666036.009       
+WeLL5            13438378.940       3666038.469       
+WeLL6            13438371.350       3666039.864       
+WeLL7            13438367.530       3666019.065       
+WeLL8            13438450.230       3666002.084       
+WeLL9            13438452.090       3666022.020       
+WeLL10           13438426.530       3666008.200       
+WeLL11           13438476.510       3666020.891       
+WeLL12           13438490.110       3666019.605       
+WeLL13           13438505.350       3666018.163       
+WeLL14           13438518.970       3666016.875       
+WeLL15           13438526.420       3666016.174       
+WeLL16           13438530.830       3666047.958       
+WeLL17           13438546.490       3666046.694       
+WeLL18           13438546.380       3666023.587       
+WeLL19           13438530.690       3666023.690       
+WeLL20           13438524.440       3665995.069       
+WeLL21           13438510.350       3665996.409       
+WeLL22           13438475.440       3665999.732       
+WeLL23           13438464.990       3666000.659       
+WeLL24           13438448.240       3665981.263       
+WeLL25           13438373.620       3666052.331       
+WeLL26           13438416.190       3666010.121       
+WeLL27           13438381.700       3666016.452       
+WeLL28           13438437.900       3666098.598       
+WeLL29           13438421.550       3666101.605       
+WeLL30           13438409.300       3666103.860       
+WeLL31           13438394.260       3666106.625       
+WeLL32           13438379.530       3666109.266       
+WeLL33           13438440.050       3666076.055       
+WeLL34           13438428.590       3666078.154       
+WeLL35           13438411.360       3666081.337       
+WeLL36           13438394.100       3666084.498       
+WeLL37           13438376.650       3666087.695       
+WeLL38           13438383.750       3666086.411       
+WeLL39           13438452.770       3666152.396       
+WeLL40           13438442.480       3666154.294       
+WeLL41           13438430.180       3666156.557       
+WeLL42           13438420.400       3666158.236       
+WeLL43           13438408.100       3666160.499       
+WeLL44           13438397.620       3666162.542       
+WeLL45           13438389.250       3666164.041       
+WeLL46           13438393.770       3666189.542       
+WeLL47           13438395.790       3666200.881       
+WeLL48           13438401.390       3666232.476       
+WeLL49           13438448.830       3666244.399       
+WeLL50           13438437.730       3666246.439       
+WeLL51           13438431.640       3666253.949       
+WeLL52           13438406.020       3666258.540       
+WeLL53           13438462.520       3666070.728       
+WeLL54           13438472.750       3666068.846       
+WeLL55           13438489.990       3666065.674       
+WeLL56           13438398.950       3666013.286       
+WeLL57           13438425.250       3666157.451       
+WeLL58           13438492.920       3665998.049       
+WeLL59           13438485.050       3666066.583       
+WeLL60           13438494.930       3666064.765       
+WeLL61           13438507.230       3666062.502       
+WeLL62           13438521.370       3666059.901       
+WeLL63           13438513.560       3666061.339       
+WeLL64           13438469.890       3666090.326       
+WeLL65           13438486.170       3666087.331       
+WeLL66           13438501.380       3666084.531       
+WeLL67           13438525.060       3666080.176       
+WeLL68           13438507.800       3666112.884       
+WeLL69           13438514.560       3666111.676       
+WeLL70           13438530.280       3666108.785       
+WeLL71           13438489.890       3666149.156       
+WeLL72           13438520.080       3666143.678       
+WeLL73           13438551.350       3666135.044       
+WeLL74           13438535.350       3666136.651       
+WeLL75           13438526.590       3666088.589       
+WeLL76           13438489.110       3666243.375       
+WeLL77           13438506.340       3666240.206       
+WeLL78           13438505.000       3666232.871       
+WeLL79           13438514.720       3666231.084       
+WeLL80           13438523.370       3666229.491       
+WeLL81           13438541.940       3666226.075       
+WeLL82           13438559.410       3666223.100       
+WeLL83           13438521.040       3666216.479       
+WeLL84           13438520.000       3666210.719       
+WeLL85           13438535.550       3666200.708       
+WeLL86           13438521.950       3666169.508       
+WeLL87           13438523.980       3666180.607       
+WeLL88           13438546.080       3666193.781       
+WeLL89           13438544.890       3666165.291       
+WeLL90           13438554.740       3666163.478       
+WeLL91           13438559.780       3666191.128       
+WeLL92           13438410.100       3666230.915       
+WeLL93           13438525.310       3666004.305       
+WeLL94           13438450.580       3666005.882       
+WeLL95           13438386.620       3666149.111       
+WeLL96           13438396.370       3666147.317       
+WeLL97           13438381.840       3666152.378       
+WeLL100          13438405.450       3666145.679       
+WeLL102          13438403.560       3666148.414       
+WeLL103          13438405.290       3666158.139       
+WeLL104          13438383.330       3666162.188       
+WeLL105          13438376.150       3666117.611       
+WeLL106          13438389.650       3666196.845       
+WeLL107          13438514.720       3666082.079       
+WeLL108          13438500.140       3666147.270       
+Outfall1         13438455.050       3665974.064       
+Outfall2         13438367.100       3666082.751       
+Outfall3         13438392.180       3666233.862       
+Outfall4         13438568.070       3666197.668       
+Outfall5         13438555.540       3666089.185       
+Storage0         13438464.750       3666185.713       
+Storage1         13438468.890       3666158.403       
+Storage2         13438462.400       3666127.129       
+Storage3         13438489.310       3666125.324       
+Storage4         13438446.030       3666083.194       
+Storage5         13438446.160       3666050.417       
+Storage6         13438453.560       3666048.193       
+
+[VERTICES]
+;;Link           X-Coord            Y-Coord           
+;;-------------- ------------------ ------------------
+Culvert0         13438412.500       3666230.750       
+Culvert0         13438465.500       3666221.000       
+Culvert1         13438491.500       3666216.250       
+Culvert1         13438518.500       3666211.250       
+Culvert2         13438457.500       3666178.000       
+Culvert2         13438404.500       3666187.750       
+Culvert3         13438471.500       3666180.000       
+Culvert3         13438495.500       3666177.750       
+Culvert3         13438495.500       3666174.750       
+Culvert3         13438520.500       3666170.000       
+Culvert4         13438459.500       3666189.500       
+Culvert4         13438406.500       3666199.250       
+Culvert5         13438516.500       3666182.250       
+Culvert5         13438496.500       3666185.750       
+Culvert5         13438496.500       3666182.500       
+Culvert5         13438472.500       3666184.500       
+Conduit0         13438489.500       3666243.500       
+Conduit0         13438506.500       3666240.250       
+Conduit1         13438506.500       3666240.250       
+Conduit1         13438505.500       3666232.750       
+Conduit2         13438505.500       3666232.750       
+Conduit2         13438514.500       3666231.000       
+Conduit3         13438514.500       3666231.000       
+Conduit3         13438523.500       3666229.500       
+Conduit4         13438559.500       3666223.000       
+Conduit4         13438541.500       3666226.000       
+Conduit5         13438541.500       3666226.000       
+Conduit5         13438523.500       3666229.500       
+Conduit6         13438523.500       3666229.500       
+Conduit6         13438521.500       3666216.500       
+Conduit7         13438521.500       3666216.500       
+Conduit7         13438520.500       3666210.750       
+Conduit8         13438520.500       3666210.750       
+Conduit8         13438535.500       3666200.750       
+Conduit9         13438535.500       3666200.750       
+Conduit9         13438546.500       3666193.750       
+Conduit10        13438546.500       3666193.750       
+Conduit10        13438559.500       3666191.250       
+Conduit11        13438523.500       3666180.500       
+Conduit11        13438521.500       3666169.500       
+Conduit12        13438521.500       3666169.500       
+Conduit12        13438544.500       3666165.250       
+Conduit13        13438544.500       3666165.250       
+Conduit13        13438554.500       3666163.500       
+Conduit14        13438554.500       3666163.500       
+Conduit14        13438562.500       3666190.750       
+Conduit15        13438551.500       3666135.000       
+Conduit15        13438535.500       3666136.750       
+Conduit16        13438489.500       3666149.250       
+Conduit16        13438500.500       3666147.250       
+Conduit17        13438500.500       3666147.250       
+Conduit17        13438520.500       3666143.750       
+Conduit18        13438520.500       3666143.750       
+Conduit18        13438535.500       3666136.750       
+Conduit19        13438535.500       3666136.750       
+Conduit19        13438530.500       3666108.750       
+Conduit20        13438507.500       3666113.000       
+Conduit20        13438514.500       3666111.750       
+Conduit21        13438514.500       3666111.750       
+Conduit21        13438530.500       3666108.750       
+Conduit22        13438530.500       3666108.750       
+Conduit22        13438526.500       3666088.500       
+Conduit23        13438526.500       3666088.500       
+Conduit23        13438550.500       3666084.250       
+Conduit24        13438469.500       3666090.250       
+Conduit24        13438486.500       3666087.250       
+Conduit25        13438486.500       3666087.250       
+Conduit25        13438501.500       3666084.500       
+Conduit26        13438501.500       3666084.500       
+Conduit26        13438514.500       3666082.000       
+Conduit27        13438514.500       3666082.000       
+Conduit27        13438525.500       3666080.250       
+Conduit28        13438437.500       3666098.500       
+Conduit28        13438421.500       3666101.500       
+Conduit29        13438421.500       3666101.500       
+Conduit29        13438409.500       3666103.750       
+Conduit30        13438409.500       3666103.750       
+Conduit30        13438394.500       3666106.750       
+Conduit31        13438394.500       3666106.500       
+Conduit31        13438379.500       3666109.250       
+Conduit32        13438462.500       3666070.750       
+Conduit32        13438472.500       3666068.750       
+Conduit33        13438472.500       3666068.750       
+Conduit33        13438485.500       3666066.500       
+Conduit34        13438485.500       3666066.500       
+Conduit34        13438489.500       3666065.750       
+Conduit35        13438489.500       3666065.750       
+Conduit35        13438494.500       3666064.750       
+Conduit36        13438494.500       3666064.750       
+Conduit36        13438507.500       3666062.500       
+Conduit37        13438507.500       3666062.500       
+Conduit37        13438513.500       3666061.250       
+Conduit38        13438513.500       3666061.250       
+Conduit38        13438521.500       3666060.000       
+Conduit39        13438521.500       3666060.000       
+Conduit39        13438525.500       3666080.250       
+Conduit40        13438546.500       3666046.750       
+Conduit40        13438546.500       3666023.500       
+Conduit41        13438546.500       3666023.500       
+Conduit41        13438530.500       3666023.750       
+Conduit42        13438530.500       3666048.000       
+Conduit42        13438530.500       3666023.750       
+Conduit43        13438476.500       3666021.000       
+Conduit43        13438490.500       3666019.500       
+Conduit44        13438490.500       3666019.500       
+Conduit44        13438505.500       3666018.250       
+Conduit45        13438505.500       3666018.250       
+Conduit45        13438518.500       3666017.000       
+Conduit46        13438518.500       3666017.000       
+Conduit46        13438526.500       3666016.250       
+Conduit47        13438526.500       3666016.000       
+Conduit47        13438525.500       3666004.250       
+Conduit48        13438525.500       3666004.250       
+Conduit48        13438524.500       3665995.000       
+Conduit49        13438524.500       3665995.000       
+Conduit49        13438516.500       3665995.750       
+Conduit50        13438516.500       3665995.750       
+Conduit50        13438510.500       3665996.500       
+Conduit51        13438510.500       3665996.500       
+Conduit51        13438492.500       3665998.000       
+Conduit52        13438492.500       3665998.000       
+Conduit52        13438475.500       3665999.750       
+Conduit53        13438475.500       3665999.750       
+Conduit53        13438464.500       3666000.750       
+Conduit54        13438464.500       3666000.750       
+Conduit54        13438450.500       3666002.000       
+Conduit55        13438367.500       3666019.000       
+Conduit55        13438381.500       3666016.500       
+Conduit56        13438381.500       3666016.500       
+Conduit56        13438398.500       3666013.250       
+Conduit57        13438398.500       3666013.250       
+Conduit57        13438416.500       3666010.000       
+Conduit58        13438416.500       3666010.000       
+Conduit58        13438426.500       3666008.250       
+Conduit59        13438426.500       3666008.250       
+Conduit59        13438450.500       3666006.000       
+Conduit60        13438450.500       3666006.000       
+Conduit60        13438450.500       3666002.000       
+Conduit61        13438452.500       3666022.000       
+Conduit61        13438450.500       3666006.000       
+Conduit62        13438450.500       3666002.000       
+Conduit62        13438448.500       3665981.250       
+Conduit63        13438448.500       3665981.250       
+Conduit63        13438448.500       3665979.000       
+Conduit64        13438420.500       3666030.750       
+Conduit64        13438407.500       3666033.250       
+Conduit65        13438407.500       3666033.250       
+Conduit65        13438392.500       3666036.000       
+Conduit66        13438392.500       3666036.000       
+Conduit66        13438378.500       3666038.500       
+Conduit67        13438378.500       3666038.500       
+Conduit67        13438371.500       3666039.750       
+Conduit68        13438371.500       3666039.750       
+Conduit68        13438367.500       3666019.000       
+Conduit69        13438373.500       3666052.250       
+Conduit69        13438371.500       3666039.750       
+Conduit70        13438440.500       3666076.000       
+Conduit70        13438428.500       3666078.250       
+Conduit71        13438428.500       3666078.250       
+Conduit71        13438411.500       3666081.250       
+Conduit72        13438411.500       3666081.250       
+Conduit72        13438394.500       3666084.500       
+Conduit73        13438394.500       3666084.500       
+Conduit73        13438383.500       3666086.500       
+Conduit74        13438383.500       3666086.500       
+Conduit74        13438376.500       3666087.750       
+Conduit75        13438452.500       3666152.500       
+Conduit75        13438442.500       3666154.250       
+Conduit76        13438442.500       3666154.250       
+Conduit76        13438430.500       3666156.500       
+Conduit77        13438430.500       3666156.500       
+Conduit77        13438425.500       3666157.500       
+Conduit78        13438425.500       3666157.500       
+Conduit78        13438420.500       3666158.250       
+Conduit79        13438420.500       3666158.250       
+Conduit79        13438408.500       3666160.500       
+Conduit80        13438403.500       3666148.500       
+Conduit80        13438405.500       3666158.250       
+Conduit81        13438389.500       3666164.000       
+Conduit81        13438397.500       3666162.500       
+Conduit82        13438383.500       3666162.250       
+Conduit82        13438389.500       3666196.750       
+Conduit83        13438393.500       3666189.500       
+Conduit83        13438389.500       3666164.000       
+Conduit84        13438395.500       3666201.000       
+Conduit84        13438393.500       3666189.500       
+Conduit85        13438401.500       3666232.500       
+Conduit85        13438395.500       3666201.000       
+Conduit86        13438406.500       3666258.500       
+Conduit86        13438401.500       3666232.500       
+Conduit87        13438410.500       3666231.000       
+Conduit87        13438401.500       3666232.500       
+Conduit88        13438461.500       3666242.000       
+Conduit88        13438448.500       3666244.500       
+Conduit89        13438448.500       3666244.500       
+Conduit89        13438437.500       3666246.500       
+Conduit90        13438437.500       3666246.500       
+Conduit90        13438431.500       3666254.000       
+Conduit91        13438431.500       3666254.000       
+Conduit91        13438406.500       3666258.500       
+Conduit92        13438389.500       3666196.750       
+Conduit92        13438397.500       3666238.750       
+Conduit93        13438408.500       3666160.500       
+Conduit93        13438405.500       3666145.750       
+Conduit95        13438381.500       3666152.500       
+Conduit95        13438376.500       3666117.500       
+Conduit96        13438379.500       3666109.250       
+Conduit96        13438386.500       3666149.000       
+Conduit97        13438386.500       3666149.000       
+Conduit97        13438396.500       3666147.250       
+Conduit98        13438376.500       3666117.500       
+Conduit98        13438371.500       3666086.750       
+Conduit99        13438376.500       3666087.750       
+Conduit99        13438379.500       3666109.250       
+Conduit100       13438525.500       3666080.250       
+Conduit100       13438526.500       3666088.500       
+Conduit101       13438559.500       3666191.250       
+Conduit101       13438562.500       3666190.750       
+Conduit102       13438405.500       3666158.250       
+Conduit102       13438383.500       3666162.250       
+Conduit105       13438405.500       3666145.750       
+Conduit105       13438403.500       3666148.500       
+Conduit106       13438397.500       3666162.500       
+Conduit106       13438408.500       3666160.500       
+Conduit107       13438530.500       3666023.750       
+Conduit107       13438526.500       3666016.250       
+
+[Polygons]
+;;Subcatchment   X-Coord            Y-Coord           
+;;-------------- ------------------ ------------------
+Sub0             13438454.500       3666103.750       
+Sub0             13438445.500       3666105.250       
+Sub0             13438425.500       3666109.000       
+Sub0             13438430.500       3666138.250       
+Sub0             13438461.500       3666146.250       
+Sub0             13438454.500       3666103.750       
+Sub1             13438416.500       3666142.500       
+Sub1             13438430.500       3666138.250       
+Sub1             13438425.500       3666109.000       
+Sub1             13438398.500       3666113.750       
+Sub1             13438398.500       3666133.500       
+Sub1             13438403.500       3666152.750       
+Sub1             13438411.500       3666151.500       
+Sub1             13438416.500       3666142.500       
+Sub2             13438534.500       3666148.000       
+Sub2             13438534.500       3666145.250       
+Sub2             13438534.500       3666143.000       
+Sub2             13438534.500       3666140.750       
+Sub2             13438534.500       3666137.750       
+Sub2             13438531.500       3666120.500       
+Sub2             13438531.500       3666120.000       
+Sub2             13438529.500       3666110.750       
+Sub2             13438528.500       3666111.000       
+Sub2             13438517.500       3666113.500       
+Sub2             13438521.500       3666135.500       
+Sub2             13438519.500       3666145.250       
+Sub2             13438518.500       3666148.250       
+Sub2             13438529.500       3666150.000       
+Sub2             13438534.500       3666148.000       
+Sub3             13438446.500       3666256.500       
+Sub3             13438446.500       3666254.000       
+Sub3             13438444.500       3666242.500       
+Sub3             13438427.500       3666245.750       
+Sub3             13438422.500       3666246.500       
+Sub3             13438423.500       3666252.000       
+Sub3             13438422.500       3666256.000       
+Sub3             13438422.500       3666258.500       
+Sub3             13438421.500       3666261.250       
+Sub3             13438423.500       3666260.750       
+Sub3             13438446.500       3666256.500       
+Sub4             13438416.500       3666262.500       
+Sub4             13438417.500       3666262.500       
+Sub4             13438417.500       3666265.250       
+Sub4             13438417.500       3666265.500       
+Sub4             13438419.500       3666265.000       
+Sub4             13438419.500       3666265.000       
+Sub4             13438421.500       3666261.250       
+Sub4             13438419.500       3666261.250       
+Sub4             13438417.500       3666261.250       
+Sub4             13438414.500       3666260.250       
+Sub4             13438412.500       3666259.000       
+Sub4             13438408.500       3666255.000       
+Sub4             13438406.500       3666253.250       
+Sub4             13438406.500       3666251.250       
+Sub4             13438405.500       3666249.250       
+Sub4             13438403.500       3666238.250       
+Sub4             13438400.500       3666238.750       
+Sub4             13438401.500       3666248.000       
+Sub4             13438402.500       3666248.750       
+Sub4             13438402.500       3666249.500       
+Sub4             13438402.500       3666250.000       
+Sub4             13438402.500       3666251.000       
+Sub4             13438403.500       3666252.000       
+Sub4             13438403.500       3666253.000       
+Sub4             13438404.500       3666253.750       
+Sub4             13438404.500       3666254.750       
+Sub4             13438404.500       3666255.250       
+Sub4             13438405.500       3666255.750       
+Sub4             13438406.500       3666256.750       
+Sub4             13438406.500       3666257.250       
+Sub4             13438407.500       3666258.000       
+Sub4             13438407.500       3666258.500       
+Sub4             13438408.500       3666259.000       
+Sub4             13438408.500       3666259.250       
+Sub4             13438409.500       3666259.750       
+Sub4             13438410.500       3666260.250       
+Sub4             13438411.500       3666260.750       
+Sub4             13438411.500       3666261.000       
+Sub4             13438412.500       3666261.500       
+Sub4             13438413.500       3666261.750       
+Sub4             13438414.500       3666262.000       
+Sub4             13438415.500       3666262.250       
+Sub4             13438416.500       3666262.500       
+Sub5             13438421.500       3666261.250       
+Sub5             13438422.500       3666258.500       
+Sub5             13438422.500       3666256.000       
+Sub5             13438423.500       3666252.000       
+Sub5             13438422.500       3666246.500       
+Sub5             13438415.500       3666248.000       
+Sub5             13438414.500       3666248.000       
+Sub5             13438414.500       3666246.500       
+Sub5             13438413.500       3666243.500       
+Sub5             13438412.500       3666243.750       
+Sub5             13438411.500       3666238.000       
+Sub5             13438407.500       3666238.000       
+Sub5             13438403.500       3666238.250       
+Sub5             13438405.500       3666249.250       
+Sub5             13438406.500       3666251.250       
+Sub5             13438406.500       3666253.250       
+Sub5             13438408.500       3666255.000       
+Sub5             13438412.500       3666259.000       
+Sub5             13438414.500       3666260.250       
+Sub5             13438417.500       3666261.250       
+Sub5             13438419.500       3666261.250       
+Sub5             13438421.500       3666261.250       
+Sub6             13438446.500       3666256.500       
+Sub6             13438423.500       3666260.750       
+Sub6             13438421.500       3666261.250       
+Sub6             13438419.500       3666265.000       
+Sub6             13438419.500       3666265.000       
+Sub6             13438432.500       3666262.750       
+Sub6             13438439.500       3666261.250       
+Sub6             13438447.500       3666260.000       
+Sub6             13438446.500       3666256.500       
+Sub7             13438446.500       3666256.500       
+Sub7             13438447.500       3666260.000       
+Sub7             13438463.500       3666257.000       
+Sub7             13438472.500       3666255.250       
+Sub7             13438472.500       3666255.250       
+Sub7             13438472.500       3666253.250       
+Sub7             13438475.500       3666252.500       
+Sub7             13438475.500       3666251.500       
+Sub7             13438446.500       3666256.500       
+Sub8             13438475.500       3666251.500       
+Sub8             13438475.500       3666252.500       
+Sub8             13438498.500       3666248.500       
+Sub8             13438499.500       3666250.500       
+Sub8             13438506.500       3666249.000       
+Sub8             13438506.500       3666247.500       
+Sub8             13438506.500       3666245.500       
+Sub8             13438504.500       3666246.000       
+Sub8             13438475.500       3666251.500       
+Sub9             13438530.500       3666226.750       
+Sub9             13438542.500       3666231.250       
+Sub9             13438542.500       3666231.000       
+Sub9             13438542.500       3666230.500       
+Sub9             13438543.500       3666229.750       
+Sub9             13438545.500       3666228.250       
+Sub9             13438543.500       3666225.000       
+Sub9             13438544.500       3666224.250       
+Sub9             13438546.500       3666223.000       
+Sub9             13438547.500       3666222.500       
+Sub9             13438551.500       3666220.750       
+Sub9             13438551.500       3666220.500       
+Sub9             13438556.500       3666218.250       
+Sub9             13438559.500       3666216.750       
+Sub9             13438560.500       3666216.250       
+Sub9             13438562.500       3666211.500       
+Sub9             13438562.500       3666211.000       
+Sub9             13438562.500       3666211.000       
+Sub9             13438561.500       3666209.500       
+Sub9             13438559.500       3666206.500       
+Sub9             13438561.500       3666205.000       
+Sub9             13438562.500       3666204.250       
+Sub9             13438562.500       3666204.000       
+Sub9             13438562.500       3666203.750       
+Sub9             13438563.500       3666203.500       
+Sub9             13438564.500       3666203.000       
+Sub9             13438564.500       3666202.750       
+Sub9             13438565.500       3666202.250       
+Sub9             13438564.500       3666196.250       
+Sub9             13438562.500       3666196.250       
+Sub9             13438556.500       3666196.250       
+Sub9             13438526.500       3666202.500       
+Sub9             13438526.500       3666206.500       
+Sub9             13438530.500       3666225.750       
+Sub9             13438530.500       3666226.750       
+Sub10            13438531.500       3666024.250       
+Sub10            13438533.500       3666025.250       
+Sub10            13438541.500       3666025.250       
+Sub10            13438541.500       3666028.750       
+Sub10            13438544.500       3666028.750       
+Sub10            13438545.500       3666060.500       
+Sub10            13438545.500       3666077.250       
+Sub10            13438540.500       3666077.500       
+Sub10            13438540.500       3666083.750       
+Sub10            13438539.500       3666086.000       
+Sub10            13438536.500       3666090.750       
+Sub10            13438545.500       3666091.250       
+Sub10            13438535.500       3666119.250       
+Sub10            13438550.500       3666116.500       
+Sub10            13438561.500       3666114.750       
+Sub10            13438560.500       3666104.250       
+Sub10            13438560.500       3666102.750       
+Sub10            13438559.500       3666103.500       
+Sub10            13438559.500       3666104.500       
+Sub10            13438558.500       3666105.250       
+Sub10            13438558.500       3666106.000       
+Sub10            13438558.500       3666106.750       
+Sub10            13438556.500       3666108.000       
+Sub10            13438555.500       3666101.500       
+Sub10            13438554.500       3666089.750       
+Sub10            13438553.500       3666084.000       
+Sub10            13438553.500       3666080.750       
+Sub10            13438552.500       3666081.000       
+Sub10            13438550.500       3666062.750       
+Sub10            13438550.500       3666044.000       
+Sub10            13438550.500       3666025.500       
+Sub10            13438550.500       3666015.250       
+Sub10            13438551.500       3666007.000       
+Sub10            13438551.500       3666004.500       
+Sub10            13438531.500       3666024.250       
+Sub11            13438536.500       3666090.750       
+Sub11            13438539.500       3666086.000       
+Sub11            13438540.500       3666083.750       
+Sub11            13438540.500       3666077.500       
+Sub11            13438545.500       3666077.250       
+Sub11            13438545.500       3666060.500       
+Sub11            13438530.500       3666061.000       
+Sub11            13438531.500       3666087.000       
+Sub11            13438530.500       3666090.500       
+Sub11            13438529.500       3666098.250       
+Sub11            13438536.500       3666090.750       
+Sub12            13438545.500       3666060.500       
+Sub12            13438544.500       3666028.750       
+Sub12            13438541.500       3666028.750       
+Sub12            13438541.500       3666025.250       
+Sub12            13438533.500       3666025.250       
+Sub12            13438531.500       3666024.250       
+Sub12            13438526.500       3666028.750       
+Sub12            13438525.500       3666031.500       
+Sub12            13438526.500       3666036.750       
+Sub12            13438527.500       3666037.250       
+Sub12            13438528.500       3666040.250       
+Sub12            13438529.500       3666043.750       
+Sub12            13438530.500       3666061.000       
+Sub12            13438545.500       3666060.500       
+Sub13            13438451.500       3665976.750       
+Sub13            13438446.500       3665977.750       
+Sub13            13438444.500       3665977.750       
+Sub13            13438444.500       3665977.000       
+Sub13            13438445.500       3665976.000       
+Sub13            13438445.500       3665975.250       
+Sub13            13438446.500       3665974.750       
+Sub13            13438447.500       3665974.250       
+Sub13            13438447.500       3665973.750       
+Sub13            13438448.500       3665973.250       
+Sub13            13438448.500       3665972.750       
+Sub13            13438441.500       3665973.750       
+Sub13            13438442.500       3665978.250       
+Sub13            13438442.500       3665979.250       
+Sub13            13438442.500       3665980.250       
+Sub13            13438441.500       3665981.500       
+Sub13            13438441.500       3665982.250       
+Sub13            13438441.500       3665983.750       
+Sub13            13438440.500       3665985.000       
+Sub13            13438440.500       3665986.250       
+Sub13            13438439.500       3665989.000       
+Sub13            13438438.500       3665991.250       
+Sub13            13438438.500       3665992.500       
+Sub13            13438442.500       3665992.000       
+Sub13            13438471.500       3665988.000       
+Sub13            13438548.500       3665980.750       
+Sub13            13438549.500       3665980.500       
+Sub13            13438550.500       3665979.500       
+Sub13            13438547.500       3665975.750       
+Sub13            13438543.500       3665972.750       
+Sub13            13438539.500       3665971.250       
+Sub13            13438534.500       3665970.750       
+Sub13            13438533.500       3665971.000       
+Sub13            13438532.500       3665970.750       
+Sub13            13438525.500       3665971.750       
+Sub13            13438516.500       3665972.000       
+Sub13            13438513.500       3665971.750       
+Sub13            13438493.500       3665973.250       
+Sub13            13438487.500       3665974.250       
+Sub13            13438472.500       3665975.500       
+Sub13            13438467.500       3665976.000       
+Sub13            13438467.500       3665975.250       
+Sub13            13438451.500       3665976.750       
+Sub14            13438413.500       3665996.000       
+Sub14            13438438.500       3665992.500       
+Sub14            13438438.500       3665991.250       
+Sub14            13438439.500       3665989.000       
+Sub14            13438440.500       3665986.250       
+Sub14            13438440.500       3665985.000       
+Sub14            13438441.500       3665983.750       
+Sub14            13438441.500       3665982.250       
+Sub14            13438441.500       3665981.500       
+Sub14            13438442.500       3665980.250       
+Sub14            13438442.500       3665979.250       
+Sub14            13438442.500       3665978.250       
+Sub14            13438441.500       3665973.750       
+Sub14            13438433.500       3665974.750       
+Sub14            13438434.500       3665975.000       
+Sub14            13438435.500       3665975.250       
+Sub14            13438436.500       3665975.500       
+Sub14            13438436.500       3665976.000       
+Sub14            13438438.500       3665976.750       
+Sub14            13438438.500       3665977.250       
+Sub14            13438439.500       3665977.750       
+Sub14            13438439.500       3665978.500       
+Sub14            13438429.500       3665980.250       
+Sub14            13438426.500       3665980.750       
+Sub14            13438413.500       3665982.500       
+Sub14            13438413.500       3665996.000       
+Sub15            13438385.500       3666156.000       
+Sub15            13438390.500       3666181.000       
+Sub15            13438393.500       3666180.500       
+Sub15            13438388.500       3666155.500       
+Sub15            13438385.500       3666156.000       
+Sub16            13438395.500       3666210.000       
+Sub16            13438400.500       3666238.750       
+Sub16            13438403.500       3666238.250       
+Sub16            13438398.500       3666209.500       
+Sub16            13438395.500       3666210.000       
+Sub17            13438422.500       3666246.500       
+Sub17            13438427.500       3666245.750       
+Sub17            13438444.500       3666242.500       
+Sub17            13438469.500       3666238.000       
+Sub17            13438468.500       3666233.250       
+Sub17            13438470.500       3666233.000       
+Sub17            13438469.500       3666227.250       
+Sub17            13438467.500       3666227.500       
+Sub17            13438467.500       3666222.250       
+Sub17            13438463.500       3666223.000       
+Sub17            13438462.500       3666221.750       
+Sub17            13438415.500       3666230.500       
+Sub17            13438411.500       3666232.500       
+Sub17            13438412.500       3666237.250       
+Sub17            13438411.500       3666238.000       
+Sub17            13438412.500       3666243.750       
+Sub17            13438413.500       3666243.500       
+Sub17            13438414.500       3666246.500       
+Sub17            13438414.500       3666248.000       
+Sub17            13438415.500       3666248.000       
+Sub17            13438422.500       3666246.500       
+Sub18            13438475.500       3666251.500       
+Sub18            13438475.500       3666248.750       
+Sub18            13438475.500       3666248.250       
+Sub18            13438473.500       3666237.250       
+Sub18            13438469.500       3666238.000       
+Sub18            13438444.500       3666242.500       
+Sub18            13438446.500       3666254.000       
+Sub18            13438446.500       3666256.500       
+Sub18            13438475.500       3666251.500       
+Sub19            13438506.500       3666245.500       
+Sub19            13438506.500       3666242.500       
+Sub19            13438505.500       3666237.000       
+Sub19            13438497.500       3666238.250       
+Sub19            13438495.500       3666238.750       
+Sub19            13438495.500       3666235.000       
+Sub19            13438494.500       3666233.500       
+Sub19            13438493.500       3666228.750       
+Sub19            13438491.500       3666229.250       
+Sub19            13438470.500       3666233.000       
+Sub19            13438468.500       3666233.250       
+Sub19            13438469.500       3666238.000       
+Sub19            13438473.500       3666237.250       
+Sub19            13438475.500       3666248.250       
+Sub19            13438475.500       3666248.750       
+Sub19            13438475.500       3666251.500       
+Sub19            13438504.500       3666246.000       
+Sub19            13438506.500       3666245.500       
+Sub20            13438524.500       3666241.000       
+Sub20            13438526.500       3666239.000       
+Sub20            13438528.500       3666236.750       
+Sub20            13438529.500       3666235.250       
+Sub20            13438529.500       3666234.000       
+Sub20            13438530.500       3666230.500       
+Sub20            13438530.500       3666226.750       
+Sub20            13438522.500       3666228.250       
+Sub20            13438512.500       3666230.000       
+Sub20            13438504.500       3666231.500       
+Sub20            13438505.500       3666237.000       
+Sub20            13438506.500       3666242.500       
+Sub20            13438506.500       3666245.500       
+Sub20            13438508.500       3666245.250       
+Sub20            13438512.500       3666244.500       
+Sub20            13438521.500       3666242.750       
+Sub20            13438524.500       3666241.000       
+Sub21            13438411.500       3666238.000       
+Sub21            13438412.500       3666237.250       
+Sub21            13438411.500       3666232.500       
+Sub21            13438411.500       3666228.250       
+Sub21            13438419.500       3666224.500       
+Sub21            13438426.500       3666220.000       
+Sub21            13438427.500       3666213.250       
+Sub21            13438425.500       3666207.000       
+Sub21            13438403.500       3666209.000       
+Sub21            13438398.500       3666209.500       
+Sub21            13438403.500       3666238.250       
+Sub21            13438407.500       3666238.000       
+Sub21            13438411.500       3666238.000       
+Sub22            13438390.500       3666181.000       
+Sub22            13438395.500       3666210.000       
+Sub22            13438398.500       3666209.500       
+Sub22            13438395.500       3666195.500       
+Sub22            13438393.500       3666180.500       
+Sub22            13438390.500       3666181.000       
+Sub23            13438401.500       3666194.000       
+Sub23            13438460.500       3666181.750       
+Sub23            13438464.500       3666181.250       
+Sub23            13438463.500       3666175.250       
+Sub23            13438462.500       3666170.500       
+Sub23            13438457.500       3666171.500       
+Sub23            13438402.500       3666181.750       
+Sub23            13438398.500       3666181.000       
+Sub23            13438393.500       3666180.500       
+Sub23            13438395.500       3666195.500       
+Sub23            13438401.500       3666194.000       
+Sub24            13438404.500       3666164.000       
+Sub24            13438403.500       3666152.750       
+Sub24            13438388.500       3666155.500       
+Sub24            13438393.500       3666180.500       
+Sub24            13438398.500       3666181.000       
+Sub24            13438402.500       3666181.750       
+Sub24            13438401.500       3666177.250       
+Sub24            13438400.500       3666177.500       
+Sub24            13438399.500       3666173.000       
+Sub24            13438399.500       3666171.500       
+Sub24            13438399.500       3666166.250       
+Sub24            13438404.500       3666164.000       
+Sub25            13438457.500       3666171.500       
+Sub25            13438458.500       3666166.750       
+Sub25            13438457.500       3666161.000       
+Sub25            13438455.500       3666156.000       
+Sub25            13438450.500       3666155.500       
+Sub25            13438404.500       3666164.000       
+Sub25            13438399.500       3666166.250       
+Sub25            13438399.500       3666171.500       
+Sub25            13438399.500       3666173.000       
+Sub25            13438400.500       3666177.500       
+Sub25            13438401.500       3666177.250       
+Sub25            13438402.500       3666181.750       
+Sub25            13438457.500       3666171.500       
+Sub26            13438518.500       3666207.500       
+Sub26            13438524.500       3666206.750       
+Sub26            13438526.500       3666206.500       
+Sub26            13438526.500       3666202.500       
+Sub26            13438524.500       3666191.750       
+Sub26            13438524.500       3666188.000       
+Sub26            13438525.500       3666184.750       
+Sub26            13438521.500       3666185.500       
+Sub26            13438510.500       3666188.000       
+Sub26            13438504.500       3666209.250       
+Sub26            13438518.500       3666207.500       
+Sub27            13438553.500       3666185.500       
+Sub27            13438562.500       3666184.000       
+Sub27            13438563.500       3666183.750       
+Sub27            13438562.500       3666181.750       
+Sub27            13438561.500       3666175.500       
+Sub27            13438561.500       3666167.250       
+Sub27            13438560.500       3666160.750       
+Sub27            13438555.500       3666161.500       
+Sub27            13438553.500       3666146.000       
+Sub27            13438535.500       3666147.750       
+Sub27            13438534.500       3666148.000       
+Sub27            13438533.500       3666154.750       
+Sub27            13438531.500       3666160.500       
+Sub27            13438528.500       3666173.500       
+Sub27            13438533.500       3666172.250       
+Sub27            13438547.500       3666168.250       
+Sub27            13438552.500       3666167.750       
+Sub27            13438552.500       3666176.000       
+Sub27            13438553.500       3666185.500       
+Sub28            13438550.500       3666116.500       
+Sub28            13438535.500       3666119.250       
+Sub28            13438534.500       3666119.500       
+Sub28            13438534.500       3666119.750       
+Sub28            13438552.500       3666136.750       
+Sub28            13438553.500       3666146.000       
+Sub28            13438555.500       3666161.500       
+Sub28            13438560.500       3666160.750       
+Sub28            13438560.500       3666159.000       
+Sub28            13438560.500       3666154.500       
+Sub28            13438559.500       3666149.250       
+Sub28            13438559.500       3666148.000       
+Sub28            13438558.500       3666129.250       
+Sub28            13438557.500       3666123.750       
+Sub28            13438558.500       3666124.250       
+Sub28            13438559.500       3666124.500       
+Sub28            13438559.500       3666125.000       
+Sub28            13438560.500       3666125.500       
+Sub28            13438560.500       3666126.250       
+Sub28            13438561.500       3666127.000       
+Sub28            13438562.500       3666128.000       
+Sub28            13438562.500       3666128.750       
+Sub28            13438562.500       3666126.500       
+Sub28            13438561.500       3666114.750       
+Sub28            13438550.500       3666116.500       
+Sub29            13438535.500       3666147.750       
+Sub29            13438553.500       3666146.000       
+Sub29            13438552.500       3666136.750       
+Sub29            13438534.500       3666119.750       
+Sub29            13438531.500       3666120.000       
+Sub29            13438531.500       3666120.500       
+Sub29            13438534.500       3666137.750       
+Sub29            13438534.500       3666140.750       
+Sub29            13438534.500       3666143.000       
+Sub29            13438534.500       3666145.250       
+Sub29            13438534.500       3666148.000       
+Sub29            13438535.500       3666147.750       
+Sub30            13438528.500       3666173.500       
+Sub30            13438531.500       3666160.500       
+Sub30            13438533.500       3666154.750       
+Sub30            13438534.500       3666148.000       
+Sub30            13438529.500       3666150.000       
+Sub30            13438518.500       3666148.250       
+Sub30            13438519.500       3666145.250       
+Sub30            13438514.500       3666146.000       
+Sub30            13438501.500       3666148.500       
+Sub30            13438495.500       3666149.750       
+Sub30            13438491.500       3666151.750       
+Sub30            13438491.500       3666157.000       
+Sub30            13438492.500       3666163.000       
+Sub30            13438494.500       3666167.250       
+Sub30            13438521.500       3666162.250       
+Sub30            13438524.500       3666174.750       
+Sub30            13438528.500       3666173.500       
+Sub31            13438462.500       3666221.750       
+Sub31            13438470.500       3666220.250       
+Sub31            13438449.500       3666220.000       
+Sub31            13438427.500       3666213.250       
+Sub31            13438426.500       3666220.000       
+Sub31            13438419.500       3666224.500       
+Sub31            13438411.500       3666228.250       
+Sub31            13438411.500       3666232.500       
+Sub31            13438415.500       3666230.500       
+Sub31            13438462.500       3666221.750       
+Sub32            13438468.500       3666204.750       
+Sub32            13438483.500       3666187.250       
+Sub32            13438484.500       3666185.500       
+Sub32            13438485.500       3666184.000       
+Sub32            13438485.500       3666182.250       
+Sub32            13438485.500       3666181.500       
+Sub32            13438483.500       3666181.250       
+Sub32            13438469.500       3666182.500       
+Sub32            13438469.500       3666181.750       
+Sub32            13438470.500       3666180.750       
+Sub32            13438470.500       3666180.000       
+Sub32            13438469.500       3666179.750       
+Sub32            13438468.500       3666179.750       
+Sub32            13438467.500       3666179.750       
+Sub32            13438466.500       3666179.750       
+Sub32            13438465.500       3666180.250       
+Sub32            13438464.500       3666181.250       
+Sub32            13438460.500       3666181.750       
+Sub32            13438460.500       3666183.750       
+Sub32            13438460.500       3666189.250       
+Sub32            13438455.500       3666193.750       
+Sub32            13438451.500       3666197.250       
+Sub32            13438449.500       3666202.000       
+Sub32            13438427.500       3666213.250       
+Sub32            13438449.500       3666220.000       
+Sub32            13438470.500       3666220.250       
+Sub32            13438468.500       3666204.750       
+Sub33            13438460.500       3666181.750       
+Sub33            13438401.500       3666194.000       
+Sub33            13438395.500       3666195.500       
+Sub33            13438398.500       3666209.500       
+Sub33            13438403.500       3666209.000       
+Sub33            13438425.500       3666207.000       
+Sub33            13438427.500       3666213.250       
+Sub33            13438449.500       3666202.000       
+Sub33            13438451.500       3666197.250       
+Sub33            13438455.500       3666193.750       
+Sub33            13438460.500       3666189.250       
+Sub33            13438460.500       3666183.750       
+Sub33            13438460.500       3666181.750       
+Sub34            13438525.500       3666184.750       
+Sub34            13438528.500       3666173.500       
+Sub34            13438524.500       3666174.750       
+Sub34            13438519.500       3666176.000       
+Sub34            13438485.500       3666181.500       
+Sub34            13438485.500       3666182.250       
+Sub34            13438485.500       3666184.000       
+Sub34            13438484.500       3666185.500       
+Sub34            13438483.500       3666187.250       
+Sub34            13438468.500       3666204.750       
+Sub34            13438491.500       3666203.750       
+Sub34            13438504.500       3666209.250       
+Sub34            13438510.500       3666188.000       
+Sub34            13438521.500       3666185.500       
+Sub34            13438525.500       3666184.750       
+Sub35            13438485.500       3666181.500       
+Sub35            13438519.500       3666176.000       
+Sub35            13438524.500       3666174.750       
+Sub35            13438521.500       3666162.250       
+Sub35            13438494.500       3666167.250       
+Sub35            13438487.500       3666169.250       
+Sub35            13438484.500       3666170.000       
+Sub35            13438463.500       3666175.250       
+Sub35            13438464.500       3666181.250       
+Sub35            13438465.500       3666180.250       
+Sub35            13438466.500       3666179.750       
+Sub35            13438467.500       3666179.750       
+Sub35            13438468.500       3666179.750       
+Sub35            13438469.500       3666179.750       
+Sub35            13438470.500       3666180.000       
+Sub35            13438470.500       3666180.750       
+Sub35            13438469.500       3666181.750       
+Sub35            13438469.500       3666182.500       
+Sub35            13438483.500       3666181.250       
+Sub35            13438485.500       3666181.500       
+Sub36            13438487.500       3666169.250       
+Sub36            13438482.500       3666142.500       
+Sub36            13438479.500       3666143.000       
+Sub36            13438472.500       3666144.250       
+Sub36            13438461.500       3666146.250       
+Sub36            13438430.500       3666138.250       
+Sub36            13438416.500       3666142.500       
+Sub36            13438411.500       3666151.500       
+Sub36            13438403.500       3666152.750       
+Sub36            13438404.500       3666164.000       
+Sub36            13438450.500       3666155.500       
+Sub36            13438455.500       3666156.000       
+Sub36            13438457.500       3666161.000       
+Sub36            13438458.500       3666166.750       
+Sub36            13438457.500       3666171.500       
+Sub36            13438462.500       3666170.500       
+Sub36            13438463.500       3666175.250       
+Sub36            13438484.500       3666170.000       
+Sub36            13438487.500       3666169.250       
+Sub37            13438494.500       3666167.250       
+Sub37            13438492.500       3666163.000       
+Sub37            13438491.500       3666157.000       
+Sub37            13438491.500       3666151.750       
+Sub37            13438495.500       3666149.750       
+Sub37            13438501.500       3666148.500       
+Sub37            13438514.500       3666146.000       
+Sub37            13438519.500       3666145.250       
+Sub37            13438521.500       3666135.500       
+Sub37            13438517.500       3666113.500       
+Sub37            13438507.500       3666115.750       
+Sub37            13438510.500       3666129.000       
+Sub37            13438499.500       3666139.250       
+Sub37            13438482.500       3666142.500       
+Sub37            13438487.500       3666169.250       
+Sub37            13438494.500       3666167.250       
+Sub38            13438472.500       3666144.250       
+Sub38            13438466.500       3666113.000       
+Sub38            13438464.500       3666101.750       
+Sub38            13438454.500       3666103.750       
+Sub38            13438461.500       3666146.250       
+Sub38            13438472.500       3666144.250       
+Sub39            13438482.500       3666142.500       
+Sub39            13438499.500       3666139.250       
+Sub39            13438510.500       3666129.000       
+Sub39            13438507.500       3666115.750       
+Sub39            13438506.500       3666106.000       
+Sub39            13438487.500       3666109.500       
+Sub39            13438466.500       3666113.000       
+Sub39            13438472.500       3666144.250       
+Sub39            13438479.500       3666143.000       
+Sub39            13438482.500       3666142.500       
+Sub40            13438466.500       3666113.000       
+Sub40            13438487.500       3666109.500       
+Sub40            13438485.500       3666098.000       
+Sub40            13438464.500       3666101.750       
+Sub40            13438466.500       3666113.000       
+Sub41            13438487.500       3666109.500       
+Sub41            13438506.500       3666106.000       
+Sub41            13438514.500       3666104.750       
+Sub41            13438516.500       3666092.250       
+Sub41            13438485.500       3666098.000       
+Sub41            13438487.500       3666109.500       
+Sub42            13438517.500       3666113.500       
+Sub42            13438528.500       3666111.000       
+Sub42            13438529.500       3666110.750       
+Sub42            13438528.500       3666103.750       
+Sub42            13438529.500       3666098.250       
+Sub42            13438530.500       3666090.500       
+Sub42            13438525.500       3666091.500       
+Sub42            13438517.500       3666091.500       
+Sub42            13438516.500       3666092.250       
+Sub42            13438514.500       3666104.750       
+Sub42            13438506.500       3666106.000       
+Sub42            13438507.500       3666115.750       
+Sub42            13438517.500       3666113.500       
+Sub43            13438390.500       3666112.750       
+Sub43            13438388.500       3666104.000       
+Sub43            13438388.500       3666102.500       
+Sub43            13438387.500       3666099.750       
+Sub43            13438386.500       3666099.500       
+Sub43            13438385.500       3666093.750       
+Sub43            13438386.500       3666093.250       
+Sub43            13438385.500       3666088.250       
+Sub43            13438378.500       3666091.250       
+Sub43            13438380.500       3666106.250       
+Sub43            13438381.500       3666110.500       
+Sub43            13438387.500       3666113.750       
+Sub43            13438390.500       3666112.750       
+Sub44            13438423.500       3666097.500       
+Sub44            13438443.500       3666093.750       
+Sub44            13438442.500       3666089.250       
+Sub44            13438444.500       3666089.000       
+Sub44            13438442.500       3666083.000       
+Sub44            13438441.500       3666083.000       
+Sub44            13438440.500       3666078.000       
+Sub44            13438437.500       3666079.000       
+Sub44            13438436.500       3666077.500       
+Sub44            13438385.500       3666088.250       
+Sub44            13438386.500       3666093.250       
+Sub44            13438385.500       3666093.750       
+Sub44            13438386.500       3666099.500       
+Sub44            13438387.500       3666099.750       
+Sub44            13438388.500       3666102.500       
+Sub44            13438388.500       3666104.000       
+Sub44            13438423.500       3666097.500       
+Sub45            13438388.500       3666104.000       
+Sub45            13438390.500       3666112.750       
+Sub45            13438396.500       3666110.750       
+Sub45            13438398.500       3666113.750       
+Sub45            13438425.500       3666109.000       
+Sub45            13438423.500       3666097.500       
+Sub45            13438388.500       3666104.000       
+Sub46            13438425.500       3666109.000       
+Sub46            13438445.500       3666105.250       
+Sub46            13438443.500       3666093.750       
+Sub46            13438423.500       3666097.500       
+Sub46            13438425.500       3666109.000       
+Sub47            13438385.500       3666088.250       
+Sub47            13438436.500       3666077.500       
+Sub47            13438437.500       3666079.000       
+Sub47            13438440.500       3666078.000       
+Sub47            13438438.500       3666064.250       
+Sub47            13438437.500       3666057.750       
+Sub47            13438410.500       3666063.250       
+Sub47            13438376.500       3666070.250       
+Sub47            13438378.500       3666091.250       
+Sub47            13438385.500       3666088.250       
+Sub48            13438457.500       3666070.000       
+Sub48            13438464.500       3666068.000       
+Sub48            13438469.500       3666062.000       
+Sub48            13438467.500       3666044.750       
+Sub48            13438456.500       3666043.750       
+Sub48            13438455.500       3666043.750       
+Sub48            13438450.500       3666043.500       
+Sub48            13438449.500       3666059.500       
+Sub48            13438447.500       3666063.500       
+Sub48            13438448.500       3666072.750       
+Sub48            13438457.500       3666070.000       
+Sub49            13438450.500       3666043.500       
+Sub49            13438455.500       3666043.750       
+Sub49            13438456.500       3666043.750       
+Sub49            13438467.500       3666044.750       
+Sub49            13438466.500       3666036.000       
+Sub49            13438459.500       3666036.750       
+Sub49            13438450.500       3666038.250       
+Sub49            13438446.500       3666039.000       
+Sub49            13438438.500       3666045.000       
+Sub49            13438446.500       3666043.500       
+Sub49            13438450.500       3666043.500       
+Sub50            13438454.500       3666103.750       
+Sub50            13438464.500       3666101.750       
+Sub50            13438457.500       3666070.000       
+Sub50            13438448.500       3666072.750       
+Sub50            13438447.500       3666063.500       
+Sub50            13438438.500       3666064.250       
+Sub50            13438440.500       3666078.000       
+Sub50            13438441.500       3666083.000       
+Sub50            13438442.500       3666083.000       
+Sub50            13438444.500       3666089.000       
+Sub50            13438442.500       3666089.250       
+Sub50            13438443.500       3666093.750       
+Sub50            13438445.500       3666105.250       
+Sub50            13438454.500       3666103.750       
+Sub51            13438485.500       3666098.000       
+Sub51            13438484.500       3666086.250       
+Sub51            13438467.500       3666089.500       
+Sub51            13438465.500       3666085.000       
+Sub51            13438463.500       3666079.250       
+Sub51            13438464.500       3666073.750       
+Sub51            13438464.500       3666068.000       
+Sub51            13438457.500       3666070.000       
+Sub51            13438464.500       3666101.750       
+Sub51            13438485.500       3666098.000       
+Sub52            13438516.500       3666092.250       
+Sub52            13438517.500       3666091.500       
+Sub52            13438522.500       3666079.250       
+Sub52            13438484.500       3666086.250       
+Sub52            13438485.500       3666098.000       
+Sub52            13438516.500       3666092.250       
+Sub53            13438530.500       3666090.500       
+Sub53            13438531.500       3666087.000       
+Sub53            13438530.500       3666061.000       
+Sub53            13438529.500       3666061.000       
+Sub53            13438527.500       3666061.750       
+Sub53            13438519.500       3666063.500       
+Sub53            13438521.500       3666068.500       
+Sub53            13438522.500       3666074.500       
+Sub53            13438522.500       3666079.250       
+Sub53            13438517.500       3666091.500       
+Sub53            13438525.500       3666091.500       
+Sub53            13438530.500       3666090.500       
+Sub54            13438484.500       3666086.250       
+Sub54            13438522.500       3666079.250       
+Sub54            13438522.500       3666074.500       
+Sub54            13438521.500       3666068.500       
+Sub54            13438519.500       3666063.500       
+Sub54            13438515.500       3666063.000       
+Sub54            13438496.500       3666067.000       
+Sub54            13438464.500       3666073.750       
+Sub54            13438463.500       3666079.250       
+Sub54            13438465.500       3666085.000       
+Sub54            13438467.500       3666089.500       
+Sub54            13438484.500       3666086.250       
+Sub55            13438496.500       3666067.000       
+Sub55            13438496.500       3666060.000       
+Sub55            13438495.500       3666033.000       
+Sub55            13438466.500       3666036.000       
+Sub55            13438467.500       3666044.750       
+Sub55            13438469.500       3666062.000       
+Sub55            13438464.500       3666068.000       
+Sub55            13438464.500       3666073.750       
+Sub55            13438496.500       3666067.000       
+Sub56            13438523.500       3666038.000       
+Sub56            13438526.500       3666036.750       
+Sub56            13438524.500       3666034.750       
+Sub56            13438522.500       3666033.250       
+Sub56            13438520.500       3666032.000       
+Sub56            13438516.500       3666031.250       
+Sub56            13438495.500       3666033.000       
+Sub56            13438496.500       3666060.000       
+Sub56            13438503.500       3666056.000       
+Sub56            13438511.500       3666052.250       
+Sub56            13438514.500       3666051.750       
+Sub56            13438517.500       3666049.250       
+Sub56            13438520.500       3666042.750       
+Sub56            13438523.500       3666038.000       
+Sub57            13438404.500       3666032.500       
+Sub57            13438432.500       3666027.250       
+Sub57            13438430.500       3666017.750       
+Sub57            13438428.500       3666011.750       
+Sub57            13438424.500       3666011.250       
+Sub57            13438376.500       3666020.000       
+Sub57            13438373.500       3666022.000       
+Sub57            13438373.500       3666023.250       
+Sub57            13438373.500       3666027.500       
+Sub57            13438374.500       3666033.250       
+Sub57            13438376.500       3666037.500       
+Sub57            13438404.500       3666032.500       
+Sub58            13438495.500       3666017.500       
+Sub58            13438524.500       3666014.750       
+Sub58            13438524.500       3666010.250       
+Sub58            13438524.500       3666004.250       
+Sub58            13438522.500       3665999.000       
+Sub58            13438518.500       3665998.250       
+Sub58            13438470.500       3666002.750       
+Sub58            13438466.500       3666004.250       
+Sub58            13438465.500       3666009.750       
+Sub58            13438466.500       3666014.250       
+Sub58            13438466.500       3666015.750       
+Sub58            13438468.500       3666020.250       
+Sub58            13438495.500       3666017.500       
+Sub59            13438495.500       3666033.000       
+Sub59            13438495.500       3666031.750       
+Sub59            13438495.500       3666017.500       
+Sub59            13438468.500       3666020.250       
+Sub59            13438467.500       3666034.500       
+Sub59            13438466.500       3666036.000       
+Sub59            13438495.500       3666033.000       
+Sub60            13438518.500       3665998.250       
+Sub60            13438522.500       3665999.000       
+Sub60            13438524.500       3666004.250       
+Sub60            13438524.500       3666010.250       
+Sub60            13438524.500       3666014.750       
+Sub60            13438495.500       3666017.500       
+Sub60            13438495.500       3666031.750       
+Sub60            13438495.500       3666033.000       
+Sub60            13438516.500       3666031.250       
+Sub60            13438520.500       3666032.000       
+Sub60            13438522.500       3666033.250       
+Sub60            13438524.500       3666034.750       
+Sub60            13438526.500       3666036.750       
+Sub60            13438525.500       3666031.500       
+Sub60            13438526.500       3666028.750       
+Sub60            13438531.500       3666024.250       
+Sub60            13438551.500       3666004.500       
+Sub60            13438551.500       3666002.500       
+Sub60            13438551.500       3665996.000       
+Sub60            13438518.500       3665998.250       
+Sub61            13438506.500       3666247.500       
+Sub61            13438506.500       3666249.000       
+Sub61            13438525.500       3666245.750       
+Sub61            13438525.500       3666245.500       
+Sub61            13438525.500       3666242.500       
+Sub61            13438525.500       3666242.000       
+Sub61            13438526.500       3666241.750       
+Sub61            13438527.500       3666241.250       
+Sub61            13438527.500       3666240.500       
+Sub61            13438528.500       3666239.750       
+Sub61            13438529.500       3666239.250       
+Sub61            13438529.500       3666238.500       
+Sub61            13438530.500       3666238.000       
+Sub61            13438530.500       3666237.250       
+Sub61            13438531.500       3666236.500       
+Sub61            13438531.500       3666235.750       
+Sub61            13438532.500       3666234.750       
+Sub61            13438532.500       3666234.000       
+Sub61            13438532.500       3666233.250       
+Sub61            13438533.500       3666232.250       
+Sub61            13438533.500       3666231.250       
+Sub61            13438533.500       3666230.250       
+Sub61            13438533.500       3666229.500       
+Sub61            13438534.500       3666228.500       
+Sub61            13438534.500       3666229.250       
+Sub61            13438534.500       3666230.500       
+Sub61            13438534.500       3666231.750       
+Sub61            13438534.500       3666233.000       
+Sub61            13438533.500       3666233.750       
+Sub61            13438533.500       3666234.500       
+Sub61            13438533.500       3666235.500       
+Sub61            13438533.500       3666236.250       
+Sub61            13438533.500       3666237.000       
+Sub61            13438534.500       3666238.000       
+Sub61            13438534.500       3666238.500       
+Sub61            13438535.500       3666238.000       
+Sub61            13438535.500       3666237.500       
+Sub61            13438536.500       3666237.000       
+Sub61            13438537.500       3666236.250       
+Sub61            13438537.500       3666235.500       
+Sub61            13438540.500       3666232.500       
+Sub61            13438541.500       3666232.000       
+Sub61            13438541.500       3666231.500       
+Sub61            13438542.500       3666231.250       
+Sub61            13438530.500       3666226.750       
+Sub61            13438530.500       3666230.500       
+Sub61            13438529.500       3666234.000       
+Sub61            13438529.500       3666235.250       
+Sub61            13438528.500       3666236.750       
+Sub61            13438526.500       3666239.000       
+Sub61            13438524.500       3666241.000       
+Sub61            13438521.500       3666242.750       
+Sub61            13438512.500       3666244.500       
+Sub61            13438508.500       3666245.250       
+Sub61            13438506.500       3666245.500       
+Sub61            13438506.500       3666247.500       
+Sub62            13438518.500       3665998.250       
+Sub62            13438551.500       3665996.000       
+Sub62            13438552.500       3665988.500       
+Sub62            13438551.500       3665986.250       
+Sub62            13438551.500       3665983.750       
+Sub62            13438550.500       3665979.500       
+Sub62            13438549.500       3665980.500       
+Sub62            13438548.500       3665980.750       
+Sub62            13438471.500       3665988.000       
+Sub62            13438442.500       3665992.000       
+Sub62            13438445.500       3666016.500       
+Sub62            13438446.500       3666016.500       
+Sub62            13438466.500       3666014.250       
+Sub62            13438465.500       3666009.750       
+Sub62            13438466.500       3666004.250       
+Sub62            13438470.500       3666002.750       
+Sub62            13438518.500       3665998.250       
+Sub63            13438402.500       3665984.250       
+Sub63            13438404.500       3665991.500       
+Sub63            13438405.500       3665997.250       
+Sub63            13438403.500       3665998.250       
+Sub63            13438389.500       3666000.750       
+Sub63            13438372.500       3666004.000       
+Sub63            13438355.500       3666006.750       
+Sub63            13438356.500       3666011.500       
+Sub63            13438357.500       3666016.750       
+Sub63            13438358.500       3666017.250       
+Sub63            13438373.500       3666022.000       
+Sub63            13438376.500       3666020.000       
+Sub63            13438424.500       3666011.250       
+Sub63            13438428.500       3666011.750       
+Sub63            13438430.500       3666017.750       
+Sub63            13438445.500       3666016.500       
+Sub63            13438442.500       3665992.000       
+Sub63            13438438.500       3665992.500       
+Sub63            13438413.500       3665996.000       
+Sub63            13438413.500       3665982.500       
+Sub63            13438412.500       3665982.750       
+Sub63            13438410.500       3665983.000       
+Sub63            13438402.500       3665984.250       
+Sub64            13438447.500       3666063.500       
+Sub64            13438449.500       3666059.500       
+Sub64            13438450.500       3666043.500       
+Sub64            13438446.500       3666043.500       
+Sub64            13438438.500       3666045.000       
+Sub64            13438437.500       3666057.750       
+Sub64            13438438.500       3666064.250       
+Sub64            13438447.500       3666063.500       
+Sub65            13438380.500       3666129.500       
+Sub65            13438385.500       3666156.000       
+Sub65            13438388.500       3666155.500       
+Sub65            13438385.500       3666137.500       
+Sub65            13438384.500       3666128.500       
+Sub65            13438380.500       3666129.500       
+Sub66            13438403.500       3666152.750       
+Sub66            13438398.500       3666133.500       
+Sub66            13438385.500       3666137.500       
+Sub66            13438388.500       3666155.500       
+Sub66            13438403.500       3666152.750       
+Sub67            13438398.500       3666133.500       
+Sub67            13438398.500       3666113.750       
+Sub67            13438396.500       3666110.750       
+Sub67            13438390.500       3666112.750       
+Sub67            13438387.500       3666113.750       
+Sub67            13438381.500       3666110.500       
+Sub67            13438382.500       3666120.750       
+Sub67            13438384.500       3666128.500       
+Sub67            13438385.500       3666137.500       
+Sub67            13438398.500       3666133.500       
+Sub68            13438375.500       3666092.750       
+Sub68            13438376.500       3666106.750       
+Sub68            13438380.500       3666129.250       
+Sub68            13438384.500       3666128.500       
+Sub68            13438382.500       3666120.750       
+Sub68            13438381.500       3666110.500       
+Sub68            13438380.500       3666106.250       
+Sub68            13438378.500       3666091.250       
+Sub68            13438375.500       3666092.750       
+Sub69            13438372.500       3666069.250       
+Sub69            13438376.500       3666070.250       
+Sub69            13438375.500       3666064.500       
+Sub69            13438375.500       3666061.000       
+Sub69            13438376.500       3666058.750       
+Sub69            13438377.500       3666056.000       
+Sub69            13438379.500       3666053.500       
+Sub69            13438382.500       3666051.500       
+Sub69            13438376.500       3666037.500       
+Sub69            13438374.500       3666033.250       
+Sub69            13438373.500       3666027.500       
+Sub69            13438373.500       3666023.250       
+Sub69            13438373.500       3666022.000       
+Sub69            13438358.500       3666017.250       
+Sub69            13438357.500       3666016.750       
+Sub69            13438360.500       3666026.750       
+Sub69            13438360.500       3666027.000       
+Sub69            13438360.500       3666027.000       
+Sub69            13438360.500       3666028.000       
+Sub69            13438361.500       3666030.500       
+Sub69            13438362.500       3666036.250       
+Sub69            13438364.500       3666044.500       
+Sub69            13438365.500       3666047.750       
+Sub69            13438365.500       3666048.750       
+Sub69            13438368.500       3666061.250       
+Sub69            13438370.500       3666068.250       
+Sub69            13438371.500       3666067.750       
+Sub69            13438371.500       3666067.250       
+Sub69            13438371.500       3666066.500       
+Sub69            13438372.500       3666069.250       
+Sub70            13438372.500       3666069.250       
+Sub70            13438375.500       3666092.750       
+Sub70            13438378.500       3666091.250       
+Sub70            13438376.500       3666070.250       
+Sub70            13438372.500       3666069.250       
+Sub71            13438410.500       3666063.250       
+Sub71            13438407.500       3666046.250       
+Sub71            13438385.500       3666050.250       
+Sub71            13438382.500       3666051.500       
+Sub71            13438379.500       3666053.500       
+Sub71            13438377.500       3666056.000       
+Sub71            13438376.500       3666058.750       
+Sub71            13438375.500       3666061.000       
+Sub71            13438375.500       3666064.500       
+Sub71            13438376.500       3666070.250       
+Sub71            13438410.500       3666063.250       
+Sub72            13438407.500       3666046.250       
+Sub72            13438404.500       3666032.500       
+Sub72            13438376.500       3666037.500       
+Sub72            13438382.500       3666051.500       
+Sub72            13438385.500       3666050.250       
+Sub72            13438407.500       3666046.250       
+Sub73            13438434.500       3666041.250       
+Sub73            13438432.500       3666027.250       
+Sub73            13438404.500       3666032.500       
+Sub73            13438407.500       3666046.250       
+Sub73            13438434.500       3666041.250       
+Sub74            13438437.500       3666057.750       
+Sub74            13438438.500       3666045.000       
+Sub74            13438446.500       3666039.000       
+Sub74            13438434.500       3666041.250       
+Sub74            13438407.500       3666046.250       
+Sub74            13438410.500       3666063.250       
+Sub74            13438437.500       3666057.750       
+Sub75            13438446.500       3666039.000       
+Sub75            13438450.500       3666038.250       
+Sub75            13438447.500       3666021.000       
+Sub75            13438447.500       3666018.500       
+Sub75            13438446.500       3666016.500       
+Sub75            13438445.500       3666016.500       
+Sub75            13438430.500       3666017.750       
+Sub75            13438432.500       3666027.250       
+Sub75            13438434.500       3666041.250       
+Sub75            13438446.500       3666039.000       
+Sub76            13438466.500       3666036.000       
+Sub76            13438467.500       3666034.500       
+Sub76            13438468.500       3666020.250       
+Sub76            13438466.500       3666015.750       
+Sub76            13438466.500       3666014.250       
+Sub76            13438446.500       3666016.500       
+Sub76            13438447.500       3666018.500       
+Sub76            13438447.500       3666021.000       
+Sub76            13438450.500       3666038.250       
+Sub76            13438459.500       3666036.750       
+Sub76            13438466.500       3666036.000       
+Sub77            13438519.500       3666063.500       
+Sub77            13438527.500       3666061.750       
+Sub77            13438529.500       3666061.000       
+Sub77            13438530.500       3666061.000       
+Sub77            13438529.500       3666043.750       
+Sub77            13438528.500       3666040.250       
+Sub77            13438527.500       3666037.250       
+Sub77            13438526.500       3666036.750       
+Sub77            13438523.500       3666038.000       
+Sub77            13438520.500       3666042.750       
+Sub77            13438517.500       3666049.250       
+Sub77            13438514.500       3666051.750       
+Sub77            13438511.500       3666052.250       
+Sub77            13438503.500       3666056.000       
+Sub77            13438496.500       3666060.000       
+Sub77            13438496.500       3666067.000       
+Sub77            13438515.500       3666063.000       
+Sub77            13438519.500       3666063.500       
+Sub78            13438534.500       3666119.750       
+Sub78            13438534.500       3666119.500       
+Sub78            13438535.500       3666119.250       
+Sub78            13438545.500       3666091.250       
+Sub78            13438536.500       3666090.750       
+Sub78            13438529.500       3666098.250       
+Sub78            13438528.500       3666103.750       
+Sub78            13438529.500       3666110.750       
+Sub78            13438531.500       3666120.000       
+Sub78            13438534.500       3666119.750       
+Sub79            13438553.500       3666185.500       
+Sub79            13438552.500       3666176.000       
+Sub79            13438552.500       3666167.750       
+Sub79            13438547.500       3666168.250       
+Sub79            13438533.500       3666172.250       
+Sub79            13438528.500       3666173.500       
+Sub79            13438525.500       3666184.750       
+Sub79            13438524.500       3666188.000       
+Sub79            13438524.500       3666191.750       
+Sub79            13438526.500       3666202.500       
+Sub79            13438556.500       3666196.250       
+Sub79            13438562.500       3666196.250       
+Sub79            13438564.500       3666196.250       
+Sub79            13438563.500       3666192.250       
+Sub79            13438563.500       3666186.000       
+Sub79            13438563.500       3666183.750       
+Sub79            13438562.500       3666184.000       
+Sub79            13438553.500       3666185.500       
+Sub80            13438530.500       3666226.750       
+Sub80            13438530.500       3666225.750       
+Sub80            13438526.500       3666206.500       
+Sub80            13438524.500       3666206.750       
+Sub80            13438518.500       3666207.500       
+Sub80            13438519.500       3666212.500       
+Sub80            13438520.500       3666217.500       
+Sub80            13438521.500       3666217.500       
+Sub80            13438522.500       3666223.500       
+Sub80            13438522.500       3666226.750       
+Sub80            13438522.500       3666228.250       
+Sub80            13438530.500       3666226.750       
+Sub81            13438505.500       3666237.000       
+Sub81            13438504.500       3666231.500       
+Sub81            13438512.500       3666230.000       
+Sub81            13438522.500       3666228.250       
+Sub81            13438522.500       3666226.750       
+Sub81            13438522.500       3666223.500       
+Sub81            13438521.500       3666217.500       
+Sub81            13438520.500       3666217.500       
+Sub81            13438519.500       3666212.500       
+Sub81            13438515.500       3666212.000       
+Sub81            13438496.500       3666215.500       
+Sub81            13438492.500       3666217.500       
+Sub81            13438492.500       3666223.000       
+Sub81            13438493.500       3666228.750       
+Sub81            13438494.500       3666233.500       
+Sub81            13438495.500       3666235.000       
+Sub81            13438495.500       3666238.750       
+Sub81            13438497.500       3666238.250       
+Sub81            13438505.500       3666237.000       
+Sub82            13438493.500       3666228.750       
+Sub82            13438492.500       3666223.000       
+Sub82            13438492.500       3666217.500       
+Sub82            13438496.500       3666215.500       
+Sub82            13438515.500       3666212.000       
+Sub82            13438519.500       3666212.500       
+Sub82            13438518.500       3666207.500       
+Sub82            13438504.500       3666209.250       
+Sub82            13438491.500       3666203.750       
+Sub82            13438468.500       3666204.750       
+Sub82            13438470.500       3666220.250       
+Sub82            13438462.500       3666221.750       
+Sub82            13438463.500       3666223.000       
+Sub82            13438467.500       3666222.250       
+Sub82            13438467.500       3666227.500       
+Sub82            13438469.500       3666227.250       
+Sub82            13438470.500       3666233.000       
+Sub82            13438491.500       3666229.250       
+Sub82            13438493.500       3666228.750       
+
+[SYMBOLS]
+;;Gage           X-Coord            Y-Coord           
+;;-------------- ------------------ ------------------
+rain             13438370.205       3666226.789       
+
