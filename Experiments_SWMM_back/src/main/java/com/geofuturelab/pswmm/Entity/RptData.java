@@ -327,12 +327,7 @@ public class RptData {
             private String losses;
             private String runoff;
         }
-        @Data
-        public static class SubcatchmentResults{
-            private List<SubcatchmentResult> subcatchmentResults;
-            private String name;
-        }
-        private List<SubcatchmentResults> subcatchmentResultsList;
+        private Map<String,List<SubcatchmentResult>> subcatchmentResultsMap;
 
 
         @Data
@@ -344,7 +339,7 @@ public class RptData {
             private String depth;
             private String head;
         }
-        Map<String,List<NodeResult>> nodeResultsMap;
+        private Map<String,List<NodeResult>> nodeResultsMap;
 
         @Data
         public static class LinkResult{
@@ -355,12 +350,7 @@ public class RptData {
             private String depth;
             private String capacity;
         }
-        @Data
-        public static class LinkResults{
-            private List<LinkResult> linkResults;
-            private String name;
-        }
-        private List<LinkResults> linkResultsList;
+        private Map<String, List<LinkResult>> linkResultsMap;
 
         //
         @Data

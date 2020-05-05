@@ -51,13 +51,11 @@ public class RptDataDao implements IRptDataDao {
                 case "Conduit Surcharge Summary":
                     cursor = readConduitSurchargeSummary(cursor);break;
                 case "Subcatchment Results":
-                    break;
-//                    cursor = readSubcatchmentResults(cursor);break;
+                    cursor = readSubcatchmentResults(cursor);break;
                 case "Node Results":
-                    cursor = readNodeResults2(cursor);break;
+                    cursor = readNodeResults(cursor);break;
                 case "Link Results":
-//                    cursor = readLinkResults(cursor);break;
-                    break;
+                    cursor = readLinkResults(cursor);break;
                 default:
                     break;
             }
@@ -342,18 +340,18 @@ public class RptDataDao implements IRptDataDao {
 
     private int readSubcatchmentResults(int index){
         List<String> lines = linesLocal.get();
-        List<RptData.SubcatchmentResults> subcatchmentResultsList = new ArrayList<>();
+        Map<String, List<RptData.SubcatchmentResult>> subcatchmentResultsMap = new HashMap<>();
         index++;
         index = skipTitle(index,lines);
         while (index < lines.size() && !nextSection(lines.get(index).trim()))
         {
-            RptData.SubcatchmentResults subcatchmentResults = new RptData.SubcatchmentResults();
-            List<RptData.SubcatchmentResult> subcatchmentResults_sub = new ArrayList<>();
+            List<RptData.SubcatchmentResult> subcatchmentResults = new ArrayList<>();
+            String subcatchName = "";
             String line = lines.get(index).trim();
             if (line.startsWith("<") && line.endsWith(">"))
             {
                 String[] nameList = line.split("[ ]+");
-                subcatchmentResults.setName(nameList[2]);
+                subcatchName =nameList[2];
                 index = skipTitle2(index+1,lines);
             }
             while (index < lines.size() && !nextSection2(lines.get(index).trim()) &&!nextSection(lines.get(index).trim()))
@@ -371,13 +369,12 @@ public class RptDataDao implements IRptDataDao {
                 subcatchmentResult.setPrecip(tempStr[2]);
                 subcatchmentResult.setLosses(tempStr[3]);
                 subcatchmentResult.setRunoff(tempStr[4]);
-                subcatchmentResults_sub.add(subcatchmentResult);
+                subcatchmentResults.add(subcatchmentResult);
                 index++;
             }
-            subcatchmentResults.setSubcatchmentResults(subcatchmentResults_sub);
-            subcatchmentResultsList.add(subcatchmentResults);
+            subcatchmentResultsMap.put(subcatchName, subcatchmentResults);
         }
-        rptLocal.get().setSubcatchmentResultsList(subcatchmentResultsList);
+        rptLocal.get().setSubcatchmentResultsMap(subcatchmentResultsMap);
         return index;
     }
 
@@ -474,18 +471,18 @@ public class RptDataDao implements IRptDataDao {
 
     private int readLinkResults(int index){
         List<String> lines = linesLocal.get();
-        List<RptData.LinkResults> linkResultsList = new ArrayList<>();
+        Map<String, List<RptData.LinkResult>> linkResultsMap = new HashMap<>();
         index++;
         index = skipTitle(index,lines);
         while (index < lines.size() && !nextSection(lines.get(index).trim()))
         {
-            RptData.LinkResults linkResults = new RptData.LinkResults();
-            List<RptData.LinkResult> linkResults_sub = new ArrayList<>();
+            String linkName = "";
+            List<RptData.LinkResult> linkResults = new ArrayList<>();
             String line = lines.get(index).trim();
             if (line.startsWith("<") && line.endsWith(">"))
             {
                 String[] nameList = line.split("[ ]+");
-                linkResults.setName(nameList[2]);
+                linkName = nameList[2];
                 index = skipTitle2(index+1,lines);
             }
             while (index < lines.size() && !nextSection2(lines.get(index).trim()) &&!nextSection(lines.get(index).trim()))
@@ -504,13 +501,12 @@ public class RptDataDao implements IRptDataDao {
                 linkResult.setVelocity(tempStr[3]);
                 linkResult.setDepth(tempStr[4]);
                 linkResult.setCapacity(tempStr[5]);
-                linkResults_sub.add(linkResult);
+                linkResults.add(linkResult);
                 index++;
             }
-            linkResults.setLinkResults(linkResults_sub);
-            linkResultsList.add(linkResults);
+            linkResultsMap.put(linkName, linkResults);
         }
-        rptLocal.get().setLinkResultsList(linkResultsList);
+        rptLocal.get().setLinkResultsMap(linkResultsMap);
         return index;
     }
 

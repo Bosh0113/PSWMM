@@ -80,4 +80,106 @@ public class RptDataService implements IRptDataService {
         }
         return arr;
     }
+
+    @Override
+    public JSONObject timeSeriesPlot(String objType, String objName, String variable, String rptName){
+        JSONObject result = new JSONObject();
+        result.put("name", objName);
+        try {
+            List<JSONObject> objTimeVariable = new ArrayList<>();
+            RptData rptData = rptDataDao.readRptFile(basePath + rptName + ".rpt");
+            switch (objType){
+                case "Node":{
+                    List<RptData.NodeResult> nodeResults = rptData.getNodeResultsMap().get(objName);
+                    if(nodeResults != null){
+                        for(RptData.NodeResult nodeResult : nodeResults){
+                            JSONObject jsonObject = new JSONObject();
+                            jsonObject.put("day",nodeResult.getDate());
+                            jsonObject.put("time",nodeResult.getTime());
+                            switch (variable){
+                                case "Inflow": {
+                                    jsonObject.put("variable",nodeResult.getInflow());
+                                    break;
+                                }
+                                case "Flooding": {
+                                    jsonObject.put("variable",nodeResult.getFlooding());
+                                    break;
+                                }
+                                case "Depth": {
+                                    jsonObject.put("variable",nodeResult.getDepth());
+                                    break;
+                                }
+                                case "Head": {
+                                    jsonObject.put("variable",nodeResult.getHead());
+                                    break;
+                                }
+                            }
+                            objTimeVariable.add(jsonObject);
+                        }
+                    }
+                    break;
+                }
+                case "Link":{
+                    List<RptData.LinkResult> linkResults = rptData.getLinkResultsMap().get(objName);
+                    if(linkResults != null){
+                        for(RptData.LinkResult linkResult : linkResults){
+                            JSONObject jsonObject = new JSONObject();
+                            jsonObject.put("day",linkResult.getDate());
+                            jsonObject.put("time",linkResult.getTime());
+                            switch (variable){
+                                case "Flow": {
+                                    jsonObject.put("variable",linkResult.getFlow());
+                                    break;
+                                }
+                                case "Velocity": {
+                                    jsonObject.put("variable",linkResult.getVelocity());
+                                    break;
+                                }
+                                case "Depth": {
+                                    jsonObject.put("variable",linkResult.getDepth());
+                                    break;
+                                }
+                                case "Capacity": {
+                                    jsonObject.put("variable",linkResult.getCapacity());
+                                    break;
+                                }
+                            }
+                            objTimeVariable.add(jsonObject);
+                        }
+                    }
+                    break;
+                }
+                case "Subcatchment":{
+                    List<RptData.SubcatchmentResult> subcatchmentResults = rptData.getSubcatchmentResultsMap().get(objName);
+                    if(subcatchmentResults != null){
+                        for(RptData.SubcatchmentResult subcatchmentResult : subcatchmentResults){
+                            JSONObject jsonObject = new JSONObject();
+                            jsonObject.put("day",subcatchmentResult.getDate());
+                            jsonObject.put("time",subcatchmentResult.getTime());
+                            switch (variable){
+                                case "Precip": {
+                                    jsonObject.put("variable",subcatchmentResult.getPrecip());
+                                    break;
+                                }
+                                case "Lossess": {
+                                    jsonObject.put("variable",subcatchmentResult.getLosses());
+                                    break;
+                                }
+                                case "Runoff": {
+                                    jsonObject.put("variable",subcatchmentResult.getRunoff());
+                                    break;
+                                }
+                            }
+                            objTimeVariable.add(jsonObject);
+                        }
+                    }
+                    break;
+                }
+            }
+            result.put("timeVariable", objTimeVariable);
+        }catch (IOException e) {
+            throw  RequestException.fail(ResponseCode.FAIL);
+        }
+        return result;
+    }
 }
