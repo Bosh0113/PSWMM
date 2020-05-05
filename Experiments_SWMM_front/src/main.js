@@ -7,11 +7,18 @@ import ViewUI from 'view-design'
 import "view-design/dist/styles/iview.css"
 import VueRouter from 'vue-router'
 import vuescroll from 'vuescroll'
+import axios from 'axios'
+import VueAxios from 'vue-axios'
+
+axios.defaults.withCredentials=true;
 
 Vue.use(ViewUI);
 Vue.use(vuescroll)
+Vue.use(VueAxios,axios)
 
 Vue.config.productionTip = false
+axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+Vue.prototype.$axios = axios;
 
 /* eslint-disable no-new */
 new Vue({

@@ -20,8 +20,9 @@ import javax.annotation.Resource;
  * @Date: 2019/12/6 21:18
  * @Description:
  */
+@CrossOrigin(origins = "*", allowCredentials = "true")
 @RestController
-@RequestMapping("/webswmm/data")
+@RequestMapping("/data")
 @Api("数据管理")
 public class DataController {
 

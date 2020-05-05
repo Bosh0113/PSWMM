@@ -18,6 +18,10 @@ export default new Router({
     { path: '/collaborativeEditor', 
       name: 'CollaborativeEditor', 
       component: resolve => (require(["@/components/CollaborativeEditor"], resolve))
+    },
+    { path: '/tableChart', 
+      name: 'TableChart', 
+      component: resolve => (require(["@/components/TableChart"], resolve))
     }
   ],
   mode: 'history'
