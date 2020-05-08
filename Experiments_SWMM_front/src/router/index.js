@@ -13,15 +13,19 @@ export default new Router({
     },
     { path: '/runParameters', 
       name: 'RunParameters', 
-      component: resolve => (require(["@/components/RunParameters"], resolve))
+      component: resolve => (require(["@/components/Parameter/RunParameters"], resolve))
     },
     { path: '/collaborativeEditor', 
       name: 'CollaborativeEditor', 
-      component: resolve => (require(["@/components/CollaborativeEditor"], resolve))
+      component: resolve => (require(["@/components/DataProcess/CollaborativeEditor"], resolve))
     },
     { path: '/tableChart', 
       name: 'TableChart', 
-      component: resolve => (require(["@/components/TableChart"], resolve))
+      component: resolve => (require(["@/components/Visualization/TableChart"], resolve))
+    },
+    { path: '/timeSeries', 
+      name: 'TimeSeries', 
+      component: resolve => (require(["@/components/Visualization/TimeSeries"], resolve))
     }
   ],
   mode: 'history'

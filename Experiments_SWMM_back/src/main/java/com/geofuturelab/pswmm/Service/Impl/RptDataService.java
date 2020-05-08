@@ -47,7 +47,7 @@ public class RptDataService implements IRptDataService {
         JSONArray arr = new JSONArray();
         InpData inpData;
         try {
-            inpData = inpDataDao.readInpFile(basePath + inpName);
+            inpData = inpDataDao.readInpFile(basePath + inpName + ".inp");
             rptData = rptDataDao.readRptFile(basePath + rptName + ".rpt");
             for (int j = 0; j < inpData.getCoordinates().size(); j++) {
                 JSONObject jo = new JSONObject();
@@ -82,10 +82,28 @@ public class RptDataService implements IRptDataService {
     }
 
     @Override
-    public JSONObject timeSeriesPlot(String objType, String objName, String variable, String rptName){
+    public JSONObject timeSeriesPlot(String objType, String objName, String variable, String inpName, String rptName){
         JSONObject result = new JSONObject();
-        result.put("name", objName);
+        result.put("objName", objName);
+        result.put("objType", objType);
+        result.put("variable", variable);
         try {
+            InpData inpData = inpDataDao.readInpFile(basePath + inpName + ".inp");
+            List<InpData.Raingage> raingages = inpData.getRaingages();
+            List<InpData.Timeseries> timeseries = inpData.getTimeseries();
+            List<JSONObject> objRains = new ArrayList<>();
+            for(InpData.Raingage raingage: raingages){
+                JSONObject raingageObj = new JSONObject();
+                raingageObj.put("name", raingage.getName());
+                for(InpData.Timeseries timeseries1: timeseries){
+                    if (timeseries1.getName().equals(raingage.getTimeseries())){
+                        raingageObj.put("timeSeries", timeseries1.getDateTimeValues());
+                        break;
+                    }
+                }
+                objRains.add(raingageObj);
+            }
+            result.put("raingages",objRains);
             List<JSONObject> objTimeVariable = new ArrayList<>();
             RptData rptData = rptDataDao.readRptFile(basePath + rptName + ".rpt");
             switch (objType){
@@ -161,7 +179,7 @@ public class RptDataService implements IRptDataService {
                                     jsonObject.put("variable",subcatchmentResult.getPrecip());
                                     break;
                                 }
-                                case "Lossess": {
+                                case "Losses": {
                                     jsonObject.put("variable",subcatchmentResult.getLosses());
                                     break;
                                 }

@@ -74,6 +74,20 @@ public class DataController {
         return ResponseResult.result(ResponseCode.OK,jo);
     }
 
+    @GetMapping(value = "/objectNames")
+    @ResponseBody
+    @ApiOperation(value="获取Inp中对象名列表")
+    public ResponseResult getObjectNames(@RequestParam("inpName") String inpName)
+    {
+        JSONObject arr = null;
+        try {
+            arr = inpDataService.getObjectNames(inpName);
+        }catch (RequestException exception) {
+            ResponseResult.result(exception.getCode());
+        }
+        return ResponseResult.result(ResponseCode.OK,arr);
+    }
+
     @GetMapping(value = "/rpt-all")
     @ResponseBody
     @ApiOperation(value="读取rpt文件")
@@ -94,8 +108,7 @@ public class DataController {
     public ResponseResult queryDataFromRpt(@RequestParam("rptName") String rptName, @RequestParam("attriName") String attriName){
         JSONArray arr = null;
         try {
-//            arr = rptDataService.extractRptData(rptName,attriName,"/LishuiEx.inp");
-            arr = rptDataService.extractRptData(rptName,attriName,"swmm.inp");
+            arr = rptDataService.extractRptData(rptName,attriName,rptName);
         } catch (RequestException exception) {
             ResponseResult.result(exception.getCode());
         }

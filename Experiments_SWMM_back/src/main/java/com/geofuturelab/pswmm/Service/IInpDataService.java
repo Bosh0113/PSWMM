@@ -13,4 +13,5 @@ import org.springframework.web.multipart.MultipartFile;
 public interface IInpDataService {
     String saveInpFile(String email, String instanceId, DataAuthority authority, String projection, MultipartFile file);
     JSONObject queryInpDataById(String id);
+    JSONObject getObjectNames(String inpName);
 }

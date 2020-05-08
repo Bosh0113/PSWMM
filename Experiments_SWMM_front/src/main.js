@@ -9,6 +9,7 @@ import VueRouter from 'vue-router'
 import vuescroll from 'vuescroll'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
+import echarts from 'echarts'
 
 axios.defaults.withCredentials=true;
 
@@ -19,6 +20,7 @@ Vue.use(VueAxios,axios)
 Vue.config.productionTip = false
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 Vue.prototype.$axios = axios;
+Vue.prototype.$echarts = echarts;
 
 /* eslint-disable no-new */
 new Vue({

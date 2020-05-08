@@ -42,7 +42,6 @@
 export default {
     mounted(){
         window.onresize = ()=>{
-            console.log("resize");
             this.tableHeight = window.innerHeight-100;
         }
     },

@@ -30,10 +30,11 @@ public class VisualizationController {
     public ResponseResult timeSeriesPlot(@RequestParam("objType") String objType,
                                          @RequestParam("objName") String objName,
                                          @RequestParam("variable") String variable,
+                                         @RequestParam("inpName") String inpName,
                                          @RequestParam("rptName") String rptName){
         JSONObject arr = null;
         try {
-            arr = rptDataService.timeSeriesPlot(objType,objName,variable,rptName);
+            arr = rptDataService.timeSeriesPlot(objType,objName,variable,inpName,rptName);
         }catch (RequestException exception) {
             ResponseResult.result(exception.getCode());
         }
