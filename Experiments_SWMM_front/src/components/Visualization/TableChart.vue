@@ -6,6 +6,16 @@
     background-color: #19be6b;
     color: white;
 }
+.submitTitle{
+    margin-top: 5px;
+    margin-left: 5px;
+    display: inline-block;
+    word-break: break-word;
+    width: 60px;
+    font-size: 1px;
+    position: absolute;
+    line-height: 1.2;
+}
 </style>
 <template>
     <div>
@@ -17,13 +27,47 @@
                 </h3>
             </div>
             <div slot="extra">
-                <Button @click="loadReport" size="small" class="btnHoverGreen">Load Report</Button>
+                <div style="margin-top:-10px">
+                    <div style="display:inline-block;margin: 5px 0 0 -60px;position: absolute;">
+                        <h5 style="display:inline-block">You:</h5>
+                        <avatar
+                            :username="pageParams.userName"
+                            :size="25"
+                            :title="pageParams.userName"
+                            style="display:inline-block;margin:0 2px"
+                        ></avatar>
+                    </div>
+                    <h5 style="margin-top:8px;margin-left:5px;display: inline-block;position:absolute">
+                        Participants:
+                    </h5>
+                    <div style="margin-left:80px;padding:1px 5px;margin-top:5px;display:inline-block;height:100%;width:200px;white-space: nowrap">
+                        <vue-scroll :ops="ops">
+                            <avatar
+                                v-for="participant in participants"
+                                :key="participant.index"
+                                :username="participant.userName"
+                                :size="25"
+                                :title="participant.userName"
+                                style="display:inline-block;margin:0 2px"
+                            ></avatar>
+                        </vue-scroll>
+                    </div>
+                    <p class="submitTitle">
+                        Submit
+                        operation
+                    </p>
+                    <h5 style="display: inline-block;margin:8px 0 0 60px;position:absolute">:</h5>
+                    <Button icon="ios-paper-plane" 
+                    shape="circle" class="btnHoverGreen" 
+                    style="margin:-18px 0 0 70px" @click="submitOp"></Button>
+                </div>
             </div>
             <div>
                 <Select v-model="selectType" size="small" style="width:200px" @on-change="selectedTypeChange" :disabled="!originalData">
                     <Option v-for="item in typeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                 </Select>
                 <span>Click a column header to sort the column.</span>
+                <Button @click="loadReport" size="small" class="btnHoverGreen" style="float:right">Load Report</Button>
             </div>
             <div style="border: 1px solid #dcdee2;margin-top:5px;height:calc(100vh - 100px)">
                 <div v-if="!originalData" style="text-align:center">
@@ -32,24 +76,61 @@
                     </div>
                 </div>
                 <div v-else>
-                    <Table :columns="columnsShow" :data="dataShow" :height="tableHeight" border></Table>
+                    <Table highlight-row :columns="columnsShow" :data="dataShow" :height="tableHeight" border @on-current-change="tableSelectd" :row-class-name="rowClassName"></Table>
                 </div>
             </div>
         </Card>
     </div>
 </template>
 <script>
+import Avatar from "vue-avatar";
 export default {
+    name: 'TableChart',
+    components: {
+        Avatar
+    },
+    created(){
+        this.getPageInfo();
+    },
     mounted(){
+        this.connectSocket();
         window.onresize = ()=>{
             this.tableHeight = window.innerHeight-100;
         }
     },
     data(){
         return{
+            pageParams:{},
             tableHeight: window.innerHeight-100,
+            ops: {
+                bar: {
+                    background: "#808695"
+                }
+            },
+            tcSocket:null,
+            participants:[
+                {
+                    userName:"abc"
+                },
+                {
+                    userName:"bbcc"
+                },
+                {
+                    userName:"cbc"
+                },
+                {
+                    userName:"vcb"
+                },
+                {
+                    userName:"abc"
+                },
+                {
+                    userName:"bbcc"
+                }
+            ],
             originalData:false,
             selectType: "subcatchmentRunoffSummaries",
+            highlightRowIndex: 9999999999,
             typeList:[
                 {   value: "subcatchmentRunoffSummaries",
                     label: "Subcatchment Runoff"
@@ -423,6 +504,27 @@ export default {
         }
     },
     methods:{
+        getPageInfo(){
+            var href = window.location.href;
+            var url = href.split("&");
+
+            for (var i = 0; i < url.length; i++) {
+                if (/groupID/.test(url[i])) {
+                    this.pageParams.pageId = url[i].match(/groupID=(\S*)/)[1];
+                    continue;
+                }
+
+                if (/userID/.test(url[i])) {
+                    this.pageParams.userId = url[i].match(/userID=(\S*)/)[1];
+                    continue;
+                }
+
+                if (/userName/.test(url[i])) {
+                    this.pageParams.userName = url[i].match(/userName=(\S*)/)[1];
+                    continue;
+                }
+            }
+        },
         loadReport(){
             this.axios
             .get(
@@ -481,6 +583,91 @@ export default {
                 }
             }
             this.dataShow = this.originalData[type];
+        },
+        tableSelectd(currentRow, oldCurrentRow){
+            var currentIndex = this.dataShow.findIndex((e)=>{
+                return JSON.stringify(e)==JSON.stringify(currentRow);
+            });
+            this.highlightRowIndex = currentIndex;
+        },
+        rowClassName(row, index){
+            if(index == this.highlightRowIndex){
+                return 'ivu-table-row-highlight';
+            }
+            return "";
+        },
+        zoomToHighlight(newHighlight){
+            setTimeout(() => {
+                this.highlightRowIndex = newHighlight;
+                setTimeout(() => {
+        　　        document.getElementsByClassName('ivu-table-row ivu-table-row-highlight').length==0 ? '': document.getElementsByClassName('ivu-table-row ivu-table-row-highlight')[0].scrollIntoView({
+                        behavior: "instant",
+                        block: "start",
+                        inline: "nearest"
+                        })
+                }, 1000);
+            }, 500);
+        },
+        connectSocket(){
+            this.tcSocket=null;
+            var ip_port = window.location.host;
+            if(ip_port = "localhost:8084"){
+                ip_port = "localhost:8086";
+            }
+            var soSocketUrl = "ws://" + ip_port + "/PSWMM/SimulationOptionsSocket/" + this.pageParams.pageId + "-tc";
+            this.tcSocket = new WebSocket(soSocketUrl);
+            this.tcSocket.onopen = this.onOpen;
+            this.tcSocket.onmessage = this.onMessage;
+            this.tcSocket.onclose = this.onClose;
+            this.tcSocket.onerror = this.onError;
+        },
+        onOpen() {
+            console.log("Socket连接成功！");
+            this.sendMessage("connect",{});
+        },
+        onMessage(e) {
+            var messageObject = JSON.parse(e.data);
+            switch(messageObject.type){
+                case "operation":{
+                    this.originalData = messageObject.operation.originalData;
+                    this.selectType = messageObject.operation.selectType;
+                    this.selectedTypeChange(this.selectType);
+                    this.zoomToHighlight(messageObject.operation.highlightRowIndex);
+                    break;
+                }
+                case "members":{
+                    this.participants = messageObject.memberList;
+                }
+            }
+        },
+        onClose(e) {
+            this.runParametersModal = false;
+            console.log("Socket连接断开！");
+        },
+        onError(e) {
+            this.runParametersModal = false;
+            console.log("Socket连接错误！");
+        },
+        sendMessage(type, operation){
+            var userId = this.pageParams.userId;
+            var userName = this.pageParams.userName;
+            var message ={
+                type: type,
+                userInfo:{
+                    userId: userId,
+                    userName: userName
+                },
+                operation: operation
+            }
+            this.tcSocket.send(JSON.stringify(message));
+        },
+        submitOp(){
+            var operation = {
+                originalData: this.originalData,
+                selectType: this.selectType,
+                highlightRowIndex:this.highlightRowIndex,
+            };
+            this.sendMessage("operation", operation);
         }
     }
 }
