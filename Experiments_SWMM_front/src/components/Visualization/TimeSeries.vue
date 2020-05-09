@@ -110,6 +110,10 @@
                                     <Input size="small" v-model="chartOption.yAxis[0].max" />
                                 </div>
                                 <div style="margin:10px 0">
+                                    <span>L-Y axis label:</span>
+                                    <Input size="small" v-model="chartOption.yAxis[0].name" />
+                                </div>
+                                <div style="margin:10px 0">
                                     <span>R-Y axis max:</span>
                                     <Input size="small" v-model="chartOption.yAxis[1].max" />
                                 </div>
@@ -524,13 +528,21 @@ export default {
                 }
             }
             var timeVariable = data.timeVariable;
+            var y0Max = 0;
+            var y1Max = 0;
             for(var i=0; i< timeVariable.length;i++){
                 var item = timeVariable[i];
                 var newTime = this.transTime(item.day, item.time);
                 timeLine.push(newTime);
+                if(item.variable > y0Max){
+                    y0Max = item.variable;
+                }
                 variableLine.push(parseFloat(item.variable));
                 if(raingageTimeLine[i]){
-                    rainLine.push(raingageTimeLine[i].value/100);
+                    if(raingageTimeLine[i].value > y1Max){
+                        y1Max = raingageTimeLine[i].value;
+                    }
+                    rainLine.push(raingageTimeLine[i].value);
                 }
                 else{
                     rainLine.push('0');
@@ -539,7 +551,9 @@ export default {
             var showData={
                 timeLine:timeLine,
                 variableLine:variableLine,
-                rainLine:rainLine
+                rainLine:rainLine,
+                yAxis0Max: y0Max,
+                yAxis1Max: y1Max
             }
             return showData;
         },
@@ -581,8 +595,8 @@ export default {
                 {
                     show: true,
                     realtime: true,
-                    start: 30,
-                    end: 40
+                    start: 0,
+                    end: 100
                 },
                 {
                     type: 'inside',
@@ -605,12 +619,12 @@ export default {
                 {
                     name: this.selectVariable,
                     type: 'value',
-                    max: 1
+                    max: showData.yAxis0Max
                 },
                 {
                     name: 'Precipitation(mm)',
                     nameLocation: 'start',
-                    max: 5,
+                    max: showData.yAxis1Max,
                     type: 'value',
                     inverse: true
                 }
