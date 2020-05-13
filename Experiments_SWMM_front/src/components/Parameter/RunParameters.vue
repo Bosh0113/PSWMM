@@ -79,22 +79,22 @@
                                 <div class="cardDiv">
                                     <div class="cardTitle">Process Models</div>
                                      <div style="margin-top:15px">
-                                         <Checkbox v-model="simulationOptions.IGNORE_RAINFALL" class="processCB">
+                                         <Checkbox v-model="simulationOptions.n_IGNORE_RAINFALL" class="processCB">
                                             <span>Rainfall/Runoff</span>
                                         </Checkbox><br/>
-                                         <Checkbox v-model="simulationOptions.IGNORE_DEPENDENT" class="processCB">
+                                         <Checkbox v-model="simulationOptions.n_IGNORE_DEPENDENT" class="processCB">
                                             <span>Rainfall Dependent |/|</span>
                                         </Checkbox><br/>
-                                         <Checkbox v-model="simulationOptions.IGNORE_SNOW_MELT" class="processCB">
+                                         <Checkbox v-model="simulationOptions.n_IGNORE_SNOW_MELT" class="processCB">
                                             <span>Snow Melt</span>
                                         </Checkbox><br/>
-                                         <Checkbox v-model="simulationOptions.IGNORE_GROUNDWATER" class="processCB">
+                                         <Checkbox v-model="simulationOptions.n_IGNORE_GROUNDWATER" class="processCB">
                                             <span>Groundwater</span>
                                         </Checkbox><br/>
-                                         <Checkbox v-model="simulationOptions.IGNORE_ROUTING" class="processCB">
+                                         <Checkbox v-model="simulationOptions.n_IGNORE_ROUTING" class="processCB">
                                             <span>Flow Routing</span>
                                         </Checkbox><br/>
-                                         <Checkbox v-model="simulationOptions.IGNORE_WATER_QUALITY" class="processCB">
+                                         <Checkbox v-model="simulationOptions.n_IGNORE_WATER_QUALITY" class="processCB">
                                             <span>Water Quality</span>
                                         </Checkbox>
                                      </div>
@@ -519,15 +519,16 @@ export default {
             b:ROUTING_STEP变量值**的属性值为00:00:**格式;
             c:VARIABLE_STEP_c变量对应复选框选中，则VARIABLE_STEP属性值为0.00，否则，VARIABLE_STEP的属性值为VARIABLE_STEP变量的值;
         3.其余变量名即为属性名。
+        ps:具体转换可见函数variableToAttribute。
         */
        simulationOptions:{
             //General
-            IGNORE_RAINFALL:false,
-            IGNORE_DEPENDENT:false,
-            IGNORE_SNOW_MELT:false,
-            IGNORE_GROUNDWATER:false,
-            IGNORE_ROUTING:false,
-            IGNORE_WATER_QUALITY:false,
+            n_IGNORE_RAINFALL:false,
+            n_IGNORE_DEPENDENT:false,
+            n_IGNORE_SNOW_MELT:false,
+            n_IGNORE_GROUNDWATER:false,
+            n_IGNORE_ROUTING:false,
+            n_IGNORE_WATER_QUALITY:false,
             ALLOW_PONDING:false,
             CONTROLS:false,
             INPUT:false,
@@ -617,7 +618,6 @@ export default {
     },
     onMessage(e) {
         var messageObject = JSON.parse(e.data);
-        console.log(messageObject);
         switch(messageObject.type){
             case "operation":{
                 this.optionTab = messageObject.operation.tab;
@@ -671,9 +671,77 @@ export default {
         this.runParametersModal = false;
         this.soSocket.close();
     },
+    variableToAttribute(variableConfig){
+        var attributeConfig = variableConfig;
+        //General
+        attributeConfig.n_IGNORE_RAINFALL?attributeConfig.IGNORE_RAINFALL="NO":attributeConfig.IGNORE_RAINFALL="YES";
+        delete attributeConfig.n_IGNORE_RAINFALL;
+        attributeConfig.n_IGNORE_DEPENDENT?attributeConfig.IGNORE_DEPENDENT="NO":attributeConfig.IGNORE_DEPENDENT="YES";
+        delete attributeConfig.n_IGNORE_DEPENDENT;
+        attributeConfig.n_IGNORE_SNOW_MELT?attributeConfig.IGNORE_SNOW_MELT="NO":attributeConfig.IGNORE_SNOW_MELT="YES";
+        delete attributeConfig.n_IGNORE_SNOW_MELT;
+        attributeConfig.n_IGNORE_GROUNDWATER?attributeConfig.IGNORE_GROUNDWATER="NO":attributeConfig.IGNORE_GROUNDWATER="YES";
+        delete attributeConfig.n_IGNORE_GROUNDWATER;
+        attributeConfig.n_IGNORE_ROUTING?attributeConfig.IGNORE_ROUTING="NO":attributeConfig.IGNORE_ROUTING="YES";
+        delete attributeConfig.n_IGNORE_ROUTING;
+        attributeConfig.n_IGNORE_WATER_QUALITY?attributeConfig.IGNORE_WATER_QUALITY="NO":attributeConfig.IGNORE_WATER_QUALITY="YES";
+        delete attributeConfig.n_IGNORE_WATER_QUALITY;
+
+        attributeConfig.ALLOW_PONDING?attributeConfig.ALLOW_PONDING="YES":attributeConfig.ALLOW_PONDING="NO";
+        attributeConfig.CONTROLS?attributeConfig.CONTROLS="YES":attributeConfig.CONTROLS="NO";
+        attributeConfig.INPUT?attributeConfig.INPUT="YES":attributeConfig.INPUT="NO";
+        //Dates
+        var startDate = attributeConfig.START_DATE;
+        attributeConfig.START_DATE = startDate.getMonth()+"/"+startDate.getDay()+"/"+startDate.getFullYear();
+        var rptStartDate = attributeConfig.REPORT_START_DATE;
+        attributeConfig.REPORT_START_DATE = rptStartDate.getMonth()+"/"+rptStartDate.getDay()+"/"+rptStartDate.getFullYear();
+        var endDate = attributeConfig.END_DATE;
+        attributeConfig.END_DATE = endDate.getMonth()+"/"+endDate.getDay()+"/"+endDate.getFullYear();
+        var sweepStart = attributeConfig.SWEEP_START;
+        attributeConfig.SWEEP_START = sweepStart.getMonth()+"/"+sweepStart.getDay();
+        var sweepEnd = attributeConfig.SWEEP_END;
+        attributeConfig.SWEEP_END = sweepEnd.getMonth()+"/"+sweepEnd.getDay();
+        //Time Steps
+        var REPORT_STEP_h_array = attributeConfig.REPORT_STEP_h.split(":");
+        attributeConfig.REPORT_STEP = (attributeConfig.REPORT_STEP_d*24 + parseInt(REPORT_STEP_h_array[0])) +":" + REPORT_STEP_h_array[1] +":"+REPORT_STEP_h_array[2];
+        delete attributeConfig.REPORT_STEP_d;
+        delete attributeConfig.REPORT_STEP_h;
+        var DRY_STEP_h_array = attributeConfig.DRY_STEP_h.split(":");
+        attributeConfig.DRY_STEP = (attributeConfig.DRY_STEP_d*24 + parseInt(DRY_STEP_h_array[0])) +":" + DRY_STEP_h_array[1] +":"+DRY_STEP_h_array[2];
+        delete attributeConfig.DRY_STEP_d;
+        delete attributeConfig.DRY_STEP_h;
+        var WET_STEP_h_array = attributeConfig.WET_STEP_h.split(":");
+        attributeConfig.WET_STEP = (attributeConfig.WET_STEP_d*24 + parseInt(WET_STEP_h_array[0])) +":" + WET_STEP_h_array[1] +":"+WET_STEP_h_array[2];
+        delete attributeConfig.WET_STEP_d;
+        delete attributeConfig.WET_STEP_h;
+        attributeConfig.ROUTING_STEP = "00:00:"+attributeConfig.ROUTING_STEP.toString();
+        attributeConfig.SKIP_STEADY_STATE?attributeConfig.SKIP_STEADY_STATE="YES":attributeConfig.SKIP_STEADY_STATE="NO";
+        //Dynamic Wave
+        if(attributeConfig.VARIABLE_STEP_c){
+            attributeConfig.VARIABLE_STEP = "0.00";
+        }
+        delete attributeConfig.VARIABLE_STEP_c;
+        //Files
+        return attributeConfig;
+    },
     saveRunParameters(){
-        confirm('Save run parameters.');
+        console.log("-----------Variable-----------");
         console.log(this.simulationOptions);
+        var reader = new FileReader();
+        var originalConfig = Object.assign({},this.simulationOptions);
+        var downloadConfig = this.variableToAttribute(originalConfig);
+        console.log("-----------Attribute-----------");
+        console.log(downloadConfig);
+        var jsonBlob = new Blob([JSON.stringify(downloadConfig, null, 2)],{ type: "application/json" });
+        reader.readAsDataURL(jsonBlob);
+        reader.onload = function(e) {
+            var a = document.createElement("a");
+            a.download = "run_parameter.json";
+            a.href = e.target.result;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
     },
     submitOp(){
         var optionTab = this.optionTab;
