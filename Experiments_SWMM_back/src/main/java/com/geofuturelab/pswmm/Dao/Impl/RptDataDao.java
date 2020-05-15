@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.geofuturelab.pswmm.Dao.IRptDataDao;
 import com.geofuturelab.pswmm.Entity.RptData;
-import com.geofuturelab.pswmm.Service.Impl.InpDataService;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -18,13 +17,12 @@ import java.util.Map;
 
 @Component
 public class RptDataDao implements IRptDataDao {
-    private static final String basePath = InpDataService.class.getResource("/").getPath()+"//data";
     private static ThreadLocal<RptData> rptLocal = new ThreadLocal<>();
     private static ThreadLocal<List<String>> linesLocal = new ThreadLocal<>();
     @Override
     public RptData readRptFile(String fileName) throws IOException {
         rptLocal.set(new RptData());
-        System.out.println(Paths.get(fileName));
+//        System.out.println(Paths.get(fileName));
         linesLocal.set(Files.readAllLines(Paths.get(fileName),Charset.forName("UTF-8")));
         List<String> lines = linesLocal.get();
         for (int cursor = 0; cursor < lines.size(); cursor++) {

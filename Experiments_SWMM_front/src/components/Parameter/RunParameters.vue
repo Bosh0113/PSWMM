@@ -602,7 +602,7 @@ export default {
     connectSocket(){
         this.soSocket=null;
         var ip_port = window.location.host;
-        if(ip_port = "localhost:8084"){
+        if(ip_port == "localhost:8084"){
             ip_port = "localhost:8086";
         }
         var soSocketUrl = "ws://" + ip_port + "/PSWMM/SimulationOptionsSocket/" + this.pageParams.pageId;

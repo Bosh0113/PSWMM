@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -57,10 +58,11 @@ public class InpDataService implements IInpDataService {
     }
 
     @Override
-    public JSONObject getObjectNames(String inpName){
+    public JSONObject getObjectNames(String inpName, HttpServletRequest request){
         JSONObject result = new JSONObject();
+        String servicePath =request.getSession().getServletContext().getRealPath("/")+"data/";//获得数据绝对路径。
         try {
-            InpData inpData = inpDataDao.readInpFile(basePath + inpName + ".inp");
+            InpData inpData = inpDataDao.readInpFile(servicePath + inpName + ".inp");
             List<InpData.Junction> junctions = inpData.getJunctions();
             List<InpData.Outfall> outfalls = inpData.getOutfalls();
             List<String> nodes = new ArrayList<>();

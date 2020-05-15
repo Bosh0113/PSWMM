@@ -13,6 +13,7 @@ import com.geofuturelab.pswmm.Service.IRptDataService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,14 +27,13 @@ public class RptDataService implements IRptDataService {
     @Resource(name = "inpDataDao")
     IInpDataDao inpDataDao;
 
-    private static final String basePath =  (RptDataService.class.getResource("/").getPath()+"/static/data/").substring(1);
-
     @Override
-    public JSONObject parseRptData(String name) {
+    public JSONObject parseRptData(String name, HttpServletRequest request) {
         RptData rptData;
         JSONObject jo;
+        String servicePath =request.getSession().getServletContext().getRealPath("/")+"data/";
         try {
-            rptData = rptDataDao.readRptFile(basePath + name + ".rpt");
+            rptData = rptDataDao.readRptFile(servicePath + name + ".rpt");
             jo = rptDataDao.rpt2Json(rptData);
         } catch (IOException e) {
             throw  RequestException.fail(ResponseCode.FAIL);
@@ -42,13 +42,14 @@ public class RptDataService implements IRptDataService {
     }
 
     @Override
-    public JSONArray extractRptData(String rptName, String attriName, String inpName) {
+    public JSONArray extractRptData(String rptName, String attriName, String inpName, HttpServletRequest request) {
         RptData rptData;
         JSONArray arr = new JSONArray();
         InpData inpData;
         try {
-            inpData = inpDataDao.readInpFile(basePath + inpName + ".inp");
-            rptData = rptDataDao.readRptFile(basePath + rptName + ".rpt");
+            String servicePath =request.getSession().getServletContext().getRealPath("/")+"data/";
+            inpData = inpDataDao.readInpFile(servicePath + inpName + ".inp");
+            rptData = rptDataDao.readRptFile(servicePath + rptName + ".rpt");
             for (int j = 0; j < inpData.getCoordinates().size(); j++) {
                 JSONObject jo = new JSONObject();
                 InpData.Coordinate coord = inpData.getCoordinates().get(j);
@@ -82,13 +83,14 @@ public class RptDataService implements IRptDataService {
     }
 
     @Override
-    public JSONObject timeSeriesPlot(String objType, String objName, String variable, String inpName, String rptName){
+    public JSONObject timeSeriesPlot(String objType, String objName, String variable, String inpName, String rptName, HttpServletRequest request){
         JSONObject result = new JSONObject();
         result.put("objName", objName);
         result.put("objType", objType);
         result.put("variable", variable);
         try {
-            InpData inpData = inpDataDao.readInpFile(basePath + inpName + ".inp");
+            String servicePath =request.getSession().getServletContext().getRealPath("/")+"data/";
+            InpData inpData = inpDataDao.readInpFile(servicePath + inpName + ".inp");
             List<InpData.Raingage> raingages = inpData.getRaingages();
             List<InpData.Timeseries> timeseries = inpData.getTimeseries();
             List<JSONObject> objRains = new ArrayList<>();
@@ -105,7 +107,7 @@ public class RptDataService implements IRptDataService {
             }
             result.put("raingages",objRains);
             List<JSONObject> objTimeVariable = new ArrayList<>();
-            RptData rptData = rptDataDao.readRptFile(basePath + rptName + ".rpt");
+            RptData rptData = rptDataDao.readRptFile(servicePath + rptName + ".rpt");
             switch (objType){
                 case "Node":{
                     List<RptData.NodeResult> nodeResults = rptData.getNodeResultsMap().get(objName);

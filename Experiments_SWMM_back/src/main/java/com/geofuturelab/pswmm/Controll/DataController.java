@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @Author: David.Xiao
@@ -77,11 +78,11 @@ public class DataController {
     @GetMapping(value = "/objectNames")
     @ResponseBody
     @ApiOperation(value="获取Inp中对象名列表")
-    public ResponseResult getObjectNames(@RequestParam("inpName") String inpName)
+    public ResponseResult getObjectNames(@RequestParam("inpName") String inpName, HttpServletRequest request)
     {
         JSONObject arr = null;
         try {
-            arr = inpDataService.getObjectNames(inpName);
+            arr = inpDataService.getObjectNames(inpName,request);
         }catch (RequestException exception) {
             ResponseResult.result(exception.getCode());
         }
@@ -91,11 +92,11 @@ public class DataController {
     @GetMapping(value = "/rpt-all")
     @ResponseBody
     @ApiOperation(value="读取rpt文件")
-    public ResponseResult readRptData(@RequestParam("name") String name)
+    public ResponseResult readRptData(@RequestParam("name") String name, HttpServletRequest request)
     {
         JSONObject jo = null;
         try {
-             jo = rptDataService.parseRptData(name);
+             jo = rptDataService.parseRptData(name,request);
         } catch (RequestException exception) {
             ResponseResult.result(exception.getCode());
         }
@@ -105,10 +106,10 @@ public class DataController {
     @GetMapping(value = "/rpt-part")
     @ResponseBody
     @ApiOperation(value="从rpt数据中提取需要可视化的数据")
-    public ResponseResult queryDataFromRpt(@RequestParam("rptName") String rptName, @RequestParam("attriName") String attriName){
+    public ResponseResult queryDataFromRpt(@RequestParam("rptName") String rptName, @RequestParam("attriName") String attriName, HttpServletRequest request){
         JSONArray arr = null;
         try {
-            arr = rptDataService.extractRptData(rptName,attriName,rptName);
+            arr = rptDataService.extractRptData(rptName,attriName,rptName,request);
         } catch (RequestException exception) {
             ResponseResult.result(exception.getCode());
         }

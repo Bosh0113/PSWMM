@@ -71,7 +71,7 @@ public class InpDataDao implements IInpDataDao {
     @Override
     public InpData readInpFile(String fileName) throws IOException {
         inpLocal.set(new InpData());
-        System.out.println(Paths.get(fileName));
+//        System.out.println(Paths.get(fileName));
         linesLocal.set(Files.readAllLines(Paths.get(fileName),Charset.forName("UTF-8")));
         List<String> lines = linesLocal.get();
         for (int cursor = 0; cursor < lines.size(); cursor++) {

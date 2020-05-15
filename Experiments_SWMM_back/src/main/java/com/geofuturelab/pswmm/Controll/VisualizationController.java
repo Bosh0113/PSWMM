@@ -12,6 +12,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 @CrossOrigin(origins = "*", allowCredentials = "true")
 @RestController
@@ -31,10 +32,10 @@ public class VisualizationController {
                                          @RequestParam("objName") String objName,
                                          @RequestParam("variable") String variable,
                                          @RequestParam("inpName") String inpName,
-                                         @RequestParam("rptName") String rptName){
+                                         @RequestParam("rptName") String rptName, HttpServletRequest request){
         JSONObject arr = null;
         try {
-            arr = rptDataService.timeSeriesPlot(objType,objName,variable,inpName,rptName);
+            arr = rptDataService.timeSeriesPlot(objType,objName,variable,inpName,rptName,request);
         }catch (RequestException exception) {
             ResponseResult.result(exception.getCode());
         }
