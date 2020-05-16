@@ -42,7 +42,7 @@ public class RptDataService implements IRptDataService {
     }
 
     @Override
-    public JSONArray extractRptData(String rptName, String attriName, String inpName, HttpServletRequest request) {
+    public JSONArray floodingNodes(String inpName, String rptName, HttpServletRequest request) {
         RptData rptData;
         JSONArray arr = new JSONArray();
         InpData inpData;
@@ -51,24 +51,23 @@ public class RptDataService implements IRptDataService {
             inpData = inpDataDao.readInpFile(servicePath + inpName + ".inp");
             rptData = rptDataDao.readRptFile(servicePath + rptName + ".rpt");
             for (int j = 0; j < inpData.getCoordinates().size(); j++) {
-                JSONObject jo = new JSONObject();
                 InpData.Coordinate coord = inpData.getCoordinates().get(j);
-                List<JSONObject> objValues = new ArrayList<>();
                 String objName = coord.getNode();
-                String[] objCoordArr = new String[]{String.valueOf(coord.getX_coord()),String.valueOf(coord.getY_coord())};
-                jo.put("name",objName);
-                jo.put("coord",objCoordArr);
 
                 List<RptData.NodeResult> nodeResults = rptData.getNodeResultsMap().get(objName);
                 if (null != nodeResults)
                 {
-                    //先写死为depth
+                    JSONObject jo = new JSONObject();
+                    List<JSONObject> objValues = new ArrayList<>();
+                    String[] objCoordArr = new String[]{String.valueOf(coord.getX_coord()),String.valueOf(coord.getY_coord())};
+                    jo.put("name",objName);
+                    jo.put("coord",objCoordArr);
                     for (int i = 0; i < nodeResults.size(); i++) {
                         String time = nodeResults.get(i).getTime();
-                        String value = nodeResults.get(i).getDepth();
+                        String value = nodeResults.get(i).getFlooding();
                         JSONObject jsonObject = new JSONObject();
                         jsonObject.put("time",time);
-                        jsonObject.put("value",value);
+                        jsonObject.put("flooding",value);
                         objValues.add(jsonObject);
                     }
                     jo.put("data",objValues);

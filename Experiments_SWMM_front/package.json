@@ -15,8 +15,11 @@
   "dependencies": {
     "axios": "^0.19.2",
     "echarts": "^4.7.0",
+    "font-awesome": "^4.7.0",
     "leaflet": "^1.6.0",
     "leaflet.pm": "^2.2.0",
+    "ol": "^6.3.1",
+    "proj4": "^2.6.1",
     "view-design": "^4.2.0",
     "vue": "^2.5.2",
     "vue-avatar": "^2.2.0",

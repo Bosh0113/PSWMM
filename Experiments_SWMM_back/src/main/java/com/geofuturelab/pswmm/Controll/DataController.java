@@ -103,18 +103,6 @@ public class DataController {
         return ResponseResult.result(ResponseCode.OK,jo);
     }
 
-    @GetMapping(value = "/rpt-part")
-    @ResponseBody
-    @ApiOperation(value="从rpt数据中提取需要可视化的数据")
-    public ResponseResult queryDataFromRpt(@RequestParam("rptName") String rptName, @RequestParam("attriName") String attriName, HttpServletRequest request){
-        JSONArray arr = null;
-        try {
-            arr = rptDataService.extractRptData(rptName,attriName,rptName,request);
-        } catch (RequestException exception) {
-            ResponseResult.result(exception.getCode());
-        }
-        return ResponseResult.result(ResponseCode.OK,arr);
-    }
 }
 
 

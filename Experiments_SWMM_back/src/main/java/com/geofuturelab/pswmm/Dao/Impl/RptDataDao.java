@@ -544,7 +544,7 @@ public class RptDataDao implements IRptDataDao {
 
     private boolean nextSection(String line)
     {
-        return (line.startsWith("*"));
+        return (line.startsWith("*")||line.startsWith("Analysis"));
     }
 
     private boolean nextSection2(String line)

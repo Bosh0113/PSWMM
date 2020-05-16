@@ -25,6 +25,10 @@ export default new Router({
     { path: '/timeSeries', 
       name: 'TimeSeries', 
       component: resolve => (require(["@/components/Visualization/TimeSeries"], resolve))
+    },
+    { path: '/floodingNodes', 
+      name: 'floodingNodes', 
+      component: resolve => (require(["@/components/Evaluation/floodingNodes"], resolve))
     }
   ],
   mode: 'history'

@@ -41,4 +41,20 @@ public class VisualizationController {
         }
         return ResponseResult.result(ResponseCode.OK,arr);
     }
+
+
+    @GetMapping(value = "/floodingNodes")
+    @ResponseBody
+    @ApiOperation(value="获取洪涝节点")
+    public ResponseResult queryDataFromRpt(@RequestParam("inpName") String inpName,
+                                           @RequestParam("rptName") String rptName,
+                                           HttpServletRequest request){
+        JSONArray arr = null;
+        try {
+            arr = rptDataService.floodingNodes(inpName,rptName,request);
+        } catch (RequestException exception) {
+            ResponseResult.result(exception.getCode());
+        }
+        return ResponseResult.result(ResponseCode.OK,arr);
+    }
 }
