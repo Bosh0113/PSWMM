@@ -48,10 +48,12 @@ public class VisualizationController {
     @ApiOperation(value="获取洪涝节点")
     public ResponseResult queryDataFromRpt(@RequestParam("inpName") String inpName,
                                            @RequestParam("rptName") String rptName,
+                                           @RequestParam("mixFloodedHr") Float mixFloodedHr,
+                                           @RequestParam("mixFloodVolume") Float mixFloodVolume,
                                            HttpServletRequest request){
         JSONArray arr = null;
         try {
-            arr = rptDataService.floodingNodes(inpName,rptName,request);
+            arr = rptDataService.floodingNodes(inpName,rptName,mixFloodedHr,mixFloodVolume,request);
         } catch (RequestException exception) {
             ResponseResult.result(exception.getCode());
         }

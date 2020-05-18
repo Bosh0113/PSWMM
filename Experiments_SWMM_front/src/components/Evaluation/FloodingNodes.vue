@@ -87,7 +87,7 @@ input[type="range"]::-webkit-slider-thumb {
 }
 </style>
 <template>
-  <div>
+  <div style="min-width:1200px">
       <Card dis-hover style="height:100%" id="mapCard">
           <div slot="title">
               <h3>
@@ -131,18 +131,32 @@ input[type="range"]::-webkit-slider-thumb {
                   style="margin:-18px 0 0 70px" @click="submitOp"></Button>
               </div>
           </div> -->
-        <div>
+        <div style="padding:0 5px">
           <Button @click="setProjModalShow" size="small" class="btnHoverBlue">Set Projection</Button>
-          <Button @click="setVisualizaModalShow" size="small" class="btnHoverBlue">Show Flooding nodes</Button>
+          <div style="float:right">
+            <div style="margin:0 10px;display:inline-block">
+                <span>Mix flooded hours:</span>
+                <InputNumber size="small" :min="0" :step="0.01" v-model="mixFloodedHr"></InputNumber>
+            </div>
+            <div style="margin:0 10px;display:inline-block">
+                <span>Mix flood volume (10^6 ltr):</span>
+                <InputNumber size="small" :min="0" :step="0.001" v-model="mixFloodVolume"></InputNumber>
+            </div>
+            <Button @click="setVisualizaModalShow" size="small" class="btnHoverBlue">Show Flooding nodes</Button>
+          </div>
+        </div>
+        <!-- 地图可视化 -->
+        <div style="height:25px;padding:0 5px" v-show="sliderShow">
+          <strong style="display:inline-block;">Precipitation duration:</strong>
+          <Slider v-model="sliderValue" range
+          style="width:800px;display: inline-block;height:20px;margin:0 15px" 
+          :min="rptStart" 
+          :max="rptEnd" 
+          show-tip="never"
+          @on-input="changeTimeScale"></Slider>
+          <span>{{sliderValue[0]+15}}th Min - {{sliderValue[1]+15}}th Min</span>
         </div>
         <div class="map-container" id="map-container">
-          <!-- 地图可视化 -->
-          <div id="map-visualization-div" style="height: 50px; width: 300px;z-index:500;display:none;top: 30px; position: absolute;  left: 45%;">
-            <form>
-              <div id="status">Time: <span class="min-year"></span> <span class="max-year" style="font-size:large">{{maxYearInput}}</span>minutes</div>
-              <input id="max-year" type="range" min="0" max="180" step="1" value="180" style="width:300px;background-color:dodgerblue" />
-            </form>
-          </div>
         </div>
       </Card>
       <Modal
@@ -228,6 +242,11 @@ import ImageWMS from 'ol/source/ImageWMS'
 export default {
   name: 'Map',
   components: {},
+  mounted () {
+    this.getHeight()
+    this.initMap()
+
+  },
   data () {
     return {
       spinShow:false,
@@ -267,77 +286,36 @@ export default {
       rptFile:"",
       inpfileUploaded:false,
       rptfileUploaded:false,
+      mixFloodedHr:0.5,
+      mixFloodVolume:1,
       visualizaBtnDisabled:true,
-      modalFile: false,
       map: Object,
-      isCenterGot: false,
-      centerCoords: [],
-      highlightStyle: Object,
-      featureOverlay: Object,
       highlight: '',
-      selectedFeatures: this.features,
-      drawing: '',
-      modifying: '',
-      oldColor: 'rgba(242,56,22,0.61)',
-      newColor: '#ffe52c',
-      period: 12,
-      animRatio: ['^',
-        ['/',
-          ['%',
-            ['+',
-              ['time'],
-              [
-                'interpolate',
-                ['linear'],
-                ['get', 'year'],
-                1850, 0,
-                2015, 12
-              ]
-            ],
-            12
-          ],
-          12
-        ],
-        0.5
-      ],
       // circles related to mass
       style: {
         'variables': {
-          minYear: 0,
-          maxYear: 180
+          startTime: 0,
+          endTime: 165
         },
-        'filter': ['between', ['get', 'year'], ['var', 'minYear'], ['var', 'maxYear']],//用时间过滤
+        'filter': ['between', ['get', 'currentTime'], ['var', 'startTime'], ['var', 'endTime']],//用时间过滤
         'symbol': {
           'symbolType': 'circle',
-          'size': [
-            16,
-            16
+          'size': ['interpolate',
+              ['linear'],
+              ['get', 'mass'],//输入值
+              0,
+              4,
+              1, 
+              16,
           ],
           'color':
             ['interpolate',
               ['linear'],
               ['get', 'mass'],//输入值
+              0, 
+              'rgba(8,48,107,0.1)',// 极值1，颜色值 
               1,
-              'rgba(8,48,107,0.9)',
-              0.4,
-              'rgba(8,81,156,0.9)',
-              0.2,
-              'rgba(33,113,181,0.9)',
-              0.1,
-              'rgba(66,146,198,0.9)',
-              0.06,
-              'rgba(107,174,214,0.9)',
-              0.05,
-              'rgba(158,202,225,0.9)',
-              0.04,
-              'rgba(198,219,239,0.9)',
-              0.03,
-              'rgba(222,235,247,0.9)',
-              0.02,
-              'rgba(247,251,255,0.9)'
-              //   黄色和红色
-              //   0, 'rgba(242,56,22,0.61)',// 极值1，颜色值 
-              //   0.5, '#ffe52c'//极值2，颜色值
+              'rgba(8,48,107,0.8)',
             ],
           //   'color': '#006688',水墨蓝色
           'rotateWithView': false,
@@ -348,19 +326,11 @@ export default {
           'opacity': 0.95
         }
       },
-      minYearInput: '0',
-      maxYearInput: '180',
-      quakeData: [
-        ['Aachen', 21, 1880, 50.775, 6.08333],
-        ['Aachen', 21, 1880, 50.775, 6.08333],
-        ['Aarhus', 720, 1951, 56.18333, 10.23333],
-        ['Abee', 107000, 1952, 54.21667, -113.0],
-        ['Acapulco', 1914, 1976, 16.88333, -99.9],
-        ['Achiras', 780, 1902, -33.16667, -64.95]
-      ],
-      //地图可视化起止时间
-      startTime: '0',
-      endTime: '180'
+      sliderShow:false,
+      sliderValue:[0,165],
+      //时间起止
+      rptStart:0,
+      rptEnd:165
     }
 
   },
@@ -370,6 +340,56 @@ export default {
     operationType: String
   },
   methods: {
+    getHeight: () => {
+      let screenheight = window.screen.height
+      let mapDiv = document.getElementById('map-container')
+      mapDiv.style.height = screenheight - 60 + 'px'
+    },
+    initMap () {
+      let that = this;
+      var TiandiMap_img = new TileLayer({
+        title: '天地图卫星影像',
+        source: new XYZ({
+          url: 'http://t3.tianditu.com/DataServer?T=img_w&x={x}&y={y}&l={z}&tk=17f29115865a40c78e148d485673d4db',
+          wrapX: false,
+          //   url: 'http://t0.tianditu.gov.cn/img_w/wmts?tk=17f29115865a40c78e148d485673d4db'
+        })
+      })
+      var TiandiMap_cia = new TileLayer({
+        name: '天地图影像注记图层',
+        source: new XYZ({
+          url: 'http://t0.tianditu.com/DataServer?T=eia_w&x={x}&y={y}&l={z}&tk=17f29115865a40c78e148d485673d4db',//英文注记
+          // url: 'http://t0.tianditu.com/DataServer?T=cia_w&x={x}&y={y}&l={z}&tk=17f29115865a40c78e148d485673d4db',//parent.TiandituKey()为天地图密钥
+          wrapX: false,
+
+        })
+      })
+
+      this.map = new Map({
+        // 设置地图图层
+        layers: [
+          // 创建一个使用Open Street Map地图源的瓦片图层
+          TiandiMap_img,
+          TiandiMap_cia
+        ],
+        // 设置显示地图的视图
+        view: new View({
+          center: [0, 0], // 定义地图显示中心于经度0度，纬度0度处
+          zoom: 2 // 并且定义地图显示层级为2
+        }),
+        // 让id为map的div作为地图的容器
+        target: 'map-container'
+      })
+
+      // select
+      var select = new Select({
+        condition: click
+      })
+      this.map.addInteraction(select)
+      select.on('select', event => {
+        this.sendSelectedFeature(event)
+      })
+    },
     setProjModalShow(){
       this.selectProjectInfo={};
       this.disabledSetNewProj=true;
@@ -428,263 +448,6 @@ export default {
       );
       this.selectProjectionModal = false;
     },
-    setVisualizaModalShow(){
-      this.inpfileUploaded=false;
-      this.rptfileUploaded=false;
-      this.visualizaBtnDisabled=true;
-      this.showNodesModal=true;
-    },
-    uploadInp(inpFile){
-      confirm("inp file uploaded successfully.");
-      this.inpfileUploaded=true;
-      this.setVisualizaBtnDisabled();
-    },
-    uploadRpt(rptFile){
-      confirm("rpt file uploaded successfully.");
-      this.rptfileUploaded=true;
-      this.setVisualizaBtnDisabled();
-    },
-    setVisualizaBtnDisabled(){
-      this.visualizaBtnDisabled=this.inpfileUploaded&&this.rptfileUploaded?false:true;
-    },
-    showFloodingNodes(){
-      this.spinShow = true;
-      this.showNodesModal=false;
-      this.axios
-      .get(
-          "/PSWMM/vision/floodingNodes" +
-          "?inpName=" + "LishuiEx"+
-          "&rptName=" + "LishuiEx"
-      )
-      .then(res => {
-        this.spinShow = false;
-        if (res.data.code) {
-          this.initThematic(res.data.data);
-        }
-        else{
-            confirm("error.");
-            console.log(res);
-        }
-      })
-      .catch(err => {
-        confirm("error.");
-        this.spinShow = false;}
-      );
-    },
-    initMap () {
-      let that = this
-
-      //天地图文字标注
-      //   var tian_di_tu_annotation = new TileLayer({
-      //     title: '天地图文字标注',
-      //     source: new XYZ({
-      //       url: 'http://t3.tianditu.com/DataServer?T=cva_w&x={x}&y={y}&l={z}'
-      //     })
-      //   })
-      // map.addLayer(tian_di_tu_annotation);
-
-
-      var TiandiMap_img = new TileLayer({
-        title: '天地图卫星影像',
-        source: new XYZ({
-          url: 'http://t3.tianditu.com/DataServer?T=img_w&x={x}&y={y}&l={z}&tk=17f29115865a40c78e148d485673d4db',
-          wrapX: false,
-          //   url: 'http://t0.tianditu.gov.cn/img_w/wmts?tk=17f29115865a40c78e148d485673d4db'
-        })
-      })
-      var TiandiMap_cia = new TileLayer({
-        name: '天地图影像注记图层',
-        source: new XYZ({
-          url: 'http://t0.tianditu.com/DataServer?T=eia_w&x={x}&y={y}&l={z}&tk=17f29115865a40c78e148d485673d4db',//英文注记
-          // url: 'http://t0.tianditu.com/DataServer?T=cia_w&x={x}&y={y}&l={z}&tk=17f29115865a40c78e148d485673d4db',//parent.TiandituKey()为天地图密钥
-          wrapX: false,
-
-        })
-      })
-
-      // map.addLayer(tian_di_tu_satellite_layer);
-
-      //OSM
-      //   var osm_layer = new TileLayer({
-      //     preload: 4,
-      //     source: new OSM()
-      //   })
-
-      this.map = new Map({
-        // 设置地图图层
-        layers: [
-          // 创建一个使用Open Street Map地图源的瓦片图层
-          TiandiMap_img,
-          TiandiMap_cia
-        ],
-        // 设置显示地图的视图
-        view: new View({
-          center: [0, 0], // 定义地图显示中心于经度0度，纬度0度处
-          zoom: 2 // 并且定义地图显示层级为2
-        }),
-        // 让id为map的div作为地图的容器
-        target: 'map-container'
-      })
-
-
-
-
-      // hover
-      this.highlightStyle = new Style({
-        stroke: new Stroke({
-          color: '#f00',
-          width: 1
-        }),
-        fill: new Fill({
-          color: 'rgba(255,0,0,0.1)'
-        }),
-        text: new Text({
-          font: '12px Calibri,sans-serif',
-          fill: new Fill({
-            color: '#000'
-          }),
-          stroke: new Stroke({
-            color: '#f00',
-            width: 3
-          })
-        })
-      })
-      this.featureOverlay = new VectorLayer({
-        source: new VectorSource(),
-        map: this.map,
-        style: function (feature) {
-          that.highlightStyle.getText().setText(feature.get('name'))
-          return that.highlightStyle
-        }
-      })
-
-      var pointermove = evt => {
-        if (evt.dragging) {
-          return
-        }
-        var pixel = this.map.getEventPixel(evt.originalEvent)
-        that.displayFeatureName(pixel)
-      }
-      this.map.on('pointermove', pointermove)
-
-      // select
-      var select = new Select({
-        condition: click
-      })
-      this.map.addInteraction(select)
-      select.on('select', event => {
-        this.sendSelectedFeature(event)
-      })
-
-      // draw
-      var vector = new VectorLayer({
-        source: new VectorSource(),
-        style: new Style({
-          fill: new Fill({
-            color: 'rgba(255, 255, 255, 0.2)'
-          }),
-          stroke: new Stroke({
-            color: '#ffcc33',
-            width: 2
-          }),
-          image: new CircleStyle({
-            radius: 7,
-            fill: new Fill({
-              color: '#ffcc33'
-            })
-          })
-        })
-      })
-      this.map.addLayer(vector);
-      this.modifying = {
-        init: function () {
-          this.select = new Select()
-          that.map.addInteraction(this.select)
-
-          this.modify = new Modify({
-            features: this.select.getFeatures()
-          })
-          that.map.addInteraction(this.modify)
-          this.setEvents()
-        },
-        setEvents: function () {
-          var selectedFeatures = this.select.getFeatures()
-
-          this.select.on('change:active', function () {
-            selectedFeatures.forEach(function (each) {
-              selectedFeatures.remove(each)
-            })
-          })
-        },
-        setActive: function (active) {
-          this.select.setActive(active)
-          this.modify.setActive(active)
-        }
-      }
-      this.modifying.init()
-      this.drawing = {
-        init: function () {
-          that.map.addInteraction(this.Point)
-          this.Point.setActive(false)
-          that.map.addInteraction(this.LineString)
-          this.LineString.setActive(false)
-          that.map.addInteraction(this.Polygon)
-          this.Polygon.setActive(false)
-          that.map.addInteraction(this.Circle)
-          this.Circle.setActive(false)
-        },
-        Point: new Draw({
-          source: vector.getSource(),
-          type: 'Point'
-        }),
-        LineString: new Draw({
-          source: vector.getSource(),
-          type: 'LineString'
-        }),
-        Polygon: new Draw({
-          source: vector.getSource(),
-          type: 'Polygon'
-        }),
-        Circle: new Draw({
-          source: vector.getSource(),
-          type: 'Circle'
-        }),
-        getActive: function () {
-          return this.activeType ? this[this.activeType].getActive() : false
-        },
-        setActive: function (active, drawType) {
-          if (active) {
-            this.activeType && this[this.activeType].setActive(false)
-            this[drawType].setActive(true)
-            this.activeType = drawType
-          } else {
-            this.activeType && this[this.activeType].setActive(false)
-            this.activeType = null
-          }
-        }
-      }
-      this.drawing.init()
-      var snap = new Snap({
-        source: vector.getSource()
-      })
-      that.map.addInteraction(snap);
-    },
-    setOperation (operationType, drawType) {
-      this.operationType = operationType
-      this.drawType = drawType
-      if (operationType == 'modify') {
-        this.drawing.setActive(false, null)
-        this.modifying.setActive(true)
-      } else if (operationType == 'draw') {
-        this.drawing.setActive(true, drawType)
-        this.modifying.setActive(false)
-      }
-    },
-    getHeight: () => {
-      let screenheight = window.screen.height
-      let mapDiv = document.getElementById('map-container')
-      mapDiv.style.height = screenheight - 60 + 'px'
-    },
     // 设定投影坐标系
     setProjection (code, name, proj4def, bbox) {
       if (
@@ -719,125 +482,108 @@ export default {
       this.map.setView(newView)
       newView.fit(extent)
     },
-    // 添加GeoJSON数据
-    setGeoJSON (data, geoCenter) {
-      // 添加图层
-      var vectorSource = new VectorSource({
-        features: new GeoJSON().readFeatures(data)
-      })
-      var vectorLayer = new VectorLayer({
-        source: vectorSource
-      })
-      this.map.addLayer(vectorLayer)
-
-      //   var center = fromLonLat(geoCenter)
-      if (null != geoCenter) {
-        this.flyTo(geoCenter, function () { })
-      }
-
+    setVisualizaModalShow(){
+      this.inpfileUploaded=false;
+      this.rptfileUploaded=false;
+      this.visualizaBtnDisabled=true;
+      this.showNodesModal=true;
     },
-    // 发送选择的要素信息给父组件
+    uploadInp(inpFile){
+      confirm("inp file uploaded successfully.");
+      this.inpfileUploaded=true;
+      this.setVisualizaBtnDisabled();
+    },
+    uploadRpt(rptFile){
+      confirm("rpt file uploaded successfully.");
+      this.rptfileUploaded=true;
+      this.setVisualizaBtnDisabled();
+    },
+    setVisualizaBtnDisabled(){
+      this.visualizaBtnDisabled=this.inpfileUploaded&&this.rptfileUploaded?false:true;
+    },
+    showFloodingNodes(){
+      this.spinShow = true;
+      this.showNodesModal=false;
+      this.axios
+      .get(
+          "/PSWMM/vision/floodingNodes" +
+          "?inpName=" + "LishuiEx"+
+          "&rptName=" + "LishuiEx"+
+          "&mixFloodedHr=" + this.mixFloodedHr +
+          "&mixFloodVolume="+ this.mixFloodVolume
+      )
+      .then(res => {
+        this.spinShow = false;
+        if (res.data.code) {
+          // this.initStyle(res.data.data);//更新渲染配置
+          this.initThematic(res.data.data);
+          this.sliderShow = true;
+          document.getElementById("map-container").style.top="100px";
+        }
+        else{
+            confirm("error.");
+            console.log(res);
+        }
+      })
+      .catch(err => {
+        confirm("error.");
+        this.spinShow = false;}
+      );
+    },
+    initStyle(data){
+      var minValue = 0;
+      var maxValue = 0;
+      data.forEach((item)=>{
+        var value = parseFloat(item.nodeFlooding.totalFloodVolume);
+        if(minValue>value){
+          minValue = value;
+        }
+        if(maxValue<value){
+          maxValue = value;
+        }
+      });
+      this.style.symbol = {
+          'symbolType': 'circle',
+          'size': ['interpolate',
+              ['linear'],
+              ['get', 'mass'],//输入值
+              minValue,
+              8,
+              maxValue, 
+              16,
+          ],
+          'color':
+            ['interpolate',
+              ['linear'],
+              ['get', 'mass'],//输入值
+              minValue, 
+              'rgba(8,48,107,0.1)',// 极值1，颜色值 
+              maxValue,
+              'rgba(8,48,107,0.8)',
+            ],
+          'rotateWithView': false,
+          'offset': [
+            0,
+            0
+          ],
+          'opacity': 0.95
+        };
+    },
+    changeTimeScale(val){
+      this.style.variables.startTime = val[0];
+      this.style.variables.endTime = val[1];
+    },
     sendSelectedFeature (event) {
-      this.$emit('sendSelectedFeature', event.selected[0].values_.geoType, event.selected[0].values_.name)
-    },
-
-    // deperated
-    setCenterCoords (data) {
-      if (!this.isCenterGot) {
-        for (let key in data) {
-          if (key == 'geometry') {
-            if (data[key].type != 'Point') {
-              this.isCenterGot = true
-              this.centerCoords = data[key].coordinates[0]
-              return
-            }
-          }
-          if (data[key] && typeof data[key] == 'object') {
-            this.setCenterCoords(data[key])
-          }
-        }
-      }
-    },
-    // zoom
-    flyTo (location, done) {
-      var duration = 4000
-      //   var zoom = this.map.getView().getZoom()
-      var zoom = 16
-      var parts = 2
-      var called = false
-      function callback (complete) {
-        --parts
-        if (called) {
-          return
-        }
-        if (parts === 0 || !complete) {
-          called = true
-          done(complete)
-        }
-      }
-      this.map.getView().animate(
-        {
-          center: location,
-          duration: duration
-        },
-        callback
-      )
-      this.map.getView().animate(
-        {
-          zoom: zoom - 1,
-          duration: duration / 2
-        },
-        {
-          zoom: zoom,
-          duration: duration / 2
-        },
-        callback
-      )
-    },
-    // hover显示要素名称
-    displayFeatureName (pixel) {
-      var feature = this.map.forEachFeatureAtPixel(pixel, function (feature) {
-        return feature
-      })
-      if (feature !== this.highlight) {
-        if (this.highlight) {
-          this.featureOverlay.getSource().removeFeature(this.highlight)
-        }
-        if (feature) {
-          this.featureOverlay.getSource().addFeature(feature)
-        }
-        this.highlight = feature
-      }
-    },
-    updateMinYear () {
-      this.style.variables.minYear = parseInt(this.minYearInput.value)
-      this.updateStatusText()
-    },
-    updateMaxYear () {
-      this.style.variables.maxYear = parseInt(this.maxYearInput.value)
-      this.updateStatusText()
-    },
-    updateStatusText () {
-      var div = document.getElementById('status')
-      //   div.querySelector('span.min-year').textContent = this.minYearInput.value
-      div.querySelector('span.max-year').textContent = this.maxYearInput.value
+      console.log("选择要素");
+      console.log(event.selected[0].values_.geoType);
+      console.log(event.selected[0].values_.name);
+      // this.$emit('sendSelectedFeature', event.selected[0].values_.geoType, event.selected[0].values_.name)
     },
     animate () {
-      this.map.render()
-      window.requestAnimationFrame(this.animate)
+      this.map.render();
+      window.requestAnimationFrame(this.animate);
     },
     initThematic (res) {
-      var div = document.getElementById('map-visualization-div')
-      div.style.display = 'block'
-      // color
-      //   this.minYearInput = document.getElementById('min-year')
-      this.maxYearInput = document.getElementById('max-year')
-
-      //   this.minYearInput.addEventListener('input', this.updateMinYear)
-      //   this.minYearInput.addEventListener('change', this.updateMinYear)
-      this.maxYearInput.addEventListener('input', this.updateMaxYear)
-      this.maxYearInput.addEventListener('change', this.updateMaxYear)
-      this.updateStatusText()
       var features = []
       for (let i = 0; i < res.length; i++) {
         // var line = quake[i]
@@ -852,8 +598,7 @@ export default {
           // console.log('name:' + res[i].name + '  time:' + j + '  value:' + res[i].data[j].value)
           features.push(new Feature({
             mass: parseFloat(res[i].data[j].flooding || 0),
-            year: parseInt(j || 0),
-            // year: parseInt(res[i].data[j].time || 0),
+            currentTime: parseInt(j || 0),
             geometry: new Point(coords)
 
           }))
@@ -875,36 +620,7 @@ export default {
       this.map.addLayer(webGLPointsLayer)
       this.animate()
     },
-    initLegend () {
-      //legend
-      var wmsSource = new ImageWMS({
-        url: 'https://ahocevar.com/geoserver/wms',
-        params: { 'LAYERS': 'topp:states' },
-        ratio: 1,
-        serverType: 'geoserver'
-      })
-      var updateLegend = function (resolution) {
-        var graphicUrl = wmsSource.getLegendUrl(resolution)
-        var img = document.getElementById('legend')
-        img.src = graphicUrl
-      }
-
-      var resolution = this.map.getView().getResolution()
-      updateLegend(resolution)
-
-      // Update the legend when the resolution changes
-      this.map.getView().on('change:resolution', function (event) {
-        var resolution = event.target.getResolution()
-        updateLegend(resolution)
-      })
-    }
 
   },
-  mounted () {
-    this.getHeight()
-    this.initMap()
-    // this.initThematic()
-
-  }
 }
 </script>

@@ -16,7 +16,9 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class RptDataService implements IRptDataService {
@@ -42,7 +44,7 @@ public class RptDataService implements IRptDataService {
     }
 
     @Override
-    public JSONArray floodingNodes(String inpName, String rptName, HttpServletRequest request) {
+    public JSONArray floodingNodes(String inpName, String rptName, Float mixFloodedHr, Float mixFloodVolume, HttpServletRequest request) {
         RptData rptData;
         JSONArray arr = new JSONArray();
         InpData inpData;
@@ -50,18 +52,27 @@ public class RptDataService implements IRptDataService {
             String servicePath =request.getSession().getServletContext().getRealPath("/")+"data/";
             inpData = inpDataDao.readInpFile(servicePath + inpName + ".inp");
             rptData = rptDataDao.readRptFile(servicePath + rptName + ".rpt");
+            Map<String, RptData.NodeFloodingSummary> nodeFloodingSummaryMap = new HashMap<>();
+            for(RptData.NodeFloodingSummary nodeFlooding:rptData.getNodeFloodingSummaries()){
+                if(Float.parseFloat(nodeFlooding.getHoursFlooded())>mixFloodedHr
+                        && Float.parseFloat(nodeFlooding.getTotalFloodVolume())>mixFloodVolume){
+                    nodeFloodingSummaryMap.put(nodeFlooding.getNode(),nodeFlooding);
+                }
+            }
             for (int j = 0; j < inpData.getCoordinates().size(); j++) {
                 InpData.Coordinate coord = inpData.getCoordinates().get(j);
                 String objName = coord.getNode();
 
                 List<RptData.NodeResult> nodeResults = rptData.getNodeResultsMap().get(objName);
-                if (null != nodeResults)
+                RptData.NodeFloodingSummary nodeFloodingResult = nodeFloodingSummaryMap.get(objName);
+                if (null != nodeResults&&null!=nodeFloodingResult)
                 {
                     JSONObject jo = new JSONObject();
                     List<JSONObject> objValues = new ArrayList<>();
                     String[] objCoordArr = new String[]{String.valueOf(coord.getX_coord()),String.valueOf(coord.getY_coord())};
                     jo.put("name",objName);
                     jo.put("coord",objCoordArr);
+                    jo.put("nodeFlooding",nodeFloodingResult);
                     for (int i = 0; i < nodeResults.size(); i++) {
                         String time = nodeResults.get(i).getTime();
                         String value = nodeResults.get(i).getFlooding();
