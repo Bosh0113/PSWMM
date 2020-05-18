@@ -95,7 +95,7 @@ input[type="range"]::-webkit-slider-thumb {
                   Map - Flooding nodes
               </h3>
           </div>
-          <!-- <div slot="extra">
+          <div slot="extra">
               <div style="margin-top:-10px">
                   <div style="display:inline-block;margin: 5px 0 0 -60px;position: absolute;">
                       <h5 style="display:inline-block">You:</h5>
@@ -130,7 +130,7 @@ input[type="range"]::-webkit-slider-thumb {
                   shape="circle" class="btnHoverGreen" 
                   style="margin:-18px 0 0 70px" @click="submitOp"></Button>
               </div>
-          </div> -->
+          </div>
         <div style="padding:0 5px">
           <Button @click="setProjModalShow" size="small" class="btnHoverBlue">Set Projection</Button>
           <div style="float:right">
@@ -238,22 +238,55 @@ import { Circle as CircleStyle, Fill, Stroke, Style, Text } from 'ol/style'
 import 'ol/ol.css'
 import WebGLPointsLayer from 'ol/layer/WebGLPoints'
 import ImageWMS from 'ol/source/ImageWMS'
+import Avatar from "vue-avatar";
 
 export default {
-  name: 'Map',
-  components: {},
+  name: 'FloodingNodes',
+  components: {
+    Avatar
+  },
+  created(){
+    this.getPageInfo();
+  },
   mounted () {
-    this.getHeight()
-    this.initMap()
-
+    this.getHeight();
+    this.initMap();
+    this.connectSocket();
   },
   data () {
     return {
+      pageParams:{},
+      fnSocket:null,
+      ops: {
+          bar: {
+              background: "#808695"
+          }
+      },
+      participants:[
+          {
+              userName:"abc"
+          },
+          {
+              userName:"bbcc"
+          },
+          {
+              userName:"cbc"
+          },
+          {
+              userName:"vcb"
+          },
+          {
+              userName:"abc"
+          },
+          {
+              userName:"bbcc"
+          }
+      ],
       spinShow:false,
       selectProjectionModal:false,
       disabledSetNewProj:true,
       queryInputValue: '',
-      selectProjectInfo:{},
+      selectProjInfo:{},
       // 投影坐标系表格的列
       projResultCols: [
         {
@@ -289,6 +322,7 @@ export default {
       mixFloodedHr:0.5,
       mixFloodVolume:1,
       visualizaBtnDisabled:true,
+      floodingNodesData:{},
       map: Object,
       highlight: '',
       // circles related to mass
@@ -340,6 +374,27 @@ export default {
     operationType: String
   },
   methods: {
+    getPageInfo(){
+        var href = window.location.href;
+        var url = href.split("&");
+
+        for (var i = 0; i < url.length; i++) {
+            if (/groupID/.test(url[i])) {
+                this.pageParams.pageId = url[i].match(/groupID=(\S*)/)[1];
+                continue;
+            }
+
+            if (/userID/.test(url[i])) {
+                this.pageParams.userId = url[i].match(/userID=(\S*)/)[1];
+                continue;
+            }
+
+            if (/userName/.test(url[i])) {
+                this.pageParams.userName = url[i].match(/userName=(\S*)/)[1];
+                continue;
+            }
+        }
+    },
     getHeight: () => {
       let screenheight = window.screen.height
       let mapDiv = document.getElementById('map-container')
@@ -391,7 +446,7 @@ export default {
       })
     },
     setProjModalShow(){
-      this.selectProjectInfo={};
+      this.selectProjInfo={};
       this.disabledSetNewProj=true;
       this.selectProjectionModal=true;
     },
@@ -435,11 +490,11 @@ export default {
     },
     // 点击投影表格某行时，进行投影变换并将inp的投影设置为当前投影
     handleTableOnRowClick (data) {
-      this.selectProjectInfo = data;
+      this.selectProjInfo = data;
       this.disabledSetNewProj=false;
     },
     setNewProjection(){
-      var data = this.selectProjectInfo;
+      var data = this.selectProjInfo;
       this.setProjection(
         data.code,
         data.name,
@@ -451,18 +506,11 @@ export default {
     // 设定投影坐标系
     setProjection (code, name, proj4def, bbox) {
       if (
-        code === null ||
-        name === null ||
-        proj4def === null ||
-        bbox === null
+        code ==undefined ||
+        name ==undefined ||
+        proj4def ==undefined ||
+        bbox ==undefined
       ) {
-        this.map.setView(
-          new View({
-            projection: 'EPSG:4326',
-            center: [0, 0],
-            zoom: 1
-          })
-        )
         return
       }
       var newProjCode = 'EPSG:' + code
@@ -483,9 +531,6 @@ export default {
       newView.fit(extent)
     },
     setVisualizaModalShow(){
-      this.inpfileUploaded=false;
-      this.rptfileUploaded=false;
-      this.visualizaBtnDisabled=true;
       this.showNodesModal=true;
     },
     uploadInp(inpFile){
@@ -515,10 +560,8 @@ export default {
       .then(res => {
         this.spinShow = false;
         if (res.data.code) {
-          // this.initStyle(res.data.data);//更新渲染配置
-          this.initThematic(res.data.data);
-          this.sliderShow = true;
-          document.getElementById("map-container").style.top="100px";
+          this.floodingNodesData = res.data.data;
+          this.renderData(res.data.data);
         }
         else{
             confirm("error.");
@@ -529,6 +572,17 @@ export default {
         confirm("error.");
         this.spinShow = false;}
       );
+    },
+    renderData(data){
+      if(JSON.stringify(data)!='{}'){
+        // this.initStyle(data);//更新渲染配置
+        this.initThematic(data);
+        this.sliderShow = true;
+        document.getElementById("map-container").style.top="100px";
+      }
+      else{
+        console.log("No data to render.");
+      }
     },
     initStyle(data){
       var minValue = 0;
@@ -620,7 +674,93 @@ export default {
       this.map.addLayer(webGLPointsLayer)
       this.animate()
     },
+    connectSocket(){
+        this.fnSocket=null;
+        var ip_port = window.location.host;
+        if(ip_port == "localhost:8084"){
+            ip_port = "localhost:8086";
+        }
+        var fnSocketUrl = "ws://" + ip_port + "/PSWMM/SimulationOptionsSocket/" + this.pageParams.pageId+"-fn";
+        this.fnSocket = new WebSocket(fnSocketUrl);
+        this.fnSocket.onopen = this.onOpen;
+        this.fnSocket.onmessage = this.onMessage;
+        this.fnSocket.onclose = this.onClose;
+        this.fnSocket.onerror = this.onError;
+    },
+    onOpen() {
+      console.log("Socket连接成功！");
+      this.sendMessage("connect",{});
+    },
+    onMessage(e) {
+        var messageObject = JSON.parse(e.data);
+        switch(messageObject.type){
+            case "operation":{
+              var operation = messageObject.operation;
+              this.selectProjInfo = operation.projection;
+              this.setNewProjection();
 
+              var newView = this.map.getView();
+              newView.setZoom(operation.view.zoom);
+              newView.setCenter(operation.view.center);
+
+              this.style = operation.config.style;
+              this.floodingNodesData = operation.floodingData;
+              this.renderData(operation.floodingData);
+              this.inpfileUploaded=operation.config.inpfileUploaded;
+              this.rptfileUploaded=operation.config.rptfileUploaded;
+              this.mixFloodedHr=operation.config.mixFloodedHr;
+              this.mixFloodVolume=operation.config.mixFloodVolume;
+              this.visualizaBtnDisabled=operation.config.visualizaBtnDisabled;
+              this.sliderShow = operation.config.sliderShow;
+              this.sliderValue=operation.config.sliderValue;
+              break;
+            }
+            case "members":{
+                this.participants = messageObject.memberList;
+            }
+        }
+    },
+    onClose(e) {
+      console.log("Socket连接断开！");
+    },
+    onError(e) {
+      console.log("Socket连接错误！");
+    },
+    sendMessage(type, operation){
+      var userId = this.pageParams.userId;
+      var userName = this.pageParams.userName;
+      var message ={
+          type: type,
+          userInfo:{
+              userId: userId,
+              userName: userName
+          },
+          operation: operation
+      }
+      this.fnSocket.send(JSON.stringify(message));
+    },
+    submitOp(){
+      var view = this.map.getView();
+        var operation = {
+          projection:this.selectProjInfo,
+          view:{
+            zoom: view.getZoom(),
+            center: view.getCenter()
+          },
+          floodingData: this.floodingNodesData,
+          config:{
+            inpfileUploaded:true,
+            rptfileUploaded:true,
+            mixFloodedHr:this.mixFloodedHr,
+            mixFloodVolume:this.mixFloodVolume,
+            visualizaBtnDisabled:false,
+            sliderValue:this.sliderValue,
+            sliderShow:this.sliderShow,
+            style:this.style,
+          }
+        }
+        this.sendMessage("operation", operation);
+    }
   },
 }
 </script>
