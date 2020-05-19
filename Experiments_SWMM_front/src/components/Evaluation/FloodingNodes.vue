@@ -2,6 +2,9 @@
 #mapCard>>>.ivu-card-body{
   padding: 2px;
 }
+#nodeInfo>>>.ivu-modal-body{
+  padding:5px
+}
 .btnHoverBlue:hover {
   background-color: #2db7f5;
   color: white;
@@ -28,34 +31,6 @@
   /* height: 100%; */
   z-index: 0;
 }
-.div-form-group {
-  position: absolute;
-  display: inline;
-  top: 30px;
-  right: 20px;
-  z-index: 1;
-}
-.div-right {
-  display: inline-block;
-  padding: 2px;
-  margin: 2px;
-  border-radius: 4px;
-  background-color: rgba(255, 255, 255, 0.6);
-  font-size: large;
-}
-.btn-right {
-  height: 1.375em;
-  width: 1.375em;
-  border-radius: 2px;
-  opacity: 0.8;
-  border: none;
-  background-color: rgba(0, 60, 136, 0.7);
-  margin: 1px;
-  color: #fff;
-  text-align: center;
-  font-size: inherit;
-}
-
 input[type="range"] {
   -webkit-appearance: none;
   width: 300px;
@@ -210,6 +185,27 @@ input[type="range"]::-webkit-slider-thumb {
               <Button @click="showFloodingNodes" style="margin: 0 15px;width: 200px;" size="small" type="primary" :disabled="visualizaBtnDisabled">Show flooding nodes</Button>
           </div>
       </Modal>
+      <Modal
+      id="nodeInfo"
+      v-model="nodeInfoModal"
+      :mask-closable="false"
+      :draggable="true"
+      :mask="false"
+      :footer-hide="true"
+      width="250">
+          <div slot="header">
+              <h4 style="display:inline-block">Flooding Node Info</h4>
+          </div>
+          <div>
+            <Table
+              :columns="nodeInfoShowColumns"
+              :data="nodeInfoShowData"
+              stripe
+              border
+              :show-header="false"
+            ></Table>
+          </div>
+      </Modal>
       <Spin fix v-if="spinShow">
           <Icon type="ios-loading" size=18 class="demo-spin-icon-load"></Icon>
           <div>Loading</div>
@@ -234,7 +230,7 @@ import { Draw, Modify, Select, Snap } from 'ol/interaction'
 import { get as getProjection, getTransform } from 'ol/proj'
 import { applyTransform } from 'ol/extent'
 import { click } from 'ol/events/condition'
-import { Circle as CircleStyle, Fill, Stroke, Style, Text } from 'ol/style'
+import { Fill, Stroke, Style, Text, Circle } from 'ol/style'
 import 'ol/ol.css'
 import WebGLPointsLayer from 'ol/layer/WebGLPoints'
 import ImageWMS from 'ol/source/ImageWMS'
@@ -364,9 +360,25 @@ export default {
       sliderValue:[0,165],
       //时间起止
       rptStart:0,
-      rptEnd:165
+      rptEnd:165,
+      webGLPointsLayer:null,
+      floodingNodeLayer:null,
+      nodeInfoModal:false,
+      nodeInfoShowColumns:[
+        {
+          title: "key",
+          key: "key",
+          width: 158,
+          type:"html"
+        },
+        {
+          title: "value",
+          key: "value"
+        }
+      ],
+      nodeInfoShowData:[],
+      selectedNode:""
     }
-
   },
   props: {
     features: {},
@@ -434,15 +446,6 @@ export default {
         }),
         // 让id为map的div作为地图的容器
         target: 'map-container'
-      })
-
-      // select
-      var select = new Select({
-        condition: click
-      })
-      this.map.addInteraction(select)
-      select.on('select', event => {
-        this.sendSelectedFeature(event)
       })
     },
     setProjModalShow(){
@@ -627,18 +630,19 @@ export default {
       this.style.variables.startTime = val[0];
       this.style.variables.endTime = val[1];
     },
-    sendSelectedFeature (event) {
-      console.log("选择要素");
-      console.log(event.selected[0].values_.geoType);
-      console.log(event.selected[0].values_.name);
-      // this.$emit('sendSelectedFeature', event.selected[0].values_.geoType, event.selected[0].values_.name)
-    },
     animate () {
       this.map.render();
       window.requestAnimationFrame(this.animate);
     },
     initThematic (res) {
+      if(this.webGLPointsLayer!=null){
+        this.map.removeLayer(this.webGLPointsLayer);
+      }
+      if(this.floodingNodeLayer!=null){
+        this.map.removeLayer(this.floodingNodeLayer);
+      }
       var features = []
+      var vecFeature=[]
       for (let i = 0; i < res.length; i++) {
         // var line = quake[i]
         var coords = res[i].coord
@@ -647,9 +651,6 @@ export default {
           continue
         }
         for (let j = 0; j < res[i].data.length; j++) {
-
-
-          // console.log('name:' + res[i].name + '  time:' + j + '  value:' + res[i].data[j].value)
           features.push(new Feature({
             mass: parseFloat(res[i].data[j].flooding || 0),
             currentTime: parseInt(j || 0),
@@ -657,22 +658,112 @@ export default {
 
           }))
 
-
+          //geojson.feature
+          var featureItem = {
+            "type":"Feature",
+            "geometry":{
+              "type": "Point",
+              "coordinates": coords
+            },
+            "properties": res[i].nodeFlooding
+          }
+          vecFeature.push(featureItem);
         }
 
       }
       var vectorSource = new VectorSource({
         attributions: 'NASA'
       })
+      var vectorJson = {
+        "type":"FeatureCollection",
+        "features":vecFeature
+      }
+      var vectorSourceJson = new VectorSource({
+        features: (new GeoJSON()).readFeatures(vectorJson)
+        });
 
       vectorSource.addFeatures(features)
-      var webGLPointsLayer = new WebGLPointsLayer({
+      this.webGLPointsLayer = new WebGLPointsLayer({
         style: this.style,
         source: vectorSource,
         disableHitDetection: true
       })
-      this.map.addLayer(webGLPointsLayer)
+      this.map.addLayer(this.webGLPointsLayer)
+
+      var vecStyle = new Style({
+        image: new Circle({
+          fill: new  Fill({ 
+            color: 'rgba(255, 255, 255, 0)'
+          }),
+          stroke: new Stroke({ 
+            color: 'rgba(255, 255, 255, 0)',
+            width: 1
+          }),
+          radius:7
+        })
+      });
+      this.floodingNodeLayer = new VectorLayer({
+        source: vectorSourceJson,
+        style:vecStyle
+      });
+      this.map.addLayer(this.floodingNodeLayer)
+
       this.animate()
+      
+      var selectTool = new Select({
+        layers:[this.floodingNodeLayer],
+        condition: click,
+      });
+      this.map.addInteraction(selectTool);
+      selectTool.on("select", (e)=>{
+        if(e.selected.length!==0){
+          var nodeName = e.selected[0].getProperties().node;
+          this.selectedNode = nodeName;
+          this.clearSelected(nodeName);
+          let coordinate = e.mapBrowserEvent.coordinate;
+          let properties = e.selected[0].getProperties();
+          this.nodeInfoShowData = [
+            {
+              key: "Node",
+              value: properties.node
+            },
+            // {
+            //   key: "Location",
+            //   value: coordinate[0]+", "+coordinate[1]
+            // },
+            {
+              key: "Hours Flooded",
+              value: properties.hoursFlooded
+            },
+            {
+              key: "Maximum Rate<br>(CMS)",
+              value: properties.maximumRate
+            },
+            {
+              key: "Day of Maximum<br>Flooding",
+              value: properties.timeOfMaxOccurrenceDay
+            },
+            {
+              key: "Hour of Maximum<br>Flooding",
+              value: properties.timeOfMaxOccurrenceTime
+            },
+            {
+              key: "Total Flood Volume (10^6 ltr)",
+              value: properties.totalFloodVolume
+            },
+            {
+              key: "Maximum Ponded<br>Depth (Meters)",
+              value: properties.maximumPondedVolume
+            }
+          ];
+          this.nodeInfoModal = true;
+        }
+        else{
+          this.clearSelected("");
+          this.selectedNode = "";
+          console.log("no data selected");
+        }
+      });
     },
     connectSocket(){
         this.fnSocket=null;
@@ -713,6 +804,9 @@ export default {
               this.visualizaBtnDisabled=operation.config.visualizaBtnDisabled;
               this.sliderShow = operation.config.sliderShow;
               this.sliderValue=operation.config.sliderValue;
+              this.nodeInfoShowData=operation.config.nodeInfoShowData;
+              this.nodeInfoModal=operation.config.nodeInfoModal;
+              this.findPoint(operation.config.selectedNode);
               break;
             }
             case "members":{
@@ -757,9 +851,53 @@ export default {
             sliderValue:this.sliderValue,
             sliderShow:this.sliderShow,
             style:this.style,
+            nodeInfoShowData:this.nodeInfoShowData,
+            nodeInfoModal:this.nodeInfoModal,
+            selectedNode:this.selectedNode
           }
         }
         this.sendMessage("operation", operation);
+    },
+    clearSelected(node){
+       var vecStyle = new Style({
+        image: new Circle({
+          fill: new  Fill({ 
+            color: 'rgba(255, 255, 255, 0)'
+          }),
+          stroke: new Stroke({ 
+            color: 'rgba(255, 255, 255, 0)',
+            width: 1
+          }),
+          radius:7
+        })
+      });
+      this.floodingNodeLayer.getSource().forEachFeature(e=>{
+        var properties= e.getProperties();
+        if(properties.node!=node){
+          e.setStyle(vecStyle);
+        }
+      })
+    },
+    findPoint(node){
+      var featureSelectStyle = new Style({
+        image: new Circle({
+          fill: new  Fill({ 
+            color: 'rgba(87, 163, 243, 1)'
+          }),
+          stroke: new Stroke({ 
+            color: 'rgba(255, 255, 255, 1)',
+            width: 1
+          }),
+          radius:7
+        })
+      });
+      this.floodingNodeLayer.getSource().forEachFeature(e=>{
+        var properties= e.getProperties();
+        if(properties.node==node){
+          e.setStyle(featureSelectStyle);
+          // throw new Error("end for each");
+        }
+      });
     }
   },
 }
