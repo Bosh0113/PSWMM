@@ -192,7 +192,7 @@ input[type="range"]::-webkit-slider-thumb {
       :draggable="true"
       :mask="false"
       :footer-hide="true"
-      width="250">
+      width="280">
           <div slot="header">
               <h4 style="display:inline-block">Flooding Node Info</h4>
           </div>
