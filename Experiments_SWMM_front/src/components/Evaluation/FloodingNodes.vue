@@ -172,12 +172,12 @@ input[type="range"]::-webkit-slider-thumb {
           <div style="height:100px;text-align: center;">
             <div>
               <span>Inp file:</span>
-              <Input v-model="inpFile" placeholder="inp file" style="width: 300px;margin:0 10px" disabled />
+              <Input v-model="inpFile" placeholder="inp file" style="width: 300px;margin:0 10px" />
               <Button class="btnHoverBlue" @click="uploadInp(inpFile)">upload inp</Button>
             </div>
             <div style="margin-top:25px">
               <span>Rpt file:</span>
-              <Input v-model="rptFile" placeholder="rpt file" style="width: 300px;margin:0 10px" disabled />
+              <Input v-model="rptFile" placeholder="rpt file" style="width: 300px;margin:0 10px" />
               <Button class="btnHoverBlue" @click="uploadRpt(rptFile)">upload rpt</Button>
             </div>
           </div>
@@ -311,8 +311,8 @@ export default {
       ],
       projResultData:[],
       showNodesModal:false,
-      inpFile:"",
-      rptFile:"",
+      inpFile:"LishuiEx",
+      rptFile:"LishuiEx0",
       inpfileUploaded:false,
       rptfileUploaded:false,
       mixFloodedHr:0.5,
@@ -550,31 +550,36 @@ export default {
       this.visualizaBtnDisabled=this.inpfileUploaded&&this.rptfileUploaded?false:true;
     },
     showFloodingNodes(){
-      this.spinShow = true;
-      this.showNodesModal=false;
-      this.axios
-      .get(
-          "/PSWMM/vision/floodingNodes" +
-          "?inpName=" + "LishuiEx"+
-          "&rptName=" + "LishuiEx"+
-          "&mixFloodedHr=" + this.mixFloodedHr +
-          "&mixFloodVolume="+ this.mixFloodVolume
-      )
-      .then(res => {
-        this.spinShow = false;
-        if (res.data.code) {
-          this.floodingNodesData = res.data.data;
-          this.renderData(res.data.data);
-        }
-        else{
-            confirm("error.");
-            console.log(res);
-        }
-      })
-      .catch(err => {
-        confirm("error.");
-        this.spinShow = false;}
-      );
+      if(this.inpFile!=''&&this.rptFile!=''){
+        this.spinShow = true;
+        this.showNodesModal=false;
+        this.axios
+        .get(
+            "/PSWMM/vision/floodingNodes" +
+            "?inpName=" + this.inpFile+
+            "&rptName=" + this.rptFile+
+            "&mixFloodedHr=" + this.mixFloodedHr +
+            "&mixFloodVolume="+ this.mixFloodVolume
+        )
+        .then(res => {
+          this.spinShow = false;
+          if (res.data.code) {
+            this.floodingNodesData = res.data.data;
+            this.renderData(res.data.data);
+          }
+          else{
+              confirm("error.");
+              console.log(res);
+          }
+        })
+        .catch(err => {
+          confirm("error.");
+          this.spinShow = false;}
+        );
+      }
+      else{
+        confirm('Upload data, please.');
+      }
     },
     renderData(data){
       if(JSON.stringify(data)!='{}'){
