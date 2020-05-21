@@ -17,6 +17,9 @@
     position: absolute;
     line-height: 1.2;
 }
+.demo-spin-icon-load{
+  animation: ani-demo-spin 1s linear infinite;
+}
 </style>
 <template>
     <div>
@@ -81,9 +84,9 @@
                     <Option v-for="item in rainageList" :value="item" :key="item">{{ item }}</Option>
                 </Select>
                 <div style="float:right">
-                <Button @click="loadInp" size="small" class="btnHoverBlue">Load Inp</Button>
-                <Button @click="loadRpt" size="small" class="btnHoverBlue">Load Rpt</Button>
-                    <Button @click="showTimeSeries" size="small" class="btnHoverGreen">Visualization</Button>
+                <Button @click="loadInpShow" size="small" class="btnHoverBlue">Load Inp</Button>
+                <Button @click="loadRptShow" size="small" class="btnHoverBlue">Load Rpt</Button>
+                    <Button @click="showTimeSeries" size="small" class="btnHoverGreen" :disabled="!originalData">Visualization</Button>
                 </div>
             </div>
             <div style="border: 1px solid #dcdee2;margin-top:5px;height:calc(100vh - 120px)" id="chartContent">
@@ -135,6 +138,46 @@
                 </div>
             </div>
         </Card>
+        <Modal
+        id="loadInp"
+        v-model="loadInpModal"
+        :styles="{top: '20px'}"
+        width="500">
+            <div slot="header">
+                <h4 style="display:inline-block">Upload inp file</h4>
+            </div>
+            <div style="text-align: center;">
+                <div>
+                <span>Inp file:</span>
+                <Input v-model="inpFileUrl" placeholder="inp file" style="width: 300px;margin:0 10px" />
+                </div>
+            </div>
+            <div slot="footer">
+                <Button @click="loadInp" style="margin: 0 15px;width: 200px;" size="small" type="primary" >Upload</Button>
+            </div>
+        </Modal>
+        <Modal
+        id="loadRpt"
+        v-model="loadRptModal"
+        :styles="{top: '20px'}"
+        width="500">
+            <div slot="header">
+                <h4 style="display:inline-block">Upload rpt file</h4>
+            </div>
+            <div style="text-align: center;">
+                <div>
+                <span>Rpt file:</span>
+                <Input v-model="rptFileUrl" placeholder="rpt file" style="width: 300px;margin:0 10px" />
+                </div>
+            </div>
+            <div slot="footer">
+                <Button @click="loadRpt" style="margin: 0 15px;width: 200px;" size="small" type="primary" >Upload</Button>
+            </div>
+        </Modal>
+        <Spin fix v-if="spinShow">
+            <Icon type="ios-loading" size=18 class="demo-spin-icon-load"></Icon>
+            <div>Loading</div>
+        </Spin>
     </div>
 </template>
 <script>
@@ -159,9 +202,14 @@ export default {
     data(){
         return{
             pageParams:{},
+            spinShow:false,
             timeSeriesPlot:null,
             inpData:false,
             rptData:false,
+            loadInpModal:false,
+            inpFileUrl:"swmm",
+            loadRptModal:false,
+            rptFileUrl:"swmm",
             originalData:false,
             visualization:false,
             selectType:"Node",
@@ -388,26 +436,34 @@ export default {
             var newShowTime = newDay + " " + newTime;
             return newShowTime;
         },
+        loadInpShow(){
+            this.loadInpModal = true;
+        },
         loadInp(){
-            confirm("load inp.");
+            this.loadInpModal = false;
             this.inpData = true;
             this.initSelection();
         },
+        loadRptShow(){
+            this.loadRptModal = true;
+        },
         loadRpt(){
-            confirm("load rpt.");
+            this.loadRptModal = false;
             this.rptData = true;
             this.initSelection();
         },
         initSelection(){
             if(this.inpData&&this.rptData){
+                this.spinShow = true;
                 this.originalData = true;
                 //请求ObjectName列表
                 this.axios
                 .get(
                     "/PSWMM/data/objectNames" +
-                    "?inpName=" + "swmm"
+                    "?inpName=" + this.inpFileUrl
                 )
                 .then(res => {
+                    this.spinShow = false;
                     if (res.data.code) {
                         this.updataSelection(res.data.data);
                     }
@@ -416,7 +472,10 @@ export default {
                         console.log(res);
                     }
                 })
-                .catch(err => {confirm("error.");});
+                .catch(err => {
+                    confirm("error.");
+                    this.spinShow = false;
+                });
             }
         },
         updataSelection(newObjectName){
@@ -491,28 +550,37 @@ export default {
             }
         },
         showTimeSeries(){
-            this.axios
-            .get(
-                "/PSWMM/vision/timeSeries" +
-                "?inpName=" + "swmm"+
-                "&rptName=" + "swmm" +
-                "&objType=" + this.selectType+
-                "&objName=" + this.selectName+
-                "&variable=" + this.selectVariable
-            )
-            .then(res => {
-                if (res.data.code) {
-                    this.formatedData =  this.formatShowData(res.data.data);
-                    this.visualization = true;
-                    this.updataChartOption(this.formatedData);
-                    this.toVisualization();
-                }
-                else{
+            if(this.originalData){
+                this.spinShow = true;
+                this.axios
+                .get(
+                    "/PSWMM/vision/timeSeries" +
+                    "?inpName=" + this.inpFileUrl+
+                    "&rptName=" + this.rptFileUrl +
+                    "&objType=" + this.selectType+
+                    "&objName=" + this.selectName+
+                    "&variable=" + this.selectVariable
+                )
+                .then(res => {
+                    this.spinShow = false;
+                    if (res.data.code) {
+                        this.formatedData =  this.formatShowData(res.data.data);
+                        this.visualization = true;
+                        this.updataChartOption(this.formatedData);
+                        this.toVisualization();
+                    }
+                    else{
+                        confirm("error.");
+                        console.log(res);
+                    }
+                })
+                .catch(err => {
                     confirm("error.");
-                    console.log(res);
-                }
-            })
-            .catch(err => {confirm("error.");});
+                    this.spinShow = false;
+                });
+            }else{
+                confirm("Load data, please.");
+            }
         },
         formatShowData(data){
             var timeLine = [];

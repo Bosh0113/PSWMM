@@ -16,6 +16,9 @@
     position: absolute;
     line-height: 1.2;
 }
+.demo-spin-icon-load{
+  animation: ani-demo-spin 1s linear infinite;
+}
 </style>
 <template>
     <div>
@@ -67,7 +70,7 @@
                     <Option v-for="item in typeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                 </Select>
                 <span>Click a column header to sort the column.</span>
-                <Button @click="loadReport" size="small" class="btnHoverGreen" style="float:right">Load Report</Button>
+                <Button @click="uploadRpt" size="small" class="btnHoverGreen" style="float:right">Load Report</Button>
             </div>
             <div style="border: 1px solid #dcdee2;margin-top:5px;height:calc(100vh - 100px)">
                 <div v-if="!originalData" style="text-align:center">
@@ -80,6 +83,28 @@
                 </div>
             </div>
         </Card>
+        <Modal
+        id="loadRpt"
+        v-model="loadRptModal"
+        :styles="{top: '20px'}"
+        width="500">
+            <div slot="header">
+                <h4 style="display:inline-block">Upload rpt file</h4>
+            </div>
+            <div style="text-align: center;">
+                <div>
+                <span>Rpt file:</span>
+                <Input v-model="rptFile" placeholder="rpt file" style="width: 300px;margin:0 10px" />
+                </div>
+            </div>
+            <div slot="footer">
+                <Button @click="loadReport" style="margin: 0 15px;width: 200px;" size="small" type="primary" >Upload</Button>
+            </div>
+        </Modal>
+        <Spin fix v-if="spinShow">
+            <Icon type="ios-loading" size=18 class="demo-spin-icon-load"></Icon>
+            <div>Loading</div>
+        </Spin>
     </div>
 </template>
 <script>
@@ -107,6 +132,7 @@ export default {
                     background: "#808695"
                 }
             },
+            spinShow:false,
             tcSocket:null,
             participants:[
                 {
@@ -131,6 +157,8 @@ export default {
             originalData:false,
             selectType: "subcatchmentRunoffSummaries",
             highlightRowIndex: 9999999999,
+            loadRptModal:false,
+            rptFile:"swmm",
             typeList:[
                 {   value: "subcatchmentRunoffSummaries",
                     label: "Subcatchment Runoff"
@@ -525,13 +553,19 @@ export default {
                 }
             }
         },
+        uploadRpt(){
+            this.loadRptModal = true;
+        },
         loadReport(){
+            this.loadRptModal = false;
+            this.spinShow = true;
             this.axios
             .get(
                 "/PSWMM/data/rpt-all" +
-                "?name=" + "swmm"
+                "?name=" + this.rptFile
             )
             .then(res => {
+                this.spinShow = false;
                 if (res.data.code) {
                     this.originalData = res.data.data;
                     this.selectedTypeChange(this.selectType);
@@ -541,7 +575,10 @@ export default {
                     console.log(res)
                 }
             })
-            .catch(err => {});
+            .catch(err => {
+                confirm("error.");
+                this.spinShow = false;
+            });
         },
         selectedTypeChange(type){
             switch(type){
