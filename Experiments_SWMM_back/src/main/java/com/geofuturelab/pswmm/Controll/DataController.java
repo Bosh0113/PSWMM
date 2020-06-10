@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.geofuturelab.pswmm.Bean.ResponseCode;
 import com.geofuturelab.pswmm.Bean.ResponseResult;
+import com.geofuturelab.pswmm.DTO.RptDataDTO;
 import com.geofuturelab.pswmm.Entity.DataAuthority;
 import com.geofuturelab.pswmm.Exception.RequestException;
 import com.geofuturelab.pswmm.Service.IInpDataService;
@@ -99,6 +100,19 @@ public class DataController {
              jo = rptDataService.parseRptData(name,request);
         } catch (RequestException exception) {
             ResponseResult.result(exception.getCode());
+        }
+        return ResponseResult.result(ResponseCode.OK,jo);
+    }
+
+    @PostMapping(value = "/rpt")
+    @ResponseBody
+    @ApiOperation(value = "根据特定的字段来读取rpt文件")
+    public ResponseResult readRptDataByName(@RequestBody RptDataDTO rptDataDTO, HttpServletRequest request){
+        JSONObject jo = null;
+        try{
+            jo = rptDataService.parseRptDataByProperties(rptDataDTO.getName(),rptDataDTO.getProperties(),request);
+        }catch (RequestException e){
+            ResponseResult.result(e.getCode());
         }
         return ResponseResult.result(ResponseCode.OK,jo);
     }

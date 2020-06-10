@@ -9,6 +9,7 @@ import com.geofuturelab.pswmm.Entity.InpData;
 import com.geofuturelab.pswmm.Exception.RequestException;
 import com.geofuturelab.pswmm.Service.Impl.InpDataService;
 import com.geofuturelab.pswmm.vo.InpDataVo;
+import io.swagger.models.auth.In;
 import lombok.Data;
 import org.apache.commons.beanutils.ConvertUtils;
 import org.springframework.beans.BeanUtils;
@@ -20,8 +21,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -54,8 +54,9 @@ public class InpDataDao implements IInpDataDao {
     /**将inp文件存入本地*/
     @Override
     public String saveInpFile(String email,String instanceId, MultipartFile mFile) throws IOException {
-        if (mFile == null || email == null || instanceId == null || "".equals(email) || "".equals(instanceId))
+        if (mFile == null || email == null || instanceId == null || "".equals(email) || "".equals(instanceId)){
             throw RequestException.fail(ResponseCode.FAIL);
+        }
         String folderPath = basePath + "\\" + email + "\\" + instanceId + "\\inpData";
         File folder = new File(folderPath);
         if (!folder.exists())
@@ -67,66 +68,110 @@ public class InpDataDao implements IInpDataDao {
         return file.getPath();
     }
 
-    /**从本地读取inp文件*/
     @Override
+    /**从本地读取inp文件*/
     public InpData readInpFile(String fileName) throws IOException {
-        inpLocal.set(new InpData());
-//        System.out.println(Paths.get(fileName));
-        linesLocal.set(Files.readAllLines(Paths.get(fileName),Charset.forName("UTF-8")));
-        List<String> lines = linesLocal.get();
-        for (int cursor = 0; cursor < lines.size(); cursor++) {
-            String line = lines.get(cursor);
-            switch (line) {
-                case "":break;
+        InpData inpData = new InpData();
+        BufferedReader bufferedReader = null;
+        bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(new File(fileName))));
+        String line = bufferedReader.readLine();
+        while (line != null){
+            switch (line.trim()){
+                case "":
+                    break;
                 case "[TITLE]":
-                    cursor = readTitle(cursor);break;
+                    line = skipComment(bufferedReader);
+                    line = readTitle(bufferedReader, line, inpData);
+                    break;
                 case "[OPTIONS]":
-                    cursor = readOption(cursor);break;
+                    line = skipComment(bufferedReader);
+                    line = readOption(bufferedReader, line, inpData);
+                    break;
                 case "[EVAPORATION]":
-                    cursor = readEvaporation(cursor);break;
+                    line = skipComment(bufferedReader);
+                    line = readEvaporation(bufferedReader, line, inpData);
+                    break;
                 case "[RAINGAGES]":
-                    cursor = readRaingage(cursor);break;
+                    line = skipComment(bufferedReader);
+                    line = readRaingage(bufferedReader, line, inpData);
+                    break;
                 case "[SUBCATCHMENTS]":
-                    cursor = readSubcatchment(cursor);break;
+                    line = skipComment(bufferedReader);
+                    line = readSubcatchment(bufferedReader, line, inpData);
+                    break;
                 case "[SUBAREAS]":
-                    cursor = readSubarea(cursor);break;
+                    line = skipComment(bufferedReader);
+                    line = readSubarea(bufferedReader, line, inpData);
+                    break;
                 case "[INFILTRATION]":
-                    cursor = readInfiltration(cursor);break;
+                    line = skipComment(bufferedReader);
+                    String inflitration_c = inpData.getOption().getInfiltration();
+                    line = readInfiltration(bufferedReader, inflitration_c, line, inpData);
+                    break;
                 case "[JUNCTIONS]":
-                    cursor = readJunction(cursor);break;
+                    line = skipComment(bufferedReader);
+                    line = readJunction(bufferedReader, line, inpData);
+                    break;
                 case "[OUTFALLS]":
-                    cursor = readOutfall(cursor);break;
+                    line = skipComment(bufferedReader);
+                    line = readOutfall(bufferedReader, line, inpData);
+                    break;
                 case "[STORAGE]":
-                    cursor = readStorage(cursor);break;
+                    line = skipComment(bufferedReader);
+                    line = readStorage(bufferedReader, line, inpData);
                 case "[CONDUITS]":
-                    cursor = readConduit(cursor);break;
+                    line = skipComment(bufferedReader);
+                    line = readConduit(bufferedReader, line, inpData);
+                    break;
                 case "[XSECTIONS]":
-                    cursor = readXscetion(cursor);break;
+                    line = skipComment(bufferedReader);
+                    line = readXscetion(bufferedReader, line, inpData);
+                    break;
                 case "[LOSSES]":
-                    cursor = readLosses(cursor);break;
+                    line = skipComment(bufferedReader);
+                    line = readLosses(bufferedReader, line, inpData);
+                    break;
                 case "[CURVES]":
-                    cursor = readCurve(cursor);break;
+                    line = skipComment(bufferedReader);
+                    line = readCurve(bufferedReader, line, inpData);
+                    break;
                 case "[TIMESERIES]":
-                    cursor = readTimeseries(cursor);break;
+                    line = skipComment(bufferedReader);
+                    line = readTimeseries(bufferedReader, line, inpData);
+                    break;
                 case "[REPORT]":
-                    cursor = readReport(cursor);break;
+                    line = skipComment(bufferedReader);
+                    line = readReport(bufferedReader, line, inpData);
+                    break;
                 case "[TAGS]":
-                    cursor = readTag(cursor);break;
+                    line = skipComment(bufferedReader);
+                    line = readTag(bufferedReader, line, inpData);
+                    break;
                 case "[MAP]":
-                    cursor = readMap(cursor);break;
+                    line = skipComment(bufferedReader);
+                    line = readMap(bufferedReader, line, inpData);
+                    break;
                 case "[COORDINATES]":
-                    cursor = readCoordinate(cursor);break;
+                    line = skipComment(bufferedReader);
+                    line = readCoordinate(bufferedReader, line, inpData);
+                    break;
                 case "[VERTICES]":
-                    cursor = readVertice(cursor);break;
+                    line = skipComment(bufferedReader);
+                    line = readVertice(bufferedReader, line, inpData);
+                    break;
                 case "[Polygons]":
-                    cursor = readPolygons(cursor);break;
+                    line = skipComment(bufferedReader);
+                    line = readPolygons(bufferedReader, line, inpData);
+                    break;
                 case "[SYMBOLS]":
-                    cursor = readSymbol(cursor);break;
+                    line = skipComment(bufferedReader);
+                    line = readSymbol(bufferedReader, line, inpData);
+                    break;
                 default:
                     break;
             }
         }
-        return inpLocal.get();
+        return inpData;
     }
 
     /**设置instanceid/email/authority/projection等元数据*/
@@ -192,45 +237,29 @@ public class InpDataDao implements IInpDataDao {
         return geoCenter;
     }
 
-    /**读取[TITLE]*/
-    private int readTitle(int index)
-    {
-        List<String> lines = linesLocal.get();
+    private String readTitle(BufferedReader bufferedReader, String line, InpData inpData) throws IOException {
         List<String> titles = new ArrayList<>();
-        index++;
-        index = skipComment(index,lines);
-        while (index < lines.size() && !nextSection(lines.get(index)))
-        {
-            String line = lines.get(index);
-            if (line.equals(""))
-            {
-                index++;
+        while (line != null && !nextSection(line.trim())){
+            if(line.equals("")){
+                line = bufferedReader.readLine().trim();
                 continue;
             }
             titles.add(line);
-            index++;
+            line = bufferedReader.readLine().trim();
         }
-        inpLocal.get().setTitle(titles);
-        return index - 1;
+        inpData.setTitle(titles);
+        return line;
     }
 
-    /**读取[OPTIONS]*/
-    private int readOption(int index)
-    {
-        List<String> lines = linesLocal.get();
+    private String readOption(BufferedReader bufferedReader, String line, InpData inpData) throws IOException {
         InpData.Option option = new InpData.Option();
-        index++;
-        index = skipComment(index,lines);
-        while (index < lines.size() && !nextSection(lines.get(index)))
-        {
-            String line = lines.get(index);
+        while (line != null && !nextSection(line.trim())){
             String[] tempStr=line.split("[ ]+");
-            if (line.equals(""))
-            {
-                index++;
+            if(line.equals("")){
+                line = bufferedReader.readLine().trim();
                 continue;
             }
-            switch(line) {
+            switch (line){
                 case "FLOW_UNITS":
                     option.setFlow_units(tempStr[1]);break;
                 case "INFILTRATION":
@@ -304,26 +333,17 @@ public class InpDataDao implements IInpDataDao {
                     option.setLat_flow_tol(Float.parseFloat(tempStr[1]));break;
                 default: break;
             }
-            index++;
+            line = bufferedReader.readLine().trim();
         }
-        inpLocal.get().setOption(option);
-        return index - 1;
+        inpData.setOption(option);
+        return line;
     }
 
-    /**读取[EVAPORATION]*/
-    private int readEvaporation(int index)
-    {
-
+    private String readEvaporation(BufferedReader bufferedReader, String line, InpData inpData) throws IOException {
         InpData.Evaporation evaporation=new InpData.Evaporation();
-        List<String> lines = linesLocal.get();
-        index++;
-        index = skipComment(index,lines);
-        while (index < lines.size() && !nextSection(lines.get(index)))
-        {
-            String line = lines.get(index);
-            if (line.equals(""))
-            {
-                index++;
+        while (line != null && !nextSection(line.trim())){
+            if(line.equals("")){
+                line = bufferedReader.readLine().trim();
                 continue;
             }
             String[] tempStr=line.split("[ ]+");
@@ -356,53 +376,29 @@ public class InpDataDao implements IInpDataDao {
                     break;
                 default:break;
             }
-            index++;
+            line = bufferedReader.readLine().trim();
         }
-        inpLocal.get().setEvaporation(evaporation);
-        return index - 1;
+        inpData.setEvaporation(evaporation);
+        return line;
     }
 
-    /**读取Description*/
-    private int readDescription(int index, InpData.AbstractInpPart part)
-    {
-        List<String> lines = linesLocal.get();
-        ArrayList<String> descriptions = new ArrayList<>();
-        while (lines.get(index).startsWith(";"))
-        {
-            descriptions.add(lines.get(index).substring(1));
-            index++;
+    private String skipComment(BufferedReader bufferedReader) throws IOException {
+        String line = bufferedReader.readLine().trim();
+        while (line.startsWith(";;")){
+            line = bufferedReader.readLine().trim();
         }
-        part.setDescription(descriptions);
-        return index;
+        return line;
     }
 
-    /**忽略注释*/
-    private int skipComment(int index,List<String> lines)
-    {
-        while (lines.get(index).startsWith(";;"))
-        {
-            index++;
-        }
-        return index;
-    }
-
-    /**读取[RAINGAGES]*/
-    private int readRaingage(int index)
-    {
-        List<String> lines = linesLocal.get();
+    private String readRaingage(BufferedReader bufferedReader, String line, InpData inpData) throws IOException {
         List<InpData.Raingage> raingages = new ArrayList<>();
-        index++;
-        index = skipComment(index,lines);
-        while (index < lines.size() && !nextSection(lines.get(index)))
-        {
+        while (line != null && !nextSection(line.trim())){
             InpData.Raingage raingage = new InpData.Raingage();
-            if (lines.get(index).equals(""))
-            {
-                index++;
+            if(line.equals("")){
+                line = bufferedReader.readLine().trim();
                 continue;
             }
-            index = readDescription(index,raingage);
-            String line = lines.get(index);
+            line = readDescription(bufferedReader,line,raingage);
             String[] tempStr=line.split("[ ]+");
             raingage.setName(tempStr[0]);
             raingage.setFormat(tempStr[1]);
@@ -420,29 +416,31 @@ public class InpDataDao implements IInpDataDao {
                 raingage.setRainunits(tempStr[7]);
             }
             raingages.add(raingage);
-            index++;
+            line = bufferedReader.readLine().trim();
         }
-        inpLocal.get().setRaingages(raingages);
-        return index - 1;
+        inpData.setRaingages(raingages);
+        return line;
     }
 
-    /**读取[SUBCATCHMENTS]*/
-    private int readSubcatchment(int index)
-    {
-        List<String> lines = linesLocal.get();
+    private String readDescription(BufferedReader bufferedReader,String line,InpData.AbstractInpPart part) throws IOException {
+        ArrayList<String> descriptions = new ArrayList<>();
+        while (line.startsWith(";")){
+            descriptions.add(line.substring(1));
+            line = bufferedReader.readLine().trim();
+        }
+        part.setDescription(descriptions);
+        return line;
+    }
+
+    private String readSubcatchment(BufferedReader bufferedReader, String line ,InpData inpData) throws IOException {
         List<InpData.Subcatchment> subcatchments = new ArrayList<>();
-        index++;
-        index = skipComment(index,lines);
-        while (index < lines.size() && !nextSection(lines.get(index)))
-        {
+        while (line != null && !nextSection(line.trim())){
             InpData.Subcatchment subcatchment = new InpData.Subcatchment();
-            if (lines.get(index).equals(""))
-            {
-                index++;
+            if(line.equals("")){
+                line = bufferedReader.readLine().trim();
                 continue;
             }
-            index = readDescription(index,subcatchment);
-            String line = lines.get(index);
+            line = readDescription(bufferedReader,line,subcatchment);
             String[] tempStr=line.split("[ ]+");
             subcatchment.setName(tempStr[0]);
             subcatchment.setRaingage(tempStr[1]);
@@ -462,28 +460,20 @@ public class InpDataDao implements IInpDataDao {
                 subcatchment.setSnowpack("");
             }
             subcatchments.add(subcatchment);
-            index++;
+            line = bufferedReader.readLine().trim();
         }
-        inpLocal.get().setSubcatchments(subcatchments);
-        return index - 1;
+        inpData.setSubcatchments(subcatchments);
+        return line;
     }
 
-    /**读取[SUBAREAS]*/
-    private int readSubarea(int index)
-    {
-        List<String> lines = linesLocal.get();
+    private String readSubarea(BufferedReader bufferedReader, String line, InpData inpData) throws IOException {
         List<InpData.Subarea> subareas = new ArrayList<>();
-        index++;
-        index = skipComment(index,lines);
-        while (index < lines.size() && !nextSection(lines.get(index)))
-        {
+        while (line != null && !nextSection(line.trim())){
             InpData.Subarea subarea = new InpData.Subarea();
-            if (lines.get(index).equals(""))
-            {
-                index++;
+            if(line.equals("")){
+                line = bufferedReader.readLine().trim();
                 continue;
             }
-            String line = lines.get(index);
             String[] tempStr=line.split("[ ]+");
             subarea.setName(tempStr[0]);
             subarea.setN_imperv(Float.parseFloat(tempStr[1]));
@@ -498,32 +488,23 @@ public class InpDataDao implements IInpDataDao {
             }
 
             subareas.add(subarea);
-            index++;
+            line = bufferedReader.readLine().trim();
         }
-        inpLocal.get().setSubareas(subareas);
-        return index - 1;
+        inpData.setSubareas(subareas);
+        return line;
     }
 
-    /**读取[INFILTRATION]*/
-    private int readInfiltration(int index)
-    {
-        List<String> lines = linesLocal.get();
-        ArrayList<InpData.Infiltration> infiltrations=new ArrayList<>();
-        index++;
-        index = skipComment(index,lines);
-        switch (inpLocal.get().getOption().getInfiltration())
-        {
+    private String readInfiltration(BufferedReader bufferedReader, String infiltration_c, String line, InpData inpData) throws IOException {
+        List<InpData.Infiltration> infiltrations = new ArrayList<>();
+        switch (infiltration_c){
             case "HORTON":
             case "MODIFIED_HORTON":
-                while (index < lines.size() && !nextSection(lines.get(index)))
-                {
+                while (line != null && !nextSection(line.trim())){
                     InpData.Infiltration infiltration = new InpData.Infiltration();
-                    if (lines.get(index).equals(""))
-                    {
-                        index++;
+                    if(line.equals("")){
+                        line = bufferedReader.readLine().trim();
                         continue;
                     }
-                    String line = lines.get(index);
                     String[] tempStr=line.split("[ ]+");
                     infiltration.setName(tempStr[0]);
                     infiltration.setMaxrate(Float.parseFloat(tempStr[1]));
@@ -532,71 +513,57 @@ public class InpDataDao implements IInpDataDao {
                     infiltration.setDrytime(Float.parseFloat(tempStr[4]));
                     infiltration.setMaxinfil(Float.parseFloat(tempStr[5]));
                     infiltrations.add(infiltration);
-                    index++;
+                    line = bufferedReader.readLine().trim();
                 }
                 break;
             case "GREEN_AMPT":
-                while (index < lines.size() && !nextSection(lines.get(index)))
-                {
+                while (line != null && !nextSection(line.trim())){
                     InpData.Infiltration infiltration = new InpData.Infiltration();
-                    if (lines.get(index).equals(""))
-                    {
-                        index++;
+                    if(line.equals("")){
+                        line = bufferedReader.readLine().trim();
                         continue;
                     }
-                    String line = lines.get(index);
                     String[] tempStr=line.split("[ ]+");
                     infiltration.setName(tempStr[0]);
                     infiltration.setSuction(Float.parseFloat(tempStr[1]));
                     infiltration.setConductivity(Float.parseFloat(tempStr[2]));
                     infiltration.setDrytime(Float.parseFloat(tempStr[3]));
                     infiltrations.add(infiltration);
-                    index++;
+                    line = bufferedReader.readLine().trim();
                 }
                 break;
             case "CURVE_NUMBER":
-                while (index < lines.size() && !nextSection(lines.get(index)))
-                {
+                while (line != null && !nextSection(line.trim())){
                     InpData.Infiltration infiltration = new InpData.Infiltration();
-                    if (lines.get(index).equals(""))
-                    {
-                        index++;
+                    if(line.equals("")){
+                        line = bufferedReader.readLine().trim();
                         continue;
                     }
-                    String line = lines.get(index);
                     String[] tempStr=line.split("[ ]+");
                     infiltration.setName(tempStr[0]);
                     infiltration.setCurveNumber(Float.parseFloat(tempStr[1]));
                     infiltration.setConductivity(Float.parseFloat(tempStr[2]));
                     infiltration.setDrytime(Float.parseFloat(tempStr[3]));
                     infiltrations.add(infiltration);
-                    index++;
+                    line = bufferedReader.readLine().trim();
                 }
+                break;
             default:
                 break;
         }
-        inpLocal.get().setInfiltration(infiltrations);
-        return index - 1;
+        inpData.setInfiltration(infiltrations);
+        return line;
     }
 
-    /**读取[JUNCTIONS]*/
-    private int readJunction(int index)
-    {
-        List<String> lines = linesLocal.get();
+    private String readJunction(BufferedReader bufferedReader, String line, InpData inpData) throws IOException {
         List<InpData.Junction> junctions = new ArrayList<>();
-        index++;
-        index = skipComment(index,lines);
-        while (index < lines.size() && !nextSection(lines.get(index)))
-        {
+        while (line != null && !nextSection(line.trim())){
             InpData.Junction junction=new InpData.Junction();
-
-            if (lines.get(index).equals(""))
-            {
-                index++;
+            if(line.equals("")){
+                line = bufferedReader.readLine().trim();
                 continue;
             }
-            index = readDescription(index,junction);
-            String line = lines.get(index);
+            line = readDescription(bufferedReader,line,junction);
             String[] tempStr=line.split("[ ]+");
             junction.setName(tempStr[0]);
             junction.setInvert(Float.parseFloat(tempStr[1]));
@@ -605,29 +572,21 @@ public class InpDataDao implements IInpDataDao {
             junction.setSurdepth(Float.parseFloat(tempStr[4]));
             junction.setAponded(Float.parseFloat(tempStr[5]));
             junctions.add(junction);
-            index++;
+            line = bufferedReader.readLine().trim();
         }
-        inpLocal.get().setJunctions(junctions);
-        return index - 1;
+        inpData.setJunctions(junctions);
+        return line;
     }
 
-    /**读取[OUTFALLS]*/
-    private int readOutfall(int index)
-    {
-        List<String> lines = linesLocal.get();
+    private String readOutfall(BufferedReader bufferedReader, String line, InpData inpData) throws IOException {
         List<InpData.Outfall> outfalls = new ArrayList<>();
-        index++;
-        index = skipComment(index,lines);
-        while (index < lines.size() && !nextSection(lines.get(index)))
-        {
+        while (line != null && !nextSection(line.trim())){
             InpData.Outfall outfall = new InpData.Outfall();
-            if (lines.get(index).equals(""))
-            {
-                index++;
+            if(line.equals("")){
+                line = bufferedReader.readLine().trim();
                 continue;
             }
-            index = readDescription(index,outfall);
-            String line = lines.get(index);
+            line = readDescription(bufferedReader,line,outfall);
             String[] tempStr=line.split("[ ]+");
             outfall.setName(tempStr[0]);
             outfall.setInvert(Float.parseFloat(tempStr[1]));
@@ -644,29 +603,21 @@ public class InpDataDao implements IInpDataDao {
                 outfall.setGated(tempStr[4]);
             }
             outfalls.add(outfall);
-            index++;
+            line = bufferedReader.readLine().trim();
         }
-        inpLocal.get().setOutfalls(outfalls);
-        return index - 1;
+        inpData.setOutfalls(outfalls);
+        return line;
     }
 
-    /**读取[STORAGE]*/
-    private int readStorage(int index)
-    {
-        List<String> lines = linesLocal.get();
+    private String readStorage(BufferedReader bufferedReader, String line ,InpData inpData) throws IOException {
         List<InpData.Storage> storages = new ArrayList<>();
-        index++;
-        index = skipComment(index,lines);
-        while (index < lines.size() && !nextSection(lines.get(index)))
-        {
+        while (line != null && !nextSection(line.trim())){
             InpData.Storage storage = new InpData.Storage();
-            if (lines.get(index).equals(""))
-            {
-                index++;
+            if(line.equals("")){
+                line = bufferedReader.readLine().trim();
                 continue;
             }
-            index = readDescription(index,storage);
-            String line = lines.get(index);
+            line = readDescription(bufferedReader,line,storage);
             String[] tempStr=line.split("[ ]+");
             storage.setName(tempStr[0]);
             storage.setInvert(Float.parseFloat(tempStr[1]));
@@ -703,29 +654,21 @@ public class InpDataDao implements IInpDataDao {
                 }
             }
             storages.add(storage);
-            index++;
+            line = bufferedReader.readLine().trim();
         }
-        inpLocal.get().setStorages(storages);
-        return index - 1;
+        inpData.setStorages(storages);
+        return line;
     }
 
-    /**读取[CONDUITS]*/
-    private int readConduit(int index)
-    {
-        List<String> lines = linesLocal.get();
+    private String readConduit(BufferedReader bufferedReader, String line, InpData inpData) throws IOException {
         List<InpData.Conduit> conduits = new ArrayList<>();
-        index++;
-        index = skipComment(index,lines);
-        while (index < lines.size() && !nextSection(lines.get(index)))
-        {
+        while (line != null && !nextSection(line.trim())){
             InpData.Conduit conduit = new InpData.Conduit();
-            if (lines.get(index).equals(""))
-            {
-                index++;
+            if(line.equals("")){
+                line = bufferedReader.readLine().trim();
                 continue;
             }
-            index = readDescription(index,conduit);
-            String line = lines.get(index);
+            line = readDescription(bufferedReader,line,conduit);
             String[] tempStr=line.split("[ ]+");
             conduit.setName(tempStr[0]);
             conduit.setFromnode(tempStr[1]);
@@ -737,29 +680,20 @@ public class InpDataDao implements IInpDataDao {
             conduit.setInitflow(Float.parseFloat(tempStr[7]));
             conduit.setMaxflow(Float.parseFloat(tempStr[8]));
             conduits.add(conduit);
-            index++;
+            line = bufferedReader.readLine().trim();
         }
-        inpLocal.get().setConduits(conduits);
-        return index - 1;
+        inpData.setConduits(conduits);
+        return line;
     }
 
-    /**读取[XSECTIONS]*/
-    private int readXscetion(int index)
-    {
-        List<String> lines = linesLocal.get();
+    private String readXscetion(BufferedReader bufferedReader, String line, InpData inpData) throws IOException {
         List<InpData.Xscetion> xscetions = new ArrayList<>();
-        index++;
-        index = skipComment(index,lines);
-        while (index < lines.size() && !nextSection(lines.get(index)))
-        {
+        while (line != null && !nextSection(line.trim())){
             InpData.Xscetion xscetion = new InpData.Xscetion();
-
-            if (lines.get(index).equals(""))
-            {
-                index++;
+            if(line.equals("")){
+                line = bufferedReader.readLine().trim();
                 continue;
             }
-            String line = lines.get(index);
             String[] tempStr=line.split("[ ]+");
             xscetion.setName(tempStr[0]);
             xscetion.setShape(tempStr[1]);
@@ -776,28 +710,20 @@ public class InpDataDao implements IInpDataDao {
                 xscetion.setCulvertcode(tempStr[7]);
             }
             xscetions.add(xscetion);
-            index++;
+            line = bufferedReader.readLine().trim();
         }
-        inpLocal.get().setXscetions(xscetions);
-        return index - 1;
+        inpData.setXscetions(xscetions);
+        return line;
     }
 
-    /**读取[LOSSES]*/
-    private int readLosses(int index)
-    {
-        List<String> lines = linesLocal.get();
+    private String readLosses(BufferedReader bufferedReader, String line, InpData inpData) throws IOException {
         List<InpData.Losses> losses = new ArrayList<>();
-        index++;
-        index = skipComment(index,lines);
-        while (index < lines.size() && !nextSection(lines.get(index)))
-        {
+        while (line != null && !nextSection(line.trim())){
             InpData.Losses loss = new InpData.Losses();
-            if (lines.get(index).equals(""))
-            {
-                index++;
+            if(line.equals("")){
+                line = bufferedReader.readLine().trim();
                 continue;
             }
-            String line = lines.get(index);
             String[] tempStr=line.split("[ ]+");
             loss.setName(tempStr[0]);
             loss.setEntry_loss_coeff(Float.parseFloat(tempStr[1]));
@@ -806,33 +732,24 @@ public class InpDataDao implements IInpDataDao {
             loss.setFlap_gate(tempStr[4]);
             loss.setSeepage_loss_rate(Float.parseFloat(tempStr[5]));
             losses.add(loss);
-            index++;
+            line = bufferedReader.readLine().trim();
         }
-        inpLocal.get().setLosses(losses);
-        return index - 1;
+        inpData.setLosses(losses);
+        return line;
     }
 
-    /**读取[CURVES]*/
-    private int readCurve(int index)
-    {
-        int row = 0;
-        List<String> lines = linesLocal.get();
+    private String readCurve(BufferedReader bufferedReader, String line, InpData inpData) throws IOException {
         List<InpData.Curve> curves = new ArrayList<>();
-        index++;
-        index = skipComment(index,lines);
-        while (index < lines.size() && !nextSection(lines.get(index)))
-        {
+        int row = 0;
+        while (line != null && !nextSection(line.trim())){
             InpData.Curve curve = new InpData.Curve();
-            if (lines.get(index).equals(""))
-            {
-                index++;
+            if(line.equals("")){
+                line = bufferedReader.readLine().trim();
                 continue;
             }
-            index = readDescription(index,curve);
+            line = readDescription(bufferedReader,line,curve);
             List<InpData.CurveXY> coordinates = new ArrayList<>();
-            while (!lines.get(index).startsWith(";") && !lines.get(index).equals(""))
-            {
-                String line = lines.get(index);
+            while (!line.startsWith(";") && !line.equals("")){
                 String[] tempStr=line.split("[ ]+");
                 if (row == 0)
                 {
@@ -851,36 +768,30 @@ public class InpDataDao implements IInpDataDao {
                     curveXY.setY_value(Float.parseFloat(tempStr[2]));
                     coordinates.add(curveXY);
                 }
-                index++;
+                line = bufferedReader.readLine().trim();
             }
             curve.setCoordinates(coordinates);
             curves.add(curve);
-            index++;
             row = 0;
+            line = bufferedReader.readLine().trim();
         }
-        inpLocal.get().setCurves(curves);
-        return index - 1;
+        inpData.setCurves(curves);
+        return line;
     }
 
-    /**读取[TIMESERIES]*/
-    private int readTimeseries(int index) {
+    private String readTimeseries(BufferedReader bufferedReader, String line, InpData inpData) throws IOException {
         int row = 0;
-        List<String> lines = linesLocal.get();
         List<InpData.Timeseries> timeseries = new ArrayList<>();
-        index++;
-        index = skipComment(index,lines);
-        while (index < lines.size() && !nextSection(lines.get(index))) {
+        while (line != null && !nextSection(line.trim())){
             InpData.Timeseries series = new InpData.Timeseries();
-            if (lines.get(index).equals(""))
-            {
-                index++;
+            if(line.equals("")){
+                line = bufferedReader.readLine().trim();
                 continue;
             }
-            index = readDescription(index,series);
+            line = readDescription(bufferedReader,line,series);
             ArrayList<InpData.DateTimeValue> dateTimeValues = new ArrayList<>();
-            while (!lines.get(index).startsWith(";") && !lines.get(index).equals("")){
+            while (!line.startsWith(";") && !line.equals("")){
                 InpData.DateTimeValue dateTimeValue = new InpData.DateTimeValue();
-                String line = lines.get(index);
                 String[] tempStr = line.split("[ ]+");
                 if (row == 0) {
                     series.setName(tempStr[0]);
@@ -896,32 +807,24 @@ public class InpDataDao implements IInpDataDao {
                 }
                 dateTimeValues.add(dateTimeValue);
                 row++;
-                index++;
+                line = bufferedReader.readLine().trim();
             }
             series.setDateTimeValues(dateTimeValues);
             timeseries.add(series);
             row = 0;
-            index++;
+            line = bufferedReader.readLine().trim();
         }
-        inpLocal.get().setTimeseries(timeseries);
-        return index - 1;
+        inpData.setTimeseries(timeseries);
+        return line;
     }
 
-    /**读取[REPORT]*/
-    private int readReport(int index)
-    {
-        List<String> lines = linesLocal.get();
+    private String readReport(BufferedReader bufferedReader, String line, InpData inpData) throws IOException {
         InpData.Report report = new InpData.Report();
-        index++;
-        index = skipComment(index,lines);
-        while (index < lines.size() && !nextSection(lines.get(index)))
-        {
-            if (lines.get(index).equals(""))
-            {
-                index++;
+        while (line != null && !nextSection(line.trim())){
+            if(line.equals("")){
+                line = bufferedReader.readLine().trim();
                 continue;
             }
-            String line = lines.get(index);
             String[] tempStr=line.split("[ ]+");
             switch (tempStr[0])
             {
@@ -938,56 +841,39 @@ public class InpDataDao implements IInpDataDao {
                 case "LINKS":
                     break;
                 default:break;
-
             }
-            index++;
+            line = bufferedReader.readLine().trim();
         }
-        inpLocal.get().setReport(report);
-        return index - 1;
+        inpData.setReport(report);
+        return line;
     }
 
-    /**读取[TAGS]*/
-    private int readTag(int index)
-    {
-        List<String> lines = linesLocal.get();
+    private String readTag(BufferedReader bufferedReader, String line, InpData inpData) throws IOException {
         List<InpData.Tag> tags = new ArrayList<>();
-        index++;
-        index = skipComment(index,lines);
-        while (index < lines.size() && !nextSection(lines.get(index)))
-        {
+        while (line != null && !nextSection(line.trim())){
             InpData.Tag tag = new InpData.Tag();
-            if (lines.get(index).equals(""))
-            {
-                index++;
+            if(line.equals("")){
+                line = bufferedReader.readLine().trim();
                 continue;
             }
-            String line = lines.get(index);
             String[] tempStr=line.split("[ ]+");
             tag.setCategory(tempStr[0]);
             tag.setTagId(tempStr[1]);
             tag.setContent(tempStr[2]);
             tags.add(tag);
-            index++;
+            line = bufferedReader.readLine().trim();
         }
-        inpLocal.get().setTag(tags);
-        return index - 1;
+        inpData.setTag(tags);
+        return line;
     }
 
-    /**读取[MAP]*/
-    private int readMap(int index)
-    {
+    private String readMap(BufferedReader bufferedReader, String line, InpData inpData) throws IOException {
         InpData.Map map = new InpData.Map();
-        List<String> lines = linesLocal.get();
-        index++;
-        index = skipComment(index,lines);
-        while (index < lines.size() && !nextSection(lines.get(index)))
-        {
-            if (lines.get(index).equals(""))
-            {
-                index++;
+        while (line != null && !nextSection(line.trim())){
+            if(line.equals("")){
+                line = bufferedReader.readLine().trim();
                 continue;
             }
-            String line = lines.get(index);
             String[] tempStr=line.split("[ ]+");
             if (tempStr[0].equals("DIMENSIONS"))
             {
@@ -1002,121 +888,90 @@ public class InpDataDao implements IInpDataDao {
             {
                 map.setUnits(tempStr[1]);
             }
-            index++;
+            line = bufferedReader.readLine().trim();
         }
-        inpLocal.get().setMap(map);
-        return index - 1;
+        inpData.setMap(map);
+        return line;
     }
 
-    /**读取[COORDINATES]*/
-    private int readCoordinate(int index)
-    {
-        List<String> lines = linesLocal.get();
+    private String readCoordinate(BufferedReader bufferedReader, String line, InpData inpData) throws IOException {
         List<InpData.Coordinate> coordinates = new ArrayList<>();
-        index++;
-        index = skipComment(index,lines);
-        while (index < lines.size() && !nextSection(lines.get(index)))
-        {
+        while (line != null && !nextSection(line.trim())){
             InpData.Coordinate coordinate = new InpData.Coordinate();
-            if (lines.get(index).equals(""))
-            {
-                index++;
+            if(line.equals("")){
+                line = bufferedReader.readLine().trim();
                 continue;
             }
-            String line = lines.get(index);
             String[] tempStr=line.split("[ ]+");
             coordinate.setNode(tempStr[0]);
             coordinate.setX_coord(Double.parseDouble(tempStr[1]));
             coordinate.setY_coord(Double.parseDouble(tempStr[2]));
             coordinates.add(coordinate);
-            index++;
+            line = bufferedReader.readLine().trim();
         }
-        inpLocal.get().setCoordinates(coordinates);
-        return index - 1;
+        inpData.setCoordinates(coordinates);
+        return line;
     }
 
-    /**读取[VERTICES]*/
-    private int readVertice(int index)
-    {
-        List<String> lines = linesLocal.get();
+    private String readVertice(BufferedReader bufferedReader, String line, InpData inpData) throws IOException {
         List<InpData.Vertice> vertices = new ArrayList<>();
-        index++;
-        index = skipComment(index,lines);
-        while (index < lines.size() && !nextSection(lines.get(index)))
-        {
+        while (line != null && !nextSection(line.trim())){
             InpData.Vertice vertice = new InpData.Vertice();
-            if (lines.get(index).equals(""))
-            {
-                index++;
+            if(line.equals("")){
+                line = bufferedReader.readLine().trim();
                 continue;
             }
-            String line = lines.get(index);
             String[] tempStr=line.split("[ ]+");
             vertice.setLink(tempStr[0]);
             vertice.setX_coord(Double.parseDouble(tempStr[1]));
             vertice.setY_coord(Double.parseDouble(tempStr[2]));
             vertices.add(vertice);
-            index++;
+            line = bufferedReader.readLine().trim();
         }
-        inpLocal.get().setVertices(vertices);
-        return index - 1;
+        inpData.setVertices(vertices);
+        return line;
     }
 
-    /**读取[Polygons]*/
-    private int readPolygons(int index)
-    {
-        List<String> lines = linesLocal.get();
+    private String readPolygons(BufferedReader bufferedReader, String line, InpData inpData) throws IOException {
         List<InpData.Polygon> polygons = new ArrayList<>();
-        index++;
-        index = skipComment(index,lines);
-        while (index < lines.size() && !nextSection(lines.get(index)))
-        {
+        while (line != null && !nextSection(line.trim())){
             InpData.Polygon polygon = new InpData.Polygon();
-            if (lines.get(index).equals(""))
-            {
-                index++;
+            if(line.equals("")){
+                line = bufferedReader.readLine().trim();
                 continue;
             }
-            String line = lines.get(index);
             String[] tempStr=line.split("[ ]+");
             polygon.setPolygon(tempStr[0]);
             polygon.setX_coord(Float.parseFloat(tempStr[1]));
             polygon.setY_coord(Float.parseFloat(tempStr[2]));
             polygons.add(polygon);
-            index++;
+            line = bufferedReader.readLine().trim();
         }
-        inpLocal.get().setPolygons(polygons);
-        return index - 1;
+        inpData.setPolygons(polygons);
+        return line;
     }
 
-
-    /**读取[SYMBOLS]*/
-    private int readSymbol(int index)
-    {
-        List<String> lines = linesLocal.get();
+    private String readSymbol(BufferedReader bufferedReader, String line, InpData inpData) throws IOException {
         List<InpData.Symbol> symbols = new ArrayList<>();
-        index++;
-        index = skipComment(index,lines);
-        while (index < lines.size() && !nextSection(lines.get(index)))
-        {
+        while (line != null && !nextSection(line.trim())){
             InpData.Symbol symbol = new InpData.Symbol();
-            if (lines.get(index).equals(""))
-            {
-                index++;
+            if(line.equals("")){
+                line = bufferedReader.readLine();
+                if (line != null){
+                    line = line.trim();
+                }
                 continue;
             }
-            String line = lines.get(index);
             String[] tempStr=line.split("[ ]+");
             symbol.setGage(tempStr[0]);
             symbol.setX_coord(Float.parseFloat(tempStr[1]));
             symbol.setY_coord(Float.parseFloat(tempStr[2]));
             symbols.add(symbol);
-            index++;
+            line = bufferedReader.readLine().trim();
         }
-        inpLocal.get().setSymbols(symbols);
-        return index - 1;
+        inpData.setSymbols(symbols);
+        return line;
     }
-
 
     /**判断游标是否到了下一节*/
     private boolean nextSection(String line)

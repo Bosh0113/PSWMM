@@ -312,7 +312,7 @@ export default {
       projResultData:[],
       showNodesModal:false,
       inpFile:"LishuiEx",
-      rptFile:"LishuiEx0",
+      rptFile:"LishuiEx1",
       inpfileUploaded:false,
       rptfileUploaded:false,
       mixFloodedHr:0.5,
@@ -786,6 +786,12 @@ export default {
     onOpen() {
       console.log("Socket连接成功！");
       this.sendMessage("connect",{});
+      var that = this;
+      window.setInterval(()=>{
+          if(that.fnSocket!=null){
+              that.sendMessage("ping", {});
+          }
+      },20000);
     },
     onMessage(e) {
         var messageObject = JSON.parse(e.data);

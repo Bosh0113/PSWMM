@@ -613,8 +613,14 @@ export default {
         this.soSocket.onerror = this.onError;
     },
     onOpen() {
-      console.log("Socket连接成功！");
-      this.sendMessage("connect",{});
+        console.log("Socket连接成功！");
+        this.sendMessage("connect",{});
+        var that = this;
+        window.setInterval(()=>{
+            if(that.soSocket!=null){
+                that.sendMessage("ping", {});
+            }
+        },20000);
     },
     onMessage(e) {
         var messageObject = JSON.parse(e.data);

@@ -42,7 +42,6 @@ public class InpDataService implements IInpDataService {
         String id;
         try {
             String fileName = inpDataDao.saveInpFile(email, instanceId, mFile);
-            InpData inpData = inpDataDao.readInpFile(fileName);
             inpDataDao.setMetaData(email,instanceId,authority,projection);
             id = inpDataDao.insertInpData(inpDataDao.getInpData());
         } catch (IOException e) {

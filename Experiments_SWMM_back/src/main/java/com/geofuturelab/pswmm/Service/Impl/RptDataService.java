@@ -51,7 +51,11 @@ public class RptDataService implements IRptDataService {
         try {
             String servicePath =request.getSession().getServletContext().getRealPath("/")+"data/";
             inpData = inpDataDao.readInpFile(servicePath + inpName + ".inp");
-            rptData = rptDataDao.readRptFile(servicePath + rptName + ".rpt");
+            //需要获取NodeFloodingSummarie、NodeResultsMap
+            List<String> properties = new ArrayList<>();
+            properties.add("Node Flooding Summary");
+            properties.add("Node Results");
+            rptData = rptDataDao.readRptFileByProperties(servicePath + rptName + ".rpt",properties);
             Map<String, RptData.NodeFloodingSummary> nodeFloodingSummaryMap = new HashMap<>();
             for(RptData.NodeFloodingSummary nodeFlooding:rptData.getNodeFloodingSummaries()){
                 if(Float.parseFloat(nodeFlooding.getHoursFlooded())>mixFloodedHr
@@ -62,7 +66,6 @@ public class RptDataService implements IRptDataService {
             for (int j = 0; j < inpData.getCoordinates().size(); j++) {
                 InpData.Coordinate coord = inpData.getCoordinates().get(j);
                 String objName = coord.getNode();
-
                 List<RptData.NodeResult> nodeResults = rptData.getNodeResultsMap().get(objName);
                 RptData.NodeFloodingSummary nodeFloodingResult = nodeFloodingSummaryMap.get(objName);
                 if (null != nodeResults&&null!=nodeFloodingResult)
@@ -117,7 +120,12 @@ public class RptDataService implements IRptDataService {
             }
             result.put("raingages",objRains);
             List<JSONObject> objTimeVariable = new ArrayList<>();
-            RptData rptData = rptDataDao.readRptFile(servicePath + rptName + ".rpt");
+            //需要获取NodeResultsMap、LinkedResultMap、Subcatchment
+            List<String> properties = new ArrayList<>();
+            properties.add("Node Results");
+            properties.add("Link Results");
+            properties.add("Subcatchment Results");
+            RptData rptData = rptDataDao.readRptFileByProperties(servicePath + rptName + ".rpt", properties);
             switch (objType){
                 case "Node":{
                     List<RptData.NodeResult> nodeResults = rptData.getNodeResultsMap().get(objName);
@@ -208,6 +216,19 @@ public class RptDataService implements IRptDataService {
             }
             result.put("timeVariable", objTimeVariable);
         }catch (IOException e) {
+            throw  RequestException.fail(ResponseCode.FAIL);
+        }
+        return result;
+    }
+
+    @Override
+    public JSONObject parseRptDataByProperties(String name, List<String> properties, HttpServletRequest request){
+        String servicePath = request.getSession().getServletContext().getRealPath("/") + "data/";
+        JSONObject result = null;
+        try {
+            RptData rptData = rptDataDao.readRptFileByProperties(servicePath + name + ".rpt",properties);
+            result = rptDataDao.rpt2Json(rptData);
+        } catch (IOException e) {
             throw  RequestException.fail(ResponseCode.FAIL);
         }
         return result;

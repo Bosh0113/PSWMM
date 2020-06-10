@@ -5,8 +5,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.geofuturelab.pswmm.Dao.IRptDataDao;
 import com.geofuturelab.pswmm.Entity.RptData;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -20,64 +21,248 @@ public class RptDataDao implements IRptDataDao {
     private static ThreadLocal<RptData> rptLocal = new ThreadLocal<>();
     private static ThreadLocal<List<String>> linesLocal = new ThreadLocal<>();
     @Override
-    public RptData readRptFile(String fileName) throws IOException {
-        rptLocal.set(new RptData());
-//        System.out.println(Paths.get(fileName));
-        linesLocal.set(Files.readAllLines(Paths.get(fileName),Charset.forName("UTF-8")));
-        List<String> lines = linesLocal.get();
-        for (int cursor = 0; cursor < lines.size(); cursor++) {
-            String line =  (lines.get(cursor)).trim();
-            switch (line) {
+    public RptData readRptFile(String fileName) throws IOException{
+        //读取数据并进行处理，先尝试传统方式
+        RptData rptData = new RptData();
+        BufferedReader bufferedReader = null;
+        bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(new File(fileName))));
+        String line;
+        while ((line = bufferedReader.readLine()) != null){
+            switch (line.trim()) {
                 case "":
                     break;
                 case "Subcatchment Runoff Summary":
-                    cursor = readSubcatchmentRunoffSummary(cursor);break;
+                    //去掉一行
+                    bufferedReader.readLine();
+                    skipTitle(bufferedReader);
+                    List<RptData.SubcatchmentRunoffSummary> subcatchmentRunoffSummaries = readSubcatchmentRunoffSummary(bufferedReader);
+                    rptData.setSubcatchmentRunoffSummaries(subcatchmentRunoffSummaries);
+                    break;
                 case "Node Depth Summary":
-                    cursor = readNodeDepthSummary(cursor);break;
+                    bufferedReader.readLine();
+                    skipTitle(bufferedReader);
+                    List<RptData.NodeDepthSummary> nodeDepthSummaries = readNodeDepthSummary(bufferedReader);
+                    rptData.setNodeDepthSummaries(nodeDepthSummaries);
+                    break;
                 case "Node Inflow Summary":
-                    cursor = readNodeInflowSummary(cursor);break;
+                    bufferedReader.readLine();
+                    skipTitle(bufferedReader);
+                    List<RptData.NodeInflowSummary> nodeInflowSummaries = readNodeInflowSummary(bufferedReader);
+                    rptData.setNodeInflowSummaries(nodeInflowSummaries);
+                    break;
                 case "Node Flooding Summary":
-                    cursor = readNodeFloodingSummary(cursor);break;
+                    bufferedReader.readLine();
+                    skipTitle(bufferedReader);
+                    List<RptData.NodeFloodingSummary> nodeFloodingSummaries = readNodeFloodingSummary(bufferedReader);
+                    rptData.setNodeFloodingSummaries(nodeFloodingSummaries);
+                    break;
                 case "Node Surcharge Summary":
-                    cursor = readNodeSurchargeSummary(cursor);break;
+                    bufferedReader.readLine();
+                    skipTitle(bufferedReader);
+                    List<RptData.NodeSurchargeSummary> nodeSurchargeSummaries = readNodeSurchargeSummary(bufferedReader);
+                    rptData.setNodeSurchargeSummaries(nodeSurchargeSummaries);
+                    break;
                 case "Storage Volume Summary":
-                    cursor = readStorageVolumeSummary(cursor);break;
+                    bufferedReader.readLine();
+                    skipTitle(bufferedReader);
+                    List<RptData.StorageVolumeSummary> storageVolumeSummaries = readStorageVolumeSummary(bufferedReader);
+                    rptData.setStorageVolumeSummaries(storageVolumeSummaries);
+                    break;
                 case "Outfall Loading Summary":
-                    cursor = readOutfallLoadingSummary(cursor);break;
+                    bufferedReader.readLine();
+                    skipTitle(bufferedReader);
+                    List<RptData.OutfallLoadingSummary> outfallLoadingSummaries = readOutfallLoadingSummary(bufferedReader);
+                    rptData.setOutfallLoadingSummaries(outfallLoadingSummaries);
+                    break;
                 case "Link Flow Summary":
-                    cursor = readLinkFlowSummary(cursor);break;
+                    bufferedReader.readLine();
+                    skipTitle(bufferedReader);
+                    List<RptData.LinkFlowSummary> linkFlowSummaries = readLinkFlowSummary(bufferedReader);
+                    rptData.setLinkFlowSummaries(linkFlowSummaries);
+                    break;
                 case "Conduit Surcharge Summary":
-                    cursor = readConduitSurchargeSummary(cursor);break;
+                    bufferedReader.readLine();
+                    skipTitle(bufferedReader);
+                    List<RptData.ConduitSurchargeSummary> conduitSurchargeSummaries = readConduitSurchargeSummary(bufferedReader);
+                    rptData.setConduitSurchargeSummaries(conduitSurchargeSummaries);
+                    break;
                 case "Subcatchment Results":
-                    cursor = readSubcatchmentResults(cursor);break;
+                    bufferedReader.readLine();
+                    String line2 = skipTitle(bufferedReader);
+                    Map<String, List<RptData.SubcatchmentResult>> subcatchmentResults = readSubcatchmentResults(bufferedReader,line2);
+                    rptData.setSubcatchmentResultsMap(subcatchmentResults);
+                    break;
                 case "Node Results":
-                    cursor = readNodeResults(cursor);break;
+                    bufferedReader.readLine();
+                    String line3 = skipTitle(bufferedReader);
+                    Map<String, List<RptData.NodeResult>> nodeResults = readNodeResults(bufferedReader, line3);
+                    rptData.setNodeResultsMap(nodeResults);
+                    break;
                 case "Link Results":
-                    cursor = readLinkResults(cursor);break;
+                    bufferedReader.readLine();
+                    String line4 = skipTitle(bufferedReader);
+                    Map<String, List<RptData.LinkResult>> linkResults = readLinkResults(bufferedReader, line4);
+                    rptData.setLinkResultsMap(linkResults);
+                    break;
                 default:
                     break;
             }
         }
-        return rptLocal.get();
+        return rptData;
     }
 
+    @Override
+    public RptData readRptFileByProperties(String fileName, List<String> properties)throws IOException {
+        //读取数据并进行处理，先尝试传统方式
+        RptData rptData = new RptData();
+        BufferedReader bufferedReader = null;
+        bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(new File(fileName))));
+        String line;
+        while ((line = bufferedReader.readLine()) != null){
+            switch (line.trim()) {
+                case "":
+                    break;
+                case "Subcatchment Runoff Summary":
+                    if(properties.contains("Subcatchment Runoff Summary")){
+                        //去掉一行
+                        bufferedReader.readLine();
+                        skipTitle(bufferedReader);
+                        List<RptData.SubcatchmentRunoffSummary> subcatchmentRunoffSummaries = readSubcatchmentRunoffSummary(bufferedReader);
+                        rptData.setSubcatchmentRunoffSummaries(subcatchmentRunoffSummaries);
+                    }
+                    break;
+                case "Node Depth Summary":
+                    if(properties.contains("Node Depth Summary")){
+                        bufferedReader.readLine();
+                        skipTitle(bufferedReader);
+                        List<RptData.NodeDepthSummary> nodeDepthSummaries = readNodeDepthSummary(bufferedReader);
+                        rptData.setNodeDepthSummaries(nodeDepthSummaries);
+                    }
+                    break;
+                case "Node Inflow Summary":
+                    if(properties.contains("Node Inflow Summary")){
+                        bufferedReader.readLine();
+                        skipTitle(bufferedReader);
+                        List<RptData.NodeInflowSummary> nodeInflowSummaries = readNodeInflowSummary(bufferedReader);
+                        rptData.setNodeInflowSummaries(nodeInflowSummaries);
+                    }
+                    break;
+                case "Node Flooding Summary":
+                    if(properties.contains("Node Flooding Summary")){
+                        bufferedReader.readLine();
+                        skipTitle(bufferedReader);
+                        List<RptData.NodeFloodingSummary> nodeFloodingSummaries = readNodeFloodingSummary(bufferedReader);
+                        rptData.setNodeFloodingSummaries(nodeFloodingSummaries);
+                    }
+                    break;
+                case "Node Surcharge Summary":
+                    if(properties.contains("Node Surcharge Summary")){
+                        bufferedReader.readLine();
+                        skipTitle(bufferedReader);
+                        List<RptData.NodeSurchargeSummary> nodeSurchargeSummaries = readNodeSurchargeSummary(bufferedReader);
+                        rptData.setNodeSurchargeSummaries(nodeSurchargeSummaries);
+                    }
+                    break;
+                case "Storage Volume Summary":
+                    if(properties.contains("Storage Volume Summary")){
+                        bufferedReader.readLine();
+                        skipTitle(bufferedReader);
+                        List<RptData.StorageVolumeSummary> storageVolumeSummaries = readStorageVolumeSummary(bufferedReader);
+                        rptData.setStorageVolumeSummaries(storageVolumeSummaries);
+                    }
+                    break;
+                case "Outfall Loading Summary":
+                    if(properties.contains("Outfall Loading Summary")){
+                        bufferedReader.readLine();
+                        skipTitle(bufferedReader);
+                        List<RptData.OutfallLoadingSummary> outfallLoadingSummaries = readOutfallLoadingSummary(bufferedReader);
+                        rptData.setOutfallLoadingSummaries(outfallLoadingSummaries);
+                    }
+                    break;
+                case "Link Flow Summary":
+                    if(properties.contains("Link Flow Summary")){
+                        bufferedReader.readLine();
+                        skipTitle(bufferedReader);
+                        List<RptData.LinkFlowSummary> linkFlowSummaries = readLinkFlowSummary(bufferedReader);
+                        rptData.setLinkFlowSummaries(linkFlowSummaries);
+                    }
+                    break;
+                case "Conduit Surcharge Summary":
+                    if(properties.contains("Conduit Surcharge Summary")){
+                        bufferedReader.readLine();
+                        skipTitle(bufferedReader);
+                        List<RptData.ConduitSurchargeSummary> conduitSurchargeSummaries = readConduitSurchargeSummary(bufferedReader);
+                        rptData.setConduitSurchargeSummaries(conduitSurchargeSummaries);
+                    }
+                    break;
+                case "Subcatchment Results":
+                    if(properties.contains("Subcatchment Results")){
+                        bufferedReader.readLine();
+                        String line2 = skipTitle(bufferedReader);
+                        Map<String, List<RptData.SubcatchmentResult>> subcatchmentResults = readSubcatchmentResults(bufferedReader,line2);
+                        rptData.setSubcatchmentResultsMap(subcatchmentResults);
+                    }
+                    break;
+                case "Node Results":
+                    if(properties.contains("Node Results")){
+                        bufferedReader.readLine();
+                        String line3 = skipTitle(bufferedReader);
+                        Map<String, List<RptData.NodeResult>> nodeResults = readNodeResults(bufferedReader, line3);
+                        rptData.setNodeResultsMap(nodeResults);
+                    }
+                    break;
+                case "Link Results":
+                    if(properties.contains("Link Results")){
+                        bufferedReader.readLine();
+                        String line4 = skipTitle(bufferedReader);
+                        Map<String, List<RptData.LinkResult>> linkResults = readLinkResults(bufferedReader, line4);
+                        rptData.setLinkResultsMap(linkResults);
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+        return rptData;
+    }
+
+    private String skipTitle(BufferedReader bufferedReader) throws IOException {
+        String line = bufferedReader.readLine().trim();
+        while (line.equals("") || line.startsWith("*")){
+            line = bufferedReader.readLine().trim();
+            if(line.startsWith("-") && line.endsWith("-")){
+                line = bufferedReader.readLine().trim();
+                while (!(line.startsWith("-") && line.endsWith("-"))){
+                    line = bufferedReader.readLine().trim();
+                }
+            }
+        }
+        return line;
+    }
+
+    private void skipTitle2(BufferedReader bufferedReader)throws IOException {
+        String line = bufferedReader.readLine().trim();
+        if (line.startsWith("-")){
+            line = bufferedReader.readLine().trim();
+            while (!line.startsWith("-")){
+                line = bufferedReader.readLine().trim();
+            }
+        }
+    }
+
+    @Override
     public JSONObject rpt2Json(RptData rptData)
     {
         JSONObject jsonObject = (JSONObject) JSON.toJSON(rptData);
         return jsonObject;
     }
 
-    private int readSubcatchmentRunoffSummary(int index){
-        List<String> lines = linesLocal.get();
+    private List<RptData.SubcatchmentRunoffSummary> readSubcatchmentRunoffSummary(BufferedReader bufferedReader) throws IOException {
         List<RptData.SubcatchmentRunoffSummary>  subcatchmentRunoffSummaries = new ArrayList<>();
-        index++;
-        index = skipTitle(index,lines);
-        while (index < lines.size() && !nextSection(lines.get(index).trim()))
-        {
-            String line = lines.get(index).trim();
-            if ("".equals(line))
-            {
-                index++;
+        String line = bufferedReader.readLine().trim();
+        while (line != null && !nextSection(line.trim())){
+            if(line.equals("")){
+                line = bufferedReader.readLine().trim();
                 continue;
             }
             RptData.SubcatchmentRunoffSummary subcatchmentRunoffSummary = new RptData.SubcatchmentRunoffSummary();
@@ -88,30 +273,22 @@ public class RptDataDao implements IRptDataDao {
             subcatchmentRunoffSummary.setTotalRunon(tempStr[2]);
             subcatchmentRunoffSummary.setTotalEvap(tempStr[3]);
             subcatchmentRunoffSummary.setTotalInfil(tempStr[4]);
-//            subcatchmentRunoffSummary.setImpervRunoff(tempStr[5]);
-//            subcatchmentRunoffSummary.setPervRunoff(tempStr[6]);
             subcatchmentRunoffSummary.setTotalRunoffMm(tempStr[5]);
             subcatchmentRunoffSummary.setTotalRunoffLtr(tempStr[6]);
             subcatchmentRunoffSummary.setPeakRunoff(tempStr[7]);
             subcatchmentRunoffSummary.setRunoffCoeff(tempStr[8]);
             subcatchmentRunoffSummaries.add(subcatchmentRunoffSummary);
-            index++;
+            line = bufferedReader.readLine().trim();
         }
-        rptLocal.get().setSubcatchmentRunoffSummaries(subcatchmentRunoffSummaries);
-        return index;
+        return subcatchmentRunoffSummaries;
     }
 
-    private int readNodeDepthSummary(int index){
-        List<String> lines = linesLocal.get();
+    private List<RptData.NodeDepthSummary> readNodeDepthSummary(BufferedReader bufferedReader) throws IOException {
         List<RptData.NodeDepthSummary>  nodeDepthSummaries = new ArrayList<>();
-        index++;
-        index = skipTitle(index,lines);
-        while (index < lines.size() && !nextSection(lines.get(index).trim()))
-        {
-            String line = lines.get(index).trim();
-            if ("".equals(line))
-            {
-                index++;
+        String line = bufferedReader.readLine().trim();
+        while (line != null && !nextSection(line.trim())){
+            if(line.equals("")){
+                line = bufferedReader.readLine().trim();
                 continue;
             }
             RptData.NodeDepthSummary nodeDepthSummary = new RptData.NodeDepthSummary();
@@ -123,25 +300,18 @@ public class RptDataDao implements IRptDataDao {
             nodeDepthSummary.setMaximumHgl(tempStr[4]);
             nodeDepthSummary.setTimeOfMaxOccurrenceDay(tempStr[5]);
             nodeDepthSummary.setTimeOfMaxOccurrenceTime(tempStr[6]);
-//            nodeDepthSummary.setReportedMaxDepth(tempStr[7]);
             nodeDepthSummaries.add(nodeDepthSummary);
-            index++;
+            line = bufferedReader.readLine().trim();
         }
-        rptLocal.get().setNodeDepthSummaries(nodeDepthSummaries);
-        return index;
+        return nodeDepthSummaries;
     }
 
-    private int readNodeInflowSummary(int index){
-        List<String> lines = linesLocal.get();
+    private List<RptData.NodeInflowSummary> readNodeInflowSummary(BufferedReader bufferedReader) throws IOException {
         List<RptData.NodeInflowSummary>  nodeInflowSummaries = new ArrayList<>();
-        index++;
-        index = skipTitle(index,lines);
-        while (index < lines.size() && !nextSection(lines.get(index).trim()))
-        {
-            String line = lines.get(index).trim();
-            if ("".equals(line))
-            {
-                index++;
+        String line = bufferedReader.readLine().trim();
+        while (line != null && !nextSection(line.trim())){
+            if(line.equals("")){
+                line = bufferedReader.readLine().trim();
                 continue;
             }
             RptData.NodeInflowSummary nodeInflowSummary = new RptData.NodeInflowSummary();
@@ -155,23 +325,17 @@ public class RptDataDao implements IRptDataDao {
             nodeInflowSummary.setLateralInflowVolume(tempStr[6]);
             nodeInflowSummary.setTotalInflowVolume(tempStr[7]);
             nodeInflowSummaries.add(nodeInflowSummary);
-            index++;
+            line = bufferedReader.readLine().trim();
         }
-        rptLocal.get().setNodeInflowSummaries(nodeInflowSummaries);
-        return index;
+        return nodeInflowSummaries;
     }
 
-    private int readNodeFloodingSummary(int index){
-        List<String> lines = linesLocal.get();
+    private List<RptData.NodeFloodingSummary> readNodeFloodingSummary(BufferedReader bufferedReader) throws IOException {
         List<RptData.NodeFloodingSummary>  nodeFloodingSummaries = new ArrayList<>();
-        index++;
-        index = skipTitle(index,lines);
-        while (index < lines.size() && !nextSection(lines.get(index).trim()))
-        {
-            String line = lines.get(index).trim();
-            if ("".equals(line))
-            {
-                index++;
+        String line = bufferedReader.readLine().trim();
+        while (line != null && !nextSection(line.trim())){
+            if(line.equals("")){
+                line = bufferedReader.readLine().trim();
                 continue;
             }
             RptData.NodeFloodingSummary nodeFloodingSummary = new RptData.NodeFloodingSummary();
@@ -184,23 +348,17 @@ public class RptDataDao implements IRptDataDao {
             nodeFloodingSummary.setTotalFloodVolume(tempStr[5]);
             nodeFloodingSummary.setMaximumPondedVolume(tempStr[6]);
             nodeFloodingSummaries.add(nodeFloodingSummary);
-            index++;
+            line = bufferedReader.readLine().trim();
         }
-        rptLocal.get().setNodeFloodingSummaries(nodeFloodingSummaries);
-        return index;
+        return nodeFloodingSummaries;
     }
 
-    private int readNodeSurchargeSummary(int index){
-        List<String> lines = linesLocal.get();
+    private List<RptData.NodeSurchargeSummary> readNodeSurchargeSummary(BufferedReader bufferedReader) throws IOException {
         List<RptData.NodeSurchargeSummary>  nodeSurchargeSummaries = new ArrayList<>();
-        index++;
-        index = skipTitle(index,lines);
-        while (index < lines.size() && !nextSection(lines.get(index).trim()))
-        {
-            String line = lines.get(index).trim();
-            if ("".equals(line))
-            {
-                index++;
+        String line = bufferedReader.readLine().trim();
+        while (line != null && !nextSection(line.trim())){
+            if(line.equals("")){
+                line = bufferedReader.readLine().trim();
                 continue;
             }
             RptData.NodeSurchargeSummary nodeSurchargeSummary = new RptData.NodeSurchargeSummary();
@@ -211,23 +369,17 @@ public class RptDataDao implements IRptDataDao {
             nodeSurchargeSummary.setMaxHeightAboveCrown(tempStr[3]);
             nodeSurchargeSummary.setMinDepthBelowRim(tempStr[4]);
             nodeSurchargeSummaries.add(nodeSurchargeSummary);
-            index++;
+            line = bufferedReader.readLine().trim();
         }
-        rptLocal.get().setNodeSurchargeSummaries(nodeSurchargeSummaries);
-        return index;
+        return nodeSurchargeSummaries;
     }
 
-    private int readStorageVolumeSummary(int index){
-        List<String> lines = linesLocal.get();
+    private List<RptData.StorageVolumeSummary> readStorageVolumeSummary(BufferedReader bufferedReader) throws IOException {
         List<RptData.StorageVolumeSummary>  storageVolumeSummaries = new ArrayList<>();
-        index++;
-        index = skipTitle(index,lines);
-        while (index < lines.size() && !nextSection(lines.get(index).trim()))
-        {
-            String line = lines.get(index).trim();
-            if ("".equals(line))
-            {
-                index++;
+        String line = bufferedReader.readLine().trim();
+        while (line != null && !nextSection(line.trim())){
+            if(line.equals("")){
+                line = bufferedReader.readLine().trim();
                 continue;
             }
             RptData.StorageVolumeSummary storageVolumeSummary = new RptData.StorageVolumeSummary();
@@ -244,23 +396,17 @@ public class RptDataDao implements IRptDataDao {
             storageVolumeSummary.setMaximumOutflow(tempStr[9]);
 
             storageVolumeSummaries.add(storageVolumeSummary);
-            index++;
+            line = bufferedReader.readLine().trim();
         }
-        rptLocal.get().setStorageVolumeSummaries(storageVolumeSummaries);
-        return index;
+        return storageVolumeSummaries;
     }
 
-    private int readOutfallLoadingSummary(int index){
-        List<String> lines = linesLocal.get();
+    private List<RptData.OutfallLoadingSummary> readOutfallLoadingSummary(BufferedReader bufferedReader) throws IOException {
         List<RptData.OutfallLoadingSummary>  outfallLoadingSummaries = new ArrayList<>();
-        index++;
-        index = skipTitle(index,lines);
-        while (index < lines.size() && !nextSection(lines.get(index).trim()))
-        {
-            String line = lines.get(index).trim();
-            if ("".equals(line) || line.startsWith("-"))
-            {
-                index++;
+        String line = bufferedReader.readLine().trim();
+        while (line != null && !nextSection(line.trim())){
+            if(line.equals("") || line.startsWith("-")){
+                line = bufferedReader.readLine().trim();
                 continue;
             }
             RptData.OutfallLoadingSummary outfallLoadingSummary = new RptData.OutfallLoadingSummary();
@@ -270,25 +416,18 @@ public class RptDataDao implements IRptDataDao {
             outfallLoadingSummary.setAvgFlow(tempStr[2]);
             outfallLoadingSummary.setMaxFlow(tempStr[3]);
             outfallLoadingSummary.setTotalVolume(tempStr[4]);
-
             outfallLoadingSummaries.add(outfallLoadingSummary);
-            index++;
+            line = bufferedReader.readLine().trim();
         }
-        rptLocal.get().setOutfallLoadingSummaries(outfallLoadingSummaries);
-        return index;
+        return outfallLoadingSummaries;
     }
 
-    private int readLinkFlowSummary(int index){
-        List<String> lines = linesLocal.get();
+    private List<RptData.LinkFlowSummary> readLinkFlowSummary(BufferedReader bufferedReader) throws IOException {
         List<RptData.LinkFlowSummary>  linkFlowSummaries = new ArrayList<>();
-        index++;
-        index = skipTitle(index,lines);
-        while (index < lines.size() && !nextSection(lines.get(index).trim()))
-        {
-            String line = lines.get(index).trim();
-            if ("".equals(line))
-            {
-                index++;
+        String line = bufferedReader.readLine().trim();
+        while (line != null && !nextSection(line.trim())){
+            if(line.equals("")){
+                line = bufferedReader.readLine().trim();
                 continue;
             }
             RptData.LinkFlowSummary linkFlowSummary = new RptData.LinkFlowSummary();
@@ -302,23 +441,17 @@ public class RptDataDao implements IRptDataDao {
             linkFlowSummary.setMaxFullFlow(tempStr[6]);
             linkFlowSummary.setMaxFullDepth(tempStr[7]);
             linkFlowSummaries.add(linkFlowSummary);
-            index++;
+            line = bufferedReader.readLine().trim();
         }
-        rptLocal.get().setLinkFlowSummaries(linkFlowSummaries);
-        return index;
+        return linkFlowSummaries;
     }
 
-    private int readConduitSurchargeSummary(int index){
-        List<String> lines = linesLocal.get();
+    private List<RptData.ConduitSurchargeSummary> readConduitSurchargeSummary(BufferedReader bufferedReader) throws IOException {
         List<RptData.ConduitSurchargeSummary>  conduitSurchargeSummaries = new ArrayList<>();
-        index++;
-        index = skipTitle(index,lines);
-        while (index < lines.size() && !nextSection(lines.get(index).trim()))
-        {
-            String line = lines.get(index).trim();
-            if ("".equals(line))
-            {
-                index++;
+        String line = bufferedReader.readLine().trim();
+        while (line != null && !nextSection(line.trim())){
+            if(line.equals("")){
+                line = bufferedReader.readLine().trim();
                 continue;
             }
             RptData.ConduitSurchargeSummary conduitSurchargeSummary = new RptData.ConduitSurchargeSummary();
@@ -330,34 +463,25 @@ public class RptDataDao implements IRptDataDao {
             conduitSurchargeSummary.setHoursAboveFullNormalFlow(tempStr[4]);
             conduitSurchargeSummary.setHoursCapacityLimited(tempStr[5]);
             conduitSurchargeSummaries.add(conduitSurchargeSummary);
-            index++;
+            line = bufferedReader.readLine().trim();
         }
-        rptLocal.get().setConduitSurchargeSummaries(conduitSurchargeSummaries);
-        return index;
+        return conduitSurchargeSummaries;
     }
 
-    private int readSubcatchmentResults(int index){
-        List<String> lines = linesLocal.get();
+    private Map<String, List<RptData.SubcatchmentResult>> readSubcatchmentResults(BufferedReader bufferedReader, String line) throws IOException {
         Map<String, List<RptData.SubcatchmentResult>> subcatchmentResultsMap = new HashMap<>();
-        index++;
-        index = skipTitle(index,lines);
-        while (index < lines.size() && !nextSection(lines.get(index).trim()))
-        {
+        while (line != null && !nextSection(line.trim())){
             List<RptData.SubcatchmentResult> subcatchmentResults = new ArrayList<>();
             String subcatchName = "";
-            String line = lines.get(index).trim();
-            if (line.startsWith("<") && line.endsWith(">"))
-            {
+            if(line.startsWith("<") && line.endsWith(">")){
                 String[] nameList = line.split("[ ]+");
-                subcatchName =nameList[2];
-                index = skipTitle2(index+1,lines);
+                subcatchName = nameList[2];
+                skipTitle2(bufferedReader);
             }
-            while (index < lines.size() && !nextSection2(lines.get(index).trim()) &&!nextSection(lines.get(index).trim()))
-            {
-                line = lines.get(index).trim();
-                if ("".equals(line))
-                {
-                    index++;
+            line = bufferedReader.readLine().trim();
+            while (line != null && !nextSection2(line) && !nextSection(line)){
+                if(line.equals("")){
+                    line = bufferedReader.readLine().trim();
                     continue;
                 }
                 RptData.SubcatchmentResult subcatchmentResult = new RptData.SubcatchmentResult();
@@ -368,37 +492,27 @@ public class RptDataDao implements IRptDataDao {
                 subcatchmentResult.setLosses(tempStr[3]);
                 subcatchmentResult.setRunoff(tempStr[4]);
                 subcatchmentResults.add(subcatchmentResult);
-                index++;
+                line = bufferedReader.readLine().trim();
             }
-            subcatchmentResultsMap.put(subcatchName, subcatchmentResults);
+            subcatchmentResultsMap.put(subcatchName,subcatchmentResults);
         }
-        rptLocal.get().setSubcatchmentResultsMap(subcatchmentResultsMap);
-        return index;
+        return subcatchmentResultsMap;
     }
 
-    private int readNodeResults(int index){
-        List<String> lines = linesLocal.get();
-        List<RptData.NodeResult> nodeResultsList = new ArrayList<>();
+    private Map<String,List<RptData.NodeResult>> readNodeResults(BufferedReader bufferedReader,String line) throws IOException {
         Map<String,List<RptData.NodeResult>> nodeResultsMap = new HashMap<>();
         String key = "";
-        index++;
-        index = skipTitle(index,lines);
-        while (index < lines.size() && !nextSection(lines.get(index).trim()))
-        {
+        while (line != null && !nextSection(line.trim())){
             List<RptData.NodeResult> nodeResults = new ArrayList<>();
-            String line = lines.get(index).trim();
-            if (line.startsWith("<") && line.endsWith(">"))
-            {
+            if(line.startsWith("<") && line.endsWith(">")){
                 String[] nameList = line.split("[ ]+");
                 key = nameList[2];
-                index = skipTitle2(index+1,lines);
+                skipTitle2(bufferedReader);
             }
-            while (index < lines.size() && !nextSection2(lines.get(index).trim()) &&!nextSection(lines.get(index).trim()))
-            {
-                line = lines.get(index).trim();
-                if ("".equals(line))
-                {
-                    index++;
+            line = bufferedReader.readLine().trim();
+            while (line != null && !nextSection2(line) && !nextSection(line)) {
+                if (line.equals("")) {
+                    line = bufferedReader.readLine().trim();
                     continue;
                 }
                 RptData.NodeResult nodeResult = new RptData.NodeResult();
@@ -410,12 +524,43 @@ public class RptDataDao implements IRptDataDao {
                 nodeResult.setDepth(tempStr[4]);
                 nodeResult.setHead(tempStr[5]);
                 nodeResults.add(nodeResult);
-                index++;
+                line = bufferedReader.readLine().trim();
             }
             nodeResultsMap.put(key,nodeResults);
         }
-        rptLocal.get().setNodeResultsMap(nodeResultsMap);
-        return index;
+        return nodeResultsMap;
+    }
+
+    private Map<String, List<RptData.LinkResult>> readLinkResults(BufferedReader bufferedReader,String line) throws IOException {
+        Map<String, List<RptData.LinkResult>> linkResultsMap = new HashMap<>();
+        while (line != null && !nextSection(line.trim())){
+            String linkName = "";
+            List<RptData.LinkResult> linkResults = new ArrayList<>();
+            if(line.startsWith("<") && line.endsWith(">")){
+                String[] nameList = line.split("[ ]+");
+                linkName = nameList[2];
+                skipTitle2(bufferedReader);
+            }
+            line = bufferedReader.readLine().trim();
+            while (line != null && !nextSection2(line) && !nextSection(line)) {
+                if (line.equals("")) {
+                    line = bufferedReader.readLine().trim();
+                    continue;
+                }
+                RptData.LinkResult linkResult = new RptData.LinkResult();
+                String[] tempStr=line.split("[ ]+");
+                linkResult.setDate(tempStr[0]);
+                linkResult.setTime(tempStr[1]);
+                linkResult.setFlow(tempStr[2]);
+                linkResult.setVelocity(tempStr[3]);
+                linkResult.setDepth(tempStr[4]);
+                linkResult.setCapacity(tempStr[5]);
+                linkResults.add(linkResult);
+                line = bufferedReader.readLine().trim();
+            }
+            linkResultsMap.put(linkName, linkResults);
+        }
+        return linkResultsMap;
     }
 
     private int readNodeResults2(int index){
@@ -464,47 +609,6 @@ public class RptDataDao implements IRptDataDao {
 
         }
         rptLocal.get().setNodeResultsMap(nodeResultsMap);
-        return index;
-    }
-
-    private int readLinkResults(int index){
-        List<String> lines = linesLocal.get();
-        Map<String, List<RptData.LinkResult>> linkResultsMap = new HashMap<>();
-        index++;
-        index = skipTitle(index,lines);
-        while (index < lines.size() && !nextSection(lines.get(index).trim()))
-        {
-            String linkName = "";
-            List<RptData.LinkResult> linkResults = new ArrayList<>();
-            String line = lines.get(index).trim();
-            if (line.startsWith("<") && line.endsWith(">"))
-            {
-                String[] nameList = line.split("[ ]+");
-                linkName = nameList[2];
-                index = skipTitle2(index+1,lines);
-            }
-            while (index < lines.size() && !nextSection2(lines.get(index).trim()) &&!nextSection(lines.get(index).trim()))
-            {
-                line = lines.get(index).trim();
-                if ("".equals(line))
-                {
-                    index++;
-                    continue;
-                }
-                RptData.LinkResult linkResult = new RptData.LinkResult();
-                String[] tempStr=line.split("[ ]+");
-                linkResult.setDate(tempStr[0]);
-                linkResult.setTime(tempStr[1]);
-                linkResult.setFlow(tempStr[2]);
-                linkResult.setVelocity(tempStr[3]);
-                linkResult.setDepth(tempStr[4]);
-                linkResult.setCapacity(tempStr[5]);
-                linkResults.add(linkResult);
-                index++;
-            }
-            linkResultsMap.put(linkName, linkResults);
-        }
-        rptLocal.get().setLinkResultsMap(linkResultsMap);
         return index;
     }
 

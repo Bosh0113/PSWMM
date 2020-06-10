@@ -158,7 +158,7 @@ export default {
             selectType: "subcatchmentRunoffSummaries",
             highlightRowIndex: 9999999999,
             loadRptModal:false,
-            rptFile:"swmm",
+            rptFile:"LishuiEx15",
             typeList:[
                 {   value: "subcatchmentRunoffSummaries",
                     label: "Subcatchment Runoff"
@@ -661,6 +661,12 @@ export default {
         onOpen() {
             console.log("Socket连接成功！");
             this.sendMessage("connect",{});
+            var that = this;
+            window.setInterval(()=>{
+                if(that.tcSocket!=null){
+                    that.sendMessage("ping", {});
+                }
+            },20000);
         },
         onMessage(e) {
             var messageObject = JSON.parse(e.data);

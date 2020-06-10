@@ -72,7 +72,7 @@
                     <Option v-for="item in typeList" :value="item" :key="item.index">{{ item }}</Option>
                 </Select>
                 <span>Object Name:</span>
-                <Select v-model="selectName" size="small" style="width:150px" :disabled="!originalData">
+                <Select v-model="selectName" size="small" style="width:150px" :disabled="!originalData" filterable>
                     <Option v-for="item in objNameList" :value="item" :key="item.index">{{ item }}</Option>
                 </Select>
                 <span>Variable:</span>
@@ -108,6 +108,11 @@
                         <Col span="4">
                             <div style="height:calc(100vh - 120px);padding:10px;border: 1px solid #dcdee2;" v-if="chartOption !='{}'">
                                 <h1>Set the render</h1>
+                                <div style="margin:10px 0">
+                                    <span>Reporting(min):</span>
+                                    <InputNumber size="small" v-model="recodeStep"  style="width:150px"/>
+                                    <Button shape="circle" icon="md-refresh" class="btnHoverGreen" size="small" @click="resetRainLine"></Button>
+                                </div>
                                 <div style="margin:10px 0">
                                     <span>L-Y axis max:</span>
                                     <Input size="small" v-model="chartOption.yAxis[0].max" />
@@ -207,9 +212,9 @@ export default {
             inpData:false,
             rptData:false,
             loadInpModal:false,
-            inpFileUrl:"swmm",
+            inpFileUrl:"LishuiEx",
             loadRptModal:false,
-            rptFileUrl:"swmm",
+            rptFileUrl:"LishuiEx1",
             originalData:false,
             visualization:false,
             selectType:"Node",
@@ -366,6 +371,8 @@ export default {
                     userName:"bbcc"
                 }
             ],
+            recodeStep:1,
+            originalRptData:{}
         }
     },
     methods:{
@@ -564,6 +571,7 @@ export default {
                 .then(res => {
                     this.spinShow = false;
                     if (res.data.code) {
+                        this.originalRptData = res.data.data;
                         this.formatedData =  this.formatShowData(res.data.data);
                         this.visualization = true;
                         this.updataChartOption(this.formatedData);
@@ -582,6 +590,11 @@ export default {
                 confirm("Load data, please.");
             }
         },
+        resetRainLine(){
+            this.formatedData =  this.formatShowData(this.originalRptData);
+            this.updataChartOption(this.formatedData);
+            this.toVisualization();
+        },
         formatShowData(data){
             var timeLine = [];
             var variableLine = [];
@@ -595,6 +608,10 @@ export default {
                     break;
                 }
             }
+            var rainLineFormat = [];
+            for(let i=0;i<raingageTimeLine.length;i+=this.recodeStep){
+                rainLineFormat.push(raingageTimeLine[i]);
+            } 
             var timeVariable = data.timeVariable;
             var y0Max = 0;
             var y1Max = 0;
@@ -606,11 +623,11 @@ export default {
                     y0Max = item.variable;
                 }
                 variableLine.push(parseFloat(item.variable));
-                if(raingageTimeLine[i]){
-                    if(raingageTimeLine[i].value > y1Max){
-                        y1Max = raingageTimeLine[i].value;
+                if(rainLineFormat[i]){
+                    if(rainLineFormat[i].value > y1Max){
+                        y1Max = rainLineFormat[i].value;
                     }
-                    rainLine.push(raingageTimeLine[i].value);
+                    rainLine.push(rainLineFormat[i].value);
                 }
                 else{
                     rainLine.push('0');
@@ -619,7 +636,7 @@ export default {
             var showData={
                 timeLine:timeLine,
                 variableLine:variableLine,
-                rainLine:rainLine,
+                rainLine:rainLineFormat,
                 yAxis0Max: y0Max,
                 yAxis1Max: y1Max
             }
@@ -768,6 +785,12 @@ export default {
         onOpen() {
             console.log("Socket连接成功！");
             this.sendMessage("connect",{});
+            var that = this;
+            window.setInterval(()=>{
+                if(that.tsSocket!=null){
+                    that.sendMessage("ping", {});
+                }
+            },20000);
         },
         onMessage(e) {
             var messageObject = JSON.parse(e.data);
